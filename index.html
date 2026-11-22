@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mawego Bookshop — Books, Stationery & Learning Materials | Kenya</title>
+  <meta name="description" content="Mawego Bookshop — textbooks, storybooks, stationery and revision guides. Delivery across the region or collect in-store. Pay with M-Pesa, card or cash. Prices in KES." />
+  <meta name="theme-color" content="#0b6b4f" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="Mawego Bookshop — Books & Stationery" />
+  <meta property="og:description" content="Textbooks, stationery and revision guides. Delivery or collection. M-Pesa, card or cash. Prices in KES." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+</head>
+<body>
+
+  <div class="splash" id="splash" aria-hidden="true">
+    <div class="splash-orbit">
+      <div class="splash-center"><i data-lucide="book-open"></i></div>
+      <div class="splash-icon"><i data-lucide="pencil"></i></div>
+      <div class="splash-icon"><i data-lucide="notebook"></i></div>
+      <div class="splash-icon"><i data-lucide="ruler"></i></div>
+      <div class="splash-icon"><i data-lucide="calculator"></i></div>
+      <div class="splash-icon"><i data-lucide="backpack"></i></div>
+      <div class="splash-icon"><i data-lucide="graduation-cap"></i></div>
+      <div class="splash-icon"><i data-lucide="pen-line"></i></div>
+      <div class="splash-icon"><i data-lucide="library"></i></div>
+    </div>
+    <div class="splash-brand">Mawego <span>Bookshop</span></div>
+    <div class="splash-sub">Loading your catalogue…</div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+        Mawego <span>Bookshop</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="/" class="active"><i data-lucide="store"></i> Shop</a>
+        <a href="#catalogue"><i data-lucide="layout-grid"></i> Catalogue</a>
+        <a href="/pages/track.html"><i data-lucide="map-pin"></i> Track</a>
+        <a href="/pages/account.html"><i data-lucide="user"></i> Account</a>
+        <a href="/pages/admin.html"><i data-lucide="settings"></i> Admin</a>
+        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-badge"><i data-lucide="map-pinned"></i> Serving Mawego &amp; surrounding areas</div>
+        <h1>Books &amp; stationery for every learner</h1>
+        <p class="lead">Curriculum textbooks, set books, revision guides and quality stationery — delivered to your door or ready for collection. All prices in Kenyan Shillings.</p>
+        <div class="hero-actions">
+          <a href="#catalogue" class="btn btn-primary btn-lg"><i data-lucide="search"></i> Browse catalogue</a>
+          <a href="/pages/track.html" class="btn btn-outline btn-lg"><i data-lucide="package-search"></i> Track your order</a>
+        </div>
+        <form class="search-bar" id="search-form" role="search">
+          <input type="search" id="search-input" placeholder="Search books, stationery, SKU…" autocomplete="off" aria-label="Search products" />
+          <button type="submit" class="btn btn-primary"><i data-lucide="search"></i> Search</button>
+        </form>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-stats">
+          <div class="hero-stat"><span class="num">7</span><span class="lbl">Categories</span></div>
+          <div class="hero-stat"><span class="num">KES</span><span class="lbl">Local pricing</span></div>
+          <div class="hero-stat"><span class="num">M-Pesa</span><span class="lbl">Easy payments</span></div>
+          <div class="hero-stat"><span class="num">Fast</span><span class="lbl">Delivery / pickup</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="trust-bar">
+    <div class="container trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon"><i data-lucide="truck"></i></div>
+        <strong>Delivery or collection</strong>
+        <span>Home, business or in-shop</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i data-lucide="wallet"></i></div>
+        <strong>Flexible payments</strong>
+        <span>M-Pesa · Card · Cash</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i data-lucide="graduation-cap"></i></div>
+        <strong>Curriculum ready</strong>
+        <span>KCPE · KCSE · set books</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i data-lucide="shield-check"></i></div>
+        <strong>Secure checkout</strong>
+        <span>Order tracking included</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="container page-pad" id="catalogue">
+    <div class="categories-strip" id="categories" role="navigation" aria-label="Product categories"></div>
+
+    <div class="section-title">
+      <h2 id="list-title">All products</h2>
+      <select id="sort-select" class="sort-select" aria-label="Sort products">
+        <option value="name">Name A–Z</option>
+        <option value="price_asc">Price: low to high</option>
+        <option value="price_desc">Price: high to low</option>
+        <option value="newest">Newest</option>
+      </select>
+    </div>
+
+    <div id="product-grid" class="product-grid">
+      <div class="loading">Loading products</div>
+    </div>
+    <div id="pagination" class="pagination"></div>
+
+    <section class="features-section" aria-label="Why shop with us">
+      <div class="section-title"><h2>Why Mawego Bookshop</h2></div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="ficon"><i data-lucide="backpack"></i></div>
+          <h3>Built for students &amp; schools</h3>
+          <p>Textbooks, revision packs and stationery selected for Kenyan curricula — from early learning through secondary.</p>
+        </div>
+        <div class="feature-card">
+          <div class="ficon"><i data-lucide="bike"></i></div>
+          <h3>Delivery or collect in store</h3>
+          <p>Choose home or business delivery, or pick up at the shop when your order is ready. Free delivery on larger orders.</p>
+        </div>
+        <div class="feature-card">
+          <div class="ficon"><i data-lucide="smartphone"></i></div>
+          <h3>Pay the way you prefer</h3>
+          <p>M-Pesa STK Push, card, or cash on delivery / collection. Track every order with your order number and phone.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">Mawego <span>Bookshop</span></div>
+          <p style="margin:0.5rem 0 0;opacity:0.9;max-width:22rem;line-height:1.55">
+            Your local bookshop online. Curriculum books, stationery, TVET &amp; university materials for students and schools across the region.
+          </p>
+          <div class="footer-social" aria-label="Social links">
+            <!-- Replace href values with your real pages / phone / map pin -->
+            <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" title="Facebook" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.56-4.7 1.32 0 2.7.24 2.7.24v2.97h-1.52c-1.5 0-1.96.93-1.96 1.89v2.26h3.34l-.53 3.49h-2.81V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            </a>
+            <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.08-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.04-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.48.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.8 9.8 0 01-5-.14l-.36-.13-3.73.98 1-3.64-.14-.37a9.8 9.8 0 01-1.5-5.23C2.3 6.26 6.62 1.94 12.04 1.94c2.62 0 5.08 1.02 6.93 2.88a9.74 9.74 0 012.87 6.94c-.01 5.42-4.33 9.74-9.79 9.74zM20.52 3.45A11.83 11.83 0 0012.04 0C5.5 0 .17 5.33.17 11.88c0 2.09.55 4.14 1.59 5.94L0 24l6.33-1.66a11.86 11.86 0 005.7 1.45h.01c6.54 0 11.87-5.33 11.88-11.88 0-3.17-1.23-6.15-3.48-8.39z"/></svg>
+            </a>
+            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95C23.73 2.7 21.31.27 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zM12 16a4 4 0 110-8 4 4 0 010 8zm6.41-11.85a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+            </a>
+            <a href="https://x.com/" target="_blank" rel="noopener noreferrer" title="X (Twitter)" aria-label="X Twitter">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M18.24 2H21.5l-7.42 8.48L22.5 22h-6.59l-5.16-6.74L5.2 22H1.92l7.93-9.07L1.5 2h6.75l4.66 6.16L18.24 2zm-1.16 18h1.81L7.02 3.9H5.08L17.08 20z"/></svg>
+            </a>
+            <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 00-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.56A3.02 3.02 0 00.5 6.2 31.6 31.6 0 000 12a31.6 31.6 0 00.5 5.8 3.02 3.02 0 002.12 2.14C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.56a3.02 3.02 0 002.12-2.14A31.6 31.6 0 0024 12a31.6 31.6 0 00-.5-5.8zM9.75 15.57V8.43L15.84 12l-6.09 3.57z"/></svg>
+            </a>
+            <a href="https://maps.google.com/?q=Mawego+Kenya" target="_blank" rel="noopener noreferrer" title="Find us on the map" aria-label="Map location">
+              <i data-lucide="map-pin"></i>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#catalogue">All products</a></li>
+            <li><a href="/pages/cart.html">Basket</a></li>
+            <li><a href="/pages/account.html">My account</a></li>
+            <li><a href="/pages/track.html">Track order</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Orders</h4>
+          <ul>
+            <li>Delivery &amp; collection</li>
+            <li>M-Pesa · Card · Cash</li>
+            <li>Prices in KES</li>
+            <li><a href="/pages/receipt.html">Receipts</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li>Mawego, Kenya</li>
+            <li>Shop hours: Mon–Sat</li>
+            <li><a href="/pages/contact.html">Contact</a></li>
+            <li><a href="/pages/admin.html">Staff login</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Mawego Bookshop. All rights reserved.</span>
+        <span><a href="/pages/privacy.html" style="color:inherit;opacity:0.9">Privacy</a> · Currency: KES</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    lucide.createIcons();
+    (function splashDismiss() {
+      const el = document.getElementById('splash');
+      if (!el) return;
+      const seen = sessionStorage.getItem('mb_splash_seen');
+      if (seen) { el.classList.add('is-done'); return; }
+      setTimeout(() => {
+        el.classList.add('is-done');
+        sessionStorage.setItem('mb_splash_seen', '1');
+      }, 2800);
+    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    let currentCategory = '';
+    let currentPage = 1;
+    let currentQ = '';
+
+    function toast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = '<i data-lucide="check-circle"></i> ' + msg;
+      document.body.appendChild(t);
+      lucide.createIcons({ nodes: [t] });
+      setTimeout(() => t.remove(), 2200);
+    }
+
+    function refreshIcons(root) {
+      lucide.createIcons(root ? { nodes: [root] } : undefined);
+    }
+
+    async function loadCategories() {
+      const { categories } = await API.categories();
+      const el = document.getElementById('categories');
+      el.innerHTML =
+        `<a href="#" class="cat-chip active" data-slug=""><i data-lucide="layout-grid"></i> All</a>` +
+        categories
+          .map((c) => `<a href="#" class="cat-chip" data-slug="${escapeHtml(c.slug)}">${escapeHtml(c.name)}</a>`)
+          .join('');
+      refreshIcons(el);
+      el.querySelectorAll('.cat-chip').forEach((chip) => {
+        chip.addEventListener('click', (e) => {
+          e.preventDefault();
+          el.querySelectorAll('.cat-chip').forEach((c) => c.classList.remove('active'));
+          chip.classList.add('active');
+          currentCategory = chip.dataset.slug;
+          currentPage = 1;
+          loadProducts();
+        });
+      });
+    }
+
+    function productCard(p) {
+      const out = p.stock_qty <= 0;
+      const sale = p.sale_active && p.final_price_kes != null && p.final_price_kes < p.price_kes;
+      const displayPrice = sale ? p.final_price_kes : p.price_kes;
+      const thumb = p.image_url
+        ? `<img src="${escapeHtml(p.image_url)}" alt="" loading="lazy" />`
+        : `<span class="thumb-placeholder"><i data-lucide="book-open"></i></span>`;
+      const priceHtml = sale
+        ? `<span class="price-was">${formatKes(p.price_kes)}</span><span class="price-now">${formatKes(displayPrice)}</span>`
+        : formatKes(displayPrice);
+      const cartPayload = {
+        id: p.id, name: p.name, price_kes: displayPrice, original_price_kes: p.price_kes,
+        stock_qty: p.stock_qty, slug: p.slug, image_url: p.image_url,
+        sale_active: !!sale, discount_percent: p.discount_percent || 0
+      };
+      return `
+        <article class="product-card">
+          <a href="/pages/product.html?slug=${encodeURIComponent(p.slug)}" class="thumb">
+            ${thumb}
+            <span class="badge-stock ${out ? 'out' : ''}">${out ? 'Out of stock' : 'In stock'}</span>
+            ${sale ? `<span class="badge-sale">${escapeHtml(p.sale_label || (p.discount_percent + '% OFF'))}</span>` : ''}
+          </a>
+          <div class="body">
+            <div class="cat">${escapeHtml(p.category_name || '')}</div>
+            <h3><a href="/pages/product.html?slug=${encodeURIComponent(p.slug)}">${escapeHtml(p.name)}</a></h3>
+            <div class="stock ${out ? 'out' : ''}">${out ? 'Currently unavailable' : p.stock_qty + ' available'}</div>
+            <div class="price">${priceHtml}</div>
+            <div class="actions">
+              <button class="btn btn-primary btn-sm" ${out ? 'disabled' : ''} data-add='${escapeHtml(JSON.stringify(cartPayload))}'>
+                <i data-lucide="plus"></i> Add to basket
+              </button>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    async function loadProducts() {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = '<div class="loading">Loading products</div>';
+      const sort = document.getElementById('sort-select').value;
+      const params = { page: currentPage, limit: 12, sort };
+      if (currentCategory) params.category = currentCategory;
+      if (currentQ) params.q = currentQ;
+
+      try {
+        const data = await API.products(params);
+        const titleEl = document.getElementById('list-title');
+        if (currentQ) titleEl.textContent = `Results for “${currentQ}”`;
+        else if (currentCategory) {
+          const chip = document.querySelector(`.cat-chip[data-slug="${currentCategory}"]`);
+          titleEl.textContent = chip ? chip.textContent.trim() : 'Products';
+        } else titleEl.textContent = 'All products';
+
+        if (!data.products.length) {
+          grid.innerHTML = `
+            <div class="empty-state card" style="grid-column:1/-1">
+              <div class="empty-icon"><i data-lucide="package-x"></i></div>
+              <p>No products found. Try another search or category.</p>
+              <a href="/" class="btn btn-outline btn-sm" onclick="location.reload()"><i data-lucide="rotate-ccw"></i> Reset filters</a>
+            </div>`;
+          refreshIcons(grid);
+          document.getElementById('pagination').innerHTML = '';
+          return;
+        }
+
+        grid.innerHTML = data.products.map(productCard).join('');
+        refreshIcons(grid);
+        grid.querySelectorAll('[data-add]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const p = JSON.parse(btn.getAttribute('data-add'));
+            Cart.add(p, 1);
+            toast('Added to basket');
+            btn.innerHTML = '<i data-lucide="check"></i> Added';
+            refreshIcons(btn);
+            setTimeout(() => {
+              btn.innerHTML = '<i data-lucide="plus"></i> Add to basket';
+              refreshIcons(btn);
+            }, 1400);
+          });
+        });
+
+        const { page, pages } = data.pagination;
+        let pagHtml = '';
+        if (pages > 1) {
+          pagHtml = `
+            <button class="btn btn-outline btn-sm" ${page <= 1 ? 'disabled' : ''} id="prev-page"><i data-lucide="chevron-left"></i> Previous</button>
+            <span>Page ${page} of ${pages}</span>
+            <button class="btn btn-outline btn-sm" ${page >= pages ? 'disabled' : ''} id="next-page">Next <i data-lucide="chevron-right"></i></button>`;
+        }
+        const pag = document.getElementById('pagination');
+        pag.innerHTML = pagHtml;
+        refreshIcons(pag);
+        document.getElementById('prev-page')?.addEventListener('click', () => {
+          currentPage--;
+          loadProducts();
+          window.scrollTo({ top: document.getElementById('catalogue').offsetTop - 80, behavior: 'smooth' });
+        });
+        document.getElementById('next-page')?.addEventListener('click', () => {
+          currentPage++;
+          loadProducts();
+          window.scrollTo({ top: document.getElementById('catalogue').offsetTop - 80, behavior: 'smooth' });
+        });
+      } catch (err) {
+        grid.innerHTML = `<div class="alert alert-error" style="grid-column:1/-1"><i data-lucide="alert-circle"></i> ${escapeHtml(err.message)}</div>`;
+        refreshIcons(grid);
+      }
+    }
+
+    document.getElementById('search-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      currentQ = document.getElementById('search-input').value.trim();
+      currentPage = 1;
+      loadProducts();
+      document.getElementById('catalogue').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    document.getElementById('sort-select').addEventListener('change', () => {
+      currentPage = 1;
+      loadProducts();
+    });
+
+    loadCategories().then(loadProducts).catch((err) => {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML =
+        `<div class="alert alert-error" style="grid-column:1/-1"><i data-lucide="server-off"></i> Could not load catalogue. Is the server running?<br/><small>${escapeHtml(err.message)}</small></div>`;
+      refreshIcons(grid);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Basket — Mawego Bookshop</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+        Mawego <span>Bookshop</span>
+      </a>
+      <nav class="nav">
+        <a href="/"><i data-lucide="store"></i> Shop</a>
+        <a href="/pages/track.html"><i data-lucide="map-pin"></i> Track</a>
+        <a href="/pages/account.html"><i data-lucide="user"></i> Account</a>
+        <a href="/pages/cart.html" class="cart-btn active"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-pad">
+    <h1 style="font-family:var(--font-display);display:flex;align-items:center;gap:0.5rem"><i data-lucide="shopping-bag"></i> Your basket</h1>
+    <div id="cart-content"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container"><p style="margin:0;opacity:0.9">Mawego Bookshop · Prices in KES</p></div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    lucide.createIcons();
+    const FREE_THRESHOLD = 2000;
+    const DELIVERY_FEE = 200;
+
+    function render() {
+      const items = Cart.get();
+      const el = document.getElementById('cart-content');
+      if (!items.length) {
+        el.innerHTML = `
+          <div class="empty-state card">
+            <div class="empty-icon"><i data-lucide="shopping-cart"></i></div>
+            <p>Your basket is empty.</p>
+            <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Continue shopping</a>
+          </div>`;
+        lucide.createIcons({ nodes: [el] });
+        return;
+      }
+
+      const sub = Cart.subtotal();
+      el.innerHTML = `
+        <div class="card">
+          <table class="cart-table">
+            <thead>
+              <tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr>
+            </thead>
+            <tbody>
+              ${items
+                .map(
+                  (i) => `
+                <tr data-id="${i.product_id}">
+                  <td><strong>${escapeHtml(i.name)}</strong></td>
+                  <td>${i.sale_active && i.original_price_kes > i.price_kes
+                    ? `<span class="price-was">${formatKes(i.original_price_kes)}</span> <span class="price-now">${formatKes(i.price_kes)}</span>`
+                    : formatKes(i.price_kes)}</td>
+                  <td>
+                    <div class="qty-control">
+                      <button type="button" data-dec aria-label="Decrease"><i data-lucide="minus"></i></button>
+                      <input type="number" min="1" value="${i.quantity}" data-qty />
+                      <button type="button" data-inc aria-label="Increase"><i data-lucide="plus"></i></button>
+                    </div>
+                  </td>
+                  <td>${formatKes(i.price_kes * i.quantity)}</td>
+                  <td><button class="btn btn-sm btn-danger" data-remove aria-label="Remove"><i data-lucide="trash-2"></i></button></td>
+                </tr>`
+                )
+                .join('')}
+            </tbody>
+          </table>
+          <div class="totals">
+            <div class="row"><span>Subtotal</span><span>${formatKes(sub)}</span></div>
+            <p style="font-size:0.9rem;color:var(--muted);margin:0.5rem 0;display:flex;align-items:center;gap:0.35rem;justify-content:flex-end">
+              <i data-lucide="truck" class="icon-sm"></i>
+              Delivery from ${formatKes(DELIVERY_FEE)} · Free over ${formatKes(FREE_THRESHOLD)}. Collection is free.
+            </p>
+            <div style="margin-top:1rem">
+              <a href="/pages/checkout.html" class="btn btn-primary"><i data-lucide="credit-card"></i> Proceed to checkout</a>
+              <a href="/" class="btn btn-outline" style="margin-left:0.5rem"><i data-lucide="arrow-left"></i> Continue shopping</a>
+            </div>
+          </div>
+        </div>`;
+      lucide.createIcons({ nodes: [el] });
+
+      el.querySelectorAll('tr[data-id]').forEach((row) => {
+        const id = Number(row.dataset.id);
+        row.querySelector('[data-inc]')?.addEventListener('click', () => {
+          const item = Cart.get().find((x) => x.product_id === id);
+          Cart.updateQty(id, (item?.quantity || 1) + 1);
+          render();
+        });
+        row.querySelector('[data-dec]')?.addEventListener('click', () => {
+          const item = Cart.get().find((x) => x.product_id === id);
+          if ((item?.quantity || 1) <= 1) Cart.remove(id);
+          else Cart.updateQty(id, item.quantity - 1);
+          render();
+        });
+        row.querySelector('[data-qty]')?.addEventListener('change', (e) => {
+          Cart.updateQty(id, parseInt(e.target.value, 10) || 1);
+          render();
+        });
+        row.querySelector('[data-remove]')?.addEventListener('click', () => {
+          Cart.remove(id);
+          render();
+        });
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

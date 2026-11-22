@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin — Mawego Bookshop</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+  <style>
+    .toolbar { display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center; margin:1rem 0; }
+    .toolbar input, .toolbar select { padding:0.5rem; border-radius:8px; border:1px solid var(--border); }
+    .toolbar input[type="search"] { min-width:240px; flex:1; max-width:380px; }
+    .thumb { width:36px; height:48px; object-fit:cover; border-radius:4px; background:var(--border); display:block; }
+    .pill { display:inline-block; padding:0.15rem 0.6rem; border-radius:999px; font-size:0.78rem; font-weight:600; }
+    .pill-ok { background:#e3f4e8; color:#17653a; }
+    .pill-low { background:#fff1d6; color:#8a5a00; }
+    .pill-out { background:#fde3e3; color:#9b1c1c; }
+    .pill-archived { background:#e8e8ec; color:#555; }
+    tr.is-archived td { opacity:0.6; }
+    .row-actions { display:flex; gap:0.35rem; flex-wrap:wrap; }
+    .hint { font-size:0.82rem; color:var(--muted); margin-top:0.25rem; }
+    .modal details { margin:0.75rem 0; }
+    .modal summary { cursor:pointer; font-weight:600; }
+    .img-preview { max-width:90px; max-height:120px; border-radius:6px; margin-top:0.5rem; }
+    @media (max-width:800px) { .dash-cols { grid-template-columns:1fr !important; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span> Mawego <span>Bookshop</span></a>
+      <nav class="nav">
+        <a href="/">Storefront</a>
+        <span id="admin-user" style="font-size:0.9rem;color:var(--muted)"></span>
+        <button class="btn btn-sm btn-outline" id="logout-btn" style="display:none"><i data-lucide="log-out"></i> Log out</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-pad" id="login-view" style="max-width:400px">
+    <h1 style="display:flex;align-items:center;gap:0.5rem;font-family:var(--font-display)"><i data-lucide="shield"></i> Staff login</h1>
+    <div class="card">
+      <div id="login-msg"></div>
+      <form id="login-form">
+        <div class="form-group"><label for="email">Email</label><input id="email" type="email" required autocomplete="username" /></div>
+        <div class="form-group"><label for="password">Password</label><input id="password" type="password" required autocomplete="current-password" /></div>
+        <button type="submit" class="btn btn-primary" style="width:100%"><i data-lucide="log-in"></i> Sign in</button>
+      </form>
+    </div>
+  </main>
+
+  <div id="admin-app" class="hidden">
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div style="padding:0 1.25rem 1rem;font-weight:700;opacity:0.9">Admin</div>
+        <a href="#" data-view="dashboard" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+        <a href="#" data-view="orders"><i data-lucide="shopping-cart"></i> Orders</a>
+        <a href="#" data-view="products"><i data-lucide="book-open"></i> Products</a>
+        <a href="#" data-view="inventory"><i data-lucide="warehouse"></i> Inventory</a>
+        <a href="#" data-view="suppliers"><i data-lucide="truck"></i> Suppliers &amp; POs</a>
+        <a href="#" data-view="expenses"><i data-lucide="receipt"></i> Expenses</a>
+        <a href="#" data-view="sales"><i data-lucide="bar-chart-3"></i> Sales report</a>
+        <a href="#" data-view="pnl"><i data-lucide="line-chart"></i> Profit &amp; loss</a>
+        <a href="#" data-view="staff"><i data-lucide="users"></i> Staff</a>
+      </aside>
+      <div class="admin-main">
+        <div id="flash"></div>
+        <div id="view-root"></div>
+      </div>
+    </div>
+  </div>
+  <div id="modal-root"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    /* ---------- Helpers ---------- */
+    const STAFF_ROLES = ['staff', 'cashier', 'inventory', 'manager', 'owner'];
+    const ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'ready', 'out_for_delivery', 'completed', 'cancelled'];
+    const $ = (sel, scope = document) => scope.querySelector(sel);
+    const $$ = (sel, scope = document) => Array.from(scope.querySelectorAll(sel));
+    const isStaffUser = (u) => !!u && STAFF_ROLES.includes(u.role);
+    const rowsOr = (list, fn, empty) => (list && list.length ? list.map(fn).join('') : empty);
+    const emptyRow = (cols, text) => `<tr><td colspan="${cols}">${text}</td></tr>`;
+
+    function icons(scope) { lucide.createIcons(scope ? { nodes: [scope] } : undefined); }
+
+    function flash(message, type = 'success') {
+      const el = $('#flash');
+      el.innerHTML = `<div class="alert alert-${type === 'error' ? 'error' : 'success'}">${escapeHtml(message)}</div>`;
+      clearTimeout(flash.t);
+      flash.t = setTimeout(() => { el.innerHTML = ''; }, 5000);
+    }
+
+    function openModal(html) {
+      const root = $('#modal-root');
+      root.innerHTML = `<div class="modal-backdrop"><div class="modal" style="max-width:580px">${html}</div></div>`;
+      $('.modal-backdrop', root).addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-backdrop')) closeModal();
+      });
+      icons(root);
+      return root;
+    }
+    function closeModal() { $('#modal-root').innerHTML = ''; }
+
+    /** Run an async action, surface any error as a flash message. */
+    async function guarded(fn) {
+      try { return await fn(); }
+      catch (err) {
+        flash(err.message || 'Something went wrong', 'error');
+        if (err.status === 401) { API.clearAuth(); showLogin(); }
+      }
+    }
+
+    function stockState(p) {
+      const qty = Number(p.stock_qty) || 0;
+      if (p.is_active === 0 || p.is_active === false) return 'archived';
+      if (qty <= 0) return 'out';
+      if (qty <= Number(p.low_stock_threshold ?? 5)) return 'low';
+      return 'ok';
+    }
+    const STATE_LABEL = { ok: 'In stock', low: 'Low stock', out: 'Out of stock', archived: 'Archived' };
+    const statePill = (p) => { const s = stockState(p); return `<span class="pill pill-${s}">${STATE_LABEL[s]}</span>`; };
+
+    /** Client-side search across name, SKU, barcode and category. */
+    function matchesQuery(p, q) {
+      if (!q) return true;
+      const needle = q.trim().toLowerCase();
+      return [p.name, p.sku, p.barcode, p.category_name].some((v) => String(v || '').toLowerCase().includes(needle));
+    }
+
+    /* ---------- Auth ---------- */
+    function showLogin() {
+      $('#login-view').classList.remove('hidden');
+      $('#admin-app').classList.add('hidden');
+    }
+    function showApp() {
+      $('#login-view').classList.add('hidden');
+      $('#admin-app').classList.remove('hidden');
+      const u = API.getUser();
+      $('#admin-user').textContent = u ? `${u.full_name} (${u.role})` : '';
+      $('#logout-btn').style.display = 'inline-flex';
+      navigate('dashboard');
+      icons();
+    }
+
+    $('#logout-btn').onclick = () => { API.clearAuth(); location.reload(); };
+    $('#login-form').onsubmit = async (e) => {
+      e.preventDefault();
+      const msg = $('#login-msg');
+      msg.innerHTML = '';
+      try {
+        const data = await API.login($('#email').value, $('#password').value);
+        if (!isStaffUser(data.user)) { msg.innerHTML = '<div class="alert alert-error">Staff access only</div>'; return; }
+        API.setAuth(data.token, data.user);
+        showApp();
+      } catch (err) {
+        msg.innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
+      }
+    };
+
+    /* ---------- Navigation ---------- */
+    const VIEWS = {
+      dashboard: renderDashboard, orders: renderOrders, products: renderProducts,
+      inventory: renderInventory, suppliers: renderSuppliers, expenses: renderExpenses,
+      sales: renderSales, pnl: renderPnL, staff: renderStaff
+    };
+
+    $$('.admin-sidebar a[data-view]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        $$('.admin-sidebar a').forEach((x) => x.classList.remove('active'));
+        a.classList.add('active');
+        navigate(a.dataset.view);
+      });
+    });
+
+    async function navigate(view) {
+      const root = $('#view-root');
+      root.innerHTML = '<div class="loading">Loading…</div>';
+      try {
+        if (VIEWS[view]) await VIEWS[view](root);
+        icons(root);
+      } catch (err) {
+        root.innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
+        if (err.status === 401) { API.clearAuth(); showLogin(); }
+      }
+    }
+
+    /* ---------- Dashboard ---------- */
+    async function renderDashboard(root) {
+      const d = await API.adminDashboard();
+      const stat = (label, value, sub) =>
+        `<div class="stat-card"><div class="label">${label}</div><div class="value">${value}</div>${sub ? `<div style="font-size:0.85rem;color:var(--muted)">${sub}</div>` : ''}</div>`;
+
+      root.innerHTML = `
+        <h1 style="margin-top:0">Dashboard</h1>
+        <div class="stats-grid">
+          ${stat('Sales today', formatKes(d.sales_today.total), `${d.sales_today.count} orders`)}
+          ${stat('Sales this month', formatKes(d.sales_month.total), `${d.sales_month.count} orders`)}
+          ${stat('Gross profit (month)', formatKes(d.gross_profit_month))}
+          ${stat('Expenses (month)', formatKes(d.expenses_month || 0))}
+          ${stat('Net profit (month)', formatKes(d.net_profit_month || 0))}
+          ${stat('Inventory value', formatKes(d.inventory_value_cost || 0))}
+          ${stat('Open orders', d.pending_orders)}
+          ${stat('Low stock', d.low_stock_count)}
+          ${stat('Open POs', formatKes(d.outstanding_purchases || 0))}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem" class="dash-cols">
+          <div>
+            <h2 style="font-size:1.1rem">Recent orders</h2>
+            <div class="table-wrap"><table class="data-table">
+              <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody>${rowsOr(d.recent_orders, (o) => `<tr>
+                <td>${escapeHtml(o.order_number)}</td><td>${escapeHtml(o.customer_name)}</td>
+                <td>${formatKes(o.total_kes)}</td>
+                <td><span class="badge badge-${o.order_status}">${o.order_status.replace(/_/g, ' ')}</span></td>
+              </tr>`, emptyRow(4, 'No orders yet'))}</tbody>
+            </table></div>
+          </div>
+          <div>
+            <h2 style="font-size:1.1rem">Low stock</h2>
+            <div class="table-wrap"><table class="data-table">
+              <thead><tr><th>Product</th><th>Qty</th><th>Min</th></tr></thead>
+              <tbody>${rowsOr(d.low_stock_products, (p) => `<tr>
+                <td>${escapeHtml(p.name)}</td><td>${p.stock_qty}</td><td>${p.low_stock_threshold}</td>
+              </tr>`, emptyRow(3, 'All products are well stocked'))}</tbody>
+            </table></div>
+          </div>
+        </div>`;
+    }
+
+    /* ---------- Orders ---------- */
+    async function renderOrders(root) {
+      root.innerHTML = `
+        <h1 style="margin-top:0">Orders</h1>
+        <div class="toolbar">
+          <input id="order-q" type="search" placeholder="Search order #, name, phone" />
+          <select id="order-status">
+            <option value="">All statuses</option>
+            ${ORDER_STATUSES.map((s) => `<option value="${s}">${s.replace(/_/g, ' ')}</option>`).join('')}
+          </select>
+          <button class="btn btn-outline btn-sm" id="order-filter"><i data-lucide="filter"></i> Filter</button>
+        </div>
+        <div class="table-wrap" id="orders-table"></div>`;
+
+      const load = async () => {
+        const res = await API.adminOrders({ q: $('#order-q').value, status: $('#order-status').value, limit: 50 });
+        $('#orders-table').innerHTML = `
+          <table class="data-table">
+            <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th></th></tr></thead>
+            <tbody>${rowsOr(res.orders, (o) => `<tr>
+              <td>${escapeHtml(o.order_number)}</td>
+              <td>${escapeHtml(o.customer_name)}<br><span class="hint">${escapeHtml(o.customer_phone)}</span></td>
+              <td>${formatKes(o.total_kes)}</td>
+              <td><span class="badge badge-${o.payment_status}">${o.payment_status}</span><br><span class="hint">${escapeHtml(o.payment_method)}</span></td>
+              <td><span class="badge badge-${o.order_status}">${o.order_status.replace(/_/g, ' ')}</span></td>
+              <td style="font-size:0.85rem">${escapeHtml(o.created_at)}</td>
+              <td><div class="row-actions">
+                <button class="btn btn-sm btn-outline" data-oid="${o.id}"><i data-lucide="pencil"></i> Manage</button>
+                <a class="btn btn-sm btn-secondary" href="/pages/receipt.html?id=${o.id}" target="_blank"><i data-lucide="receipt"></i> Receipt</a>
+              </div></td>
+            </tr>`, emptyRow(7, 'No orders found'))}</tbody>
+          </table>`;
+        $$('[data-oid]', $('#orders-table')).forEach((b) => { b.onclick = () => openOrderModal(b.dataset.oid); });
+        icons($('#orders-table'));
+      };
+      $('#order-filter').onclick = () => guarded(load);
+      $('#order-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') guarded(load); });
+      await load();
+    }
+
+    async function openOrderModal(id) {
+      const { order } = await API.adminOrder(id);
+      openModal(`
+        <h2>${escapeHtml(order.order_number)}</h2>
+        <p>${escapeHtml(order.customer_name)} · ${escapeHtml(order.customer_phone)}</p>
+        <p>Fulfilment: <strong>${escapeHtml(order.fulfilment_type)}</strong>${order.delivery_address ? ' — ' + escapeHtml(order.delivery_address) : ''}</p>
+        <p>Payment: ${escapeHtml(order.payment_method)} · <span class="badge badge-${order.payment_status}">${order.payment_status}</span></p>
+        <ul>${(order.items || []).map((i) => `<li>${escapeHtml(i.product_name)} × ${i.quantity} — ${formatKes(i.line_total_kes)}</li>`).join('')}</ul>
+        <p><strong>Total ${formatKes(order.total_kes)}</strong></p>
+        <div class="form-group"><label>Order status</label>
+          <select id="m-order-status">${ORDER_STATUSES.map((s) => `<option value="${s}" ${order.order_status === s ? 'selected' : ''}>${s.replace(/_/g, ' ')}</option>`).join('')}</select>
+        </div>
+        <div class="modal-actions">
+          ${order.payment_status !== 'paid' ? '<button class="btn btn-secondary" id="m-mark-paid"><i data-lucide="banknote"></i> Mark paid</button>' : ''}
+          <a class="btn btn-outline" href="/pages/receipt.html?id=${order.id}" target="_blank"><i data-lucide="receipt"></i> Receipt</a>
+          <button class="btn btn-primary" id="m-save"><i data-lucide="save"></i> Save status</button>
+          <button class="btn btn-outline" id="m-close"><i data-lucide="x"></i> Close</button>
+        </div>`);
+
+      $('#m-close').onclick = closeModal;
+      $('#m-save').onclick = () => guarded(async () => {
+        await API.adminUpdateOrder(id, { order_status: $('#m-order-status').value });
+        closeModal(); flash('Order status saved'); navigate('orders');
+      });
+      const paid = $('#m-mark-paid');
+      if (paid) paid.onclick = () => guarded(async () => {
+        await API.adminMarkPaid(id);
+        closeModal(); flash('Order marked as paid'); navigate('orders');
+      });
+    }
+
+    /* ---------- Products ---------- */
+    async function renderProducts(root) {
+      const [{ categories }, data] = await Promise.all([API.categories(), API.adminProducts({ limit: 1000 })]);
+      let products = data.products;
+
+      root.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem">
+          <h1 style="margin:0">Products</h1>
+          <div class="row-actions">
+            <button class="btn btn-secondary btn-sm" id="import-products"><i data-lucide="upload"></i> Import JSON</button>
+            <button class="btn btn-primary" id="new-product"><i data-lucide="plus"></i> Add product</button>
+          </div>
+        </div>
+        <div class="toolbar">
+          <input id="prod-q" type="search" placeholder="Search name, SKU, barcode or category" />
+          <select id="prod-cat">
+            <option value="">All categories</option>
+            ${categories.map((c) => `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('')}
+          </select>
+          <select id="prod-state">
+            <option value="">All products</option>
+            <option value="ok">In stock</option>
+            <option value="low">Low stock</option>
+            <option value="out">Out of stock</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+        <div class="hint" id="prod-count"></div>
+        <div class="table-wrap" id="prod-table"></div>`;
+
+      const draw = () => {
+        const q = $('#prod-q').value, cat = $('#prod-cat').value, state = $('#prod-state').value;
+        const list = products.filter((p) =>
+          matchesQuery(p, q) && (!cat || p.category_name === cat) && (!state || stockState(p) === state));
+        $('#prod-count').textContent = `${list.length} of ${products.length} products`;
+        $('#prod-table').innerHTML = `
+          <table class="data-table">
+            <thead><tr><th></th><th>SKU</th><th>Name</th><th>Category</th><th>Buying</th><th>Selling</th><th>Qty</th><th>Status</th><th></th></tr></thead>
+            <tbody>${rowsOr(list, (p) => `<tr class="${stockState(p) === 'archived' ? 'is-archived' : ''}">
+              <td>${p.image_url ? `<img class="thumb" src="${escapeHtml(p.image_url)}" alt="">` : '<span class="thumb"></span>'}</td>
+              <td>${escapeHtml(p.sku || '—')}</td>
+              <td>${escapeHtml(p.name)}${p.barcode ? `<br><span class="hint">${escapeHtml(p.barcode)}</span>` : ''}</td>
+              <td>${escapeHtml(p.category_name || '—')}</td>
+              <td>${formatKes(p.cost_kes || 0)}</td>
+              <td>${formatKes(p.price_kes)}</td>
+              <td>${p.stock_qty}</td>
+              <td>${statePill(p)}</td>
+              <td><div class="row-actions">
+                <button class="btn btn-sm btn-outline" data-edit="${p.id}"><i data-lucide="pencil"></i> Edit</button>
+                <button class="btn btn-sm btn-secondary" data-stock="${p.id}"><i data-lucide="package"></i> Stock</button>
+                <button class="btn btn-sm btn-danger" data-del="${p.id}"><i data-lucide="trash-2"></i> Delete</button>
+              </div></td>
+            </tr>`, emptyRow(9, 'No products match your search'))}</tbody>
+          </table>`;
+        const find = (id) => products.find((x) => String(x.id) === String(id));
+        $$('[data-edit]', $('#prod-table')).forEach((b) => { b.onclick = () => openProductForm(find(b.dataset.edit), categories); });
+        $$('[data-stock]', $('#prod-table')).forEach((b) => { b.onclick = () => openStockModal(find(b.dataset.stock)); });
+        $$('[data-del]', $('#prod-table')).forEach((b) => { b.onclick = () => deleteProduct(find(b.dataset.del)); });
+        icons($('#prod-table'));
+      };
+
+      ['input', 'change'].forEach((ev) => {
+        $('#prod-q').addEventListener(ev, draw);
+        $('#prod-cat').addEventListener(ev, draw);
+        $('#prod-state').addEventListener(ev, draw);
+      });
+      $('#new-product').onclick = () => openProductForm(null, categories);
+      $('#import-products').onclick = () => importProducts();
+      draw();
+    }
+
+    function importProducts() {
+      const raw = prompt('Paste a JSON array of products:\n[{ "name":"...", "price_kes":100, "cost_kes":60, "sku":"...", "stock_qty":10, "category_slug":"stationery" }]');
+      if (!raw) return;
+      let products;
+      try { products = JSON.parse(raw); } catch { flash('That is not valid JSON', 'error'); return; }
+      guarded(async () => {
+        const r = await API.adminImportProducts(products);
+        flash(`Imported ${r.created} products, skipped ${r.skipped}`);
+        navigate('products');
+      });
+    }
+
+    function openProductForm(product, categories) {
+      const isEdit = !!product;
+      const p = product || {};
+      openModal(`
+        <h2>${isEdit ? 'Edit product' : 'Add product'}</h2>
+        <form id="prod-form">
+          <div class="form-group"><label>Book name *</label><input name="name" required value="${escapeHtml(p.name || '')}" /></div>
+          <div class="form-group"><label>Category</label>
+            <select name="category_id"><option value="">No category</option>
+              ${categories.map((c) => `<option value="${c.id}" ${String(p.category_id) === String(c.id) ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>SKU</label><input name="sku" value="${escapeHtml(p.sku || '')}" /></div>
+            <div class="form-group"><label>Barcode</label><input name="barcode" value="${escapeHtml(p.barcode || '')}" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Buying price (KES)</label><input name="cost_kes" type="number" step="0.01" min="0" value="${p.cost_kes ?? 0}" /></div>
+            <div class="form-group"><label>Selling price (KES) *</label><input name="price_kes" type="number" step="0.01" min="0" required value="${p.price_kes ?? ''}" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>${isEdit ? 'Quantity in stock' : 'Opening quantity'}</label><input name="stock_qty" type="number" min="0" step="1" value="${p.stock_qty ?? 0}" />
+              ${isEdit ? '<div class="hint">Changing this records a stock count correction.</div>' : ''}</div>
+            <div class="form-group"><label>Minimum stock</label><input name="low_stock_threshold" type="number" min="0" step="1" value="${p.low_stock_threshold ?? 5}" />
+              <div class="hint">You are alerted when quantity reaches this level.</div></div>
+          </div>
+          <div class="form-group"><label>Description</label><textarea name="description" rows="2">${escapeHtml(p.description || '')}</textarea></div>
+          <div class="form-group"><label>Image</label><input name="image" id="pf-image" type="file" accept="image/*" />
+            ${p.image_url ? `<img class="img-preview" id="pf-preview" src="${escapeHtml(p.image_url)}" alt="">` : '<img class="img-preview hidden" id="pf-preview" alt="">'}
+          </div>
+          <details>
+            <summary>Sale pricing (optional)</summary>
+            <div class="form-row">
+              <div class="form-group"><label>Discount %</label><input name="discount_percent" type="number" min="0" max="100" value="${p.discount_percent ?? 0}" /></div>
+              <div class="form-group"><label>Sale price (KES)</label><input name="discount_price_kes" type="number" step="0.01" min="0" value="${p.discount_price_kes ?? ''}" /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Sale label</label><input name="sale_label" placeholder="e.g. Back to school" value="${escapeHtml(p.sale_label || '')}" /></div>
+              <div class="form-group"><label>Sale ends</label><input name="sale_ends_at" type="date" value="${p.sale_ends_at ? String(p.sale_ends_at).slice(0, 10) : ''}" /></div>
+            </div>
+          </details>
+          <div class="form-group"><label><input type="checkbox" name="is_active" ${!isEdit || p.is_active ? 'checked' : ''} /> Active — show on the customer website</label></div>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> ${isEdit ? 'Save changes' : 'Add product'}</button>
+            <button type="button" class="btn btn-outline" id="pf-close">Cancel</button>
+          </div>
+        </form>`);
+
+      $('#pf-close').onclick = closeModal;
+      $('#pf-image').onchange = (e) => {
+        const file = e.target.files[0], img = $('#pf-preview');
+        if (!file) return;
+        img.src = URL.createObjectURL(file);
+        img.classList.remove('hidden');
+      };
+
+      $('#prod-form').onsubmit = (e) => {
+        e.preventDefault();
+        guarded(async () => {
+          const form = e.target;
+          const fd = new FormData(form);
+          const cost = Number(fd.get('cost_kes') || 0), price = Number(fd.get('price_kes') || 0);
+          if (price < cost && !confirm('The selling price is lower than the buying price. Save anyway?')) return;
+
+          fd.set('is_active', form.is_active.checked ? '1' : '0');
+          const image = fd.get('image');
+          if (image && image.size === 0) fd.delete('image');
+
+          if (isEdit) {
+            const newQty = Number(fd.get('stock_qty'));
+            fd.delete('stock_qty');
+            await API.adminUpdateProduct(product.id, fd);
+            const delta = newQty - Number(product.stock_qty || 0);
+            if (delta !== 0) {
+              await API.adminAdjustStock(product.id, { change_qty: delta, reason: 'count', notes: 'Edited in product form' });
+            }
+            flash('Product updated');
+          } else {
+            await API.adminCreateProduct(fd);
+            flash(form.is_active.checked ? 'Product added and published' : 'Product added as inactive');
+          }
+          closeModal();
+          navigate('products');
+        });
+      };
+    }
+
+    /** The server archives products that have sales history and deletes the rest. */
+    function deleteProduct(product) {
+      if (!product) return;
+      openModal(`
+        <h2>Delete product</h2>
+        <p><strong>${escapeHtml(product.name)}</strong></p>
+        <p>Products that have been sold are archived instead of deleted, so your sales history stays accurate. Archived products are hidden from the website.</p>
+        <div class="modal-actions">
+          <button class="btn btn-danger" id="del-confirm"><i data-lucide="trash-2"></i> Delete product</button>
+          <button class="btn btn-outline" id="del-cancel">Cancel</button>
+        </div>`);
+      $('#del-cancel').onclick = closeModal;
+      $('#del-confirm').onclick = () => guarded(async () => {
+        const r = await API.adminDeleteProduct(product.id);
+        closeModal();
+        flash(r && r.archived ? `${product.name} has sales history, so it was archived` : `${product.name} was deleted`);
+        navigate('products');
+      });
+    }
+
+    function openStockModal(product) {
+      if (!product) return;
+      openModal(`
+        <h2>Adjust stock</h2>
+        <p>${escapeHtml(product.name)} — currently <strong>${product.stock_qty}</strong> in stock</p>
+        <div class="form-group"><label>Change quantity (+ to add, − to remove)</label><input id="st-qty" type="number" step="1" value="1" /></div>
+        <div class="form-group"><label>Reason</label>
+          <select id="st-reason">
+            <option value="received">Received / restock</option>
+            <option value="adjustment">Adjustment</option>
+            <option value="damaged">Damaged / write-off</option>
+            <option value="count">Stock count correction</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Notes</label><input id="st-notes" /></div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="st-save">Apply</button>
+          <button class="btn btn-outline" id="st-close">Cancel</button>
+        </div>`);
+      $('#st-close').onclick = closeModal;
+      $('#st-save').onclick = () => guarded(async () => {
+        const change = Number($('#st-qty').value);
+        if (!change) { flash('Enter a quantity other than zero', 'error'); return; }
+        if (Number(product.stock_qty) + change < 0) { flash('Stock cannot go below zero', 'error'); return; }
+        await API.adminAdjustStock(product.id, { change_qty: change, reason: $('#st-reason').value, notes: $('#st-notes').value });
+        closeModal(); flash('Stock updated'); navigate('products');
+      });
+    }
+
+    /* ---------- Inventory ---------- */
+    async function renderInventory(root) {
+      const data = await API.adminInventory();
+      const products = data.products;
+      const out = products.filter((p) => stockState(p) === 'out').length;
+      const low = products.filter((p) => stockState(p) === 'low').length;
+      const stat = (label, value) => `<div class="stat-card"><div class="label">${label}</div><div class="value">${value}</div></div>`;
+
+      root.innerHTML = `
+        <h1 style="margin-top:0">Inventory</h1>
+        <div class="stats-grid">
+          ${stat('Total units', data.totals.units)}
+          ${stat('Value (buying price)', formatKes(data.totals.value_cost))}
+          ${stat('Value (selling price)', formatKes(data.totals.value_retail))}
+          ${stat('Low stock', low)}
+          ${stat('Out of stock', out)}
+        </div>
+        <div class="toolbar">
+          <input id="inv-q" type="search" placeholder="Search name, SKU, barcode or category" />
+          <select id="inv-state">
+            <option value="">All products</option>
+            <option value="alerts">Needs attention (low + out)</option>
+            <option value="low">Low stock</option>
+            <option value="out">Out of stock</option>
+            <option value="ok">In stock</option>
+          </select>
+        </div>
+        <div class="table-wrap" id="inv-table"></div>`;
+
+      const draw = () => {
+        const q = $('#inv-q').value, state = $('#inv-state').value;
+        const list = products.filter((p) => {
+          const s = stockState(p);
+          const okState = !state || s === state || (state === 'alerts' && (s === 'low' || s === 'out'));
+          return okState && matchesQuery(p, q);
+        });
+        $('#inv-table').innerHTML = `
+          <table class="data-table">
+            <thead><tr><th>SKU</th><th>Name</th><th>Category</th><th>Qty</th><th>Min</th><th>Buying</th><th>Selling</th><th>Stock value</th><th>Status</th></tr></thead>
+            <tbody>${rowsOr(list, (p) => `<tr class="${stockState(p) === 'archived' ? 'is-archived' : ''}">
+              <td>${escapeHtml(p.sku || '—')}</td><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category_name || '—')}</td>
+              <td>${p.stock_qty}</td><td>${p.low_stock_threshold ?? 5}</td>
+              <td>${formatKes(p.cost_kes || 0)}</td><td>${formatKes(p.price_kes)}</td>
+              <td>${formatKes(p.stock_value_cost ?? (p.stock_qty * (p.cost_kes || 0)))}</td>
+              <td>${statePill(p)}</td>
+            </tr>`, emptyRow(9, 'No products match your search'))}</tbody>
+          </table>`;
+      };
+      ['input', 'change'].forEach((ev) => {
+        $('#inv-q').addEventListener(ev, draw);
+        $('#inv-state').addEventListener(ev, draw);
+      });
+      draw();
+    }
+
+    /* ---------- Expenses ---------- */
+    async function renderExpenses(root) {
+      const [data, cats] = await Promise.all([API.adminExpenses({ limit: 50 }), API.adminExpenseCategories()]);
+      root.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h1 style="margin:0">Operating expenses</h1>
+          <button class="btn btn-primary btn-sm" id="add-exp"><i data-lucide="plus"></i> Expense</button>
+        </div>
+        <p style="color:var(--muted)">Gross profit − expenses = net profit.</p>
+        <p><strong>Listed total:</strong> ${formatKes(data.total_amount || 0)}</p>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead>
+          <tbody>${rowsOr(data.expenses, (e) => `<tr>
+            <td>${escapeHtml(e.expense_date)}</td><td>${escapeHtml(e.category)}</td>
+            <td>${escapeHtml(e.description || '')}</td><td>${formatKes(e.amount_kes)}</td>
+            <td><button class="btn btn-sm btn-danger" data-del="${e.id}"><i data-lucide="trash-2"></i> Delete</button></td>
+          </tr>`, emptyRow(5, 'No expenses recorded'))}</tbody>
+        </table></div>`;
+
+      $$('[data-del]', root).forEach((b) => {
+        b.onclick = () => guarded(async () => {
+          if (!confirm('Delete this expense?')) return;
+          await API.adminDeleteExpense(b.dataset.del);
+          flash('Expense deleted'); navigate('expenses');
+        });
+      });
+
+      $('#add-exp').onclick = () => {
+        openModal(`
+          <h2>Record expense</h2>
+          <form id="exp-form">
+            <div class="form-group"><label>Category</label>
+              <select name="category" required>${cats.categories.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}</select>
+            </div>
+            <div class="form-group"><label>Amount (KES)</label><input name="amount_kes" type="number" step="0.01" min="0" required /></div>
+            <div class="form-group"><label>Date</label><input name="expense_date" type="date" value="${new Date().toISOString().slice(0, 10)}" /></div>
+            <div class="form-group"><label>Description</label><input name="description" /></div>
+            <div class="form-group"><label>Payment method</label>
+              <select name="payment_method"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option><option value="bank">Bank</option><option value="card">Card</option></select>
+            </div>
+            <div class="modal-actions"><button class="btn btn-primary">Save</button><button type="button" class="btn btn-outline" id="c">Cancel</button></div>
+          </form>`);
+        $('#c').onclick = closeModal;
+        $('#exp-form').onsubmit = (e) => {
+          e.preventDefault();
+          guarded(async () => {
+            await API.adminCreateExpense(Object.fromEntries(new FormData(e.target)));
+            closeModal(); flash('Expense saved'); navigate('expenses');
+          });
+        };
+      };
+    }
+
+    /* ---------- Sales report ---------- */
+    function monthRange() {
+      const now = new Date();
+      return { from: new Date(now.getFullYear(), now.getMonth(), 1).toLocaleDateString('en-CA'), to: now.toLocaleDateString('en-CA') };
+    }
+
+    async function renderSales(root) {
+      const { from, to } = monthRange();
+      root.innerHTML = `
+        <h1 style="margin-top:0">Sales report</h1>
+        <div class="toolbar" style="align-items:end">
+          <div class="form-group" style="margin:0"><label>From</label><input type="date" id="sales-from" value="${from}" /></div>
+          <div class="form-group" style="margin:0"><label>To</label><input type="date" id="sales-to" value="${to}" /></div>
+          <button class="btn btn-primary btn-sm" id="sales-run"><i data-lucide="play"></i> Run</button>
+        </div>
+        <div id="sales-body"></div>`;
+
+      const run = () => guarded(async () => {
+        const d = await API.adminSalesReport($('#sales-from').value, $('#sales-to').value);
+        const stat = (label, value) => `<div class="stat-card"><div class="label">${label}</div><div class="value">${value}</div></div>`;
+        $('#sales-body').innerHTML = `
+          <div class="stats-grid">
+            ${stat('Orders', d.summary.order_count)}
+            ${stat('Revenue', formatKes(d.summary.revenue))}
+            ${stat('Gross profit', formatKes(d.summary.gross_profit))}
+            ${stat('Expenses', formatKes(d.summary.total_expenses || 0))}
+            ${stat('Net profit', formatKes(d.summary.net_profit || 0))}
+          </div>
+          <h2 style="font-size:1.1rem">By payment method</h2>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Method</th><th>Orders</th><th>Total</th></tr></thead>
+            <tbody>${rowsOr(d.by_payment, (r) => `<tr><td>${escapeHtml(r.payment_method)}</td><td>${r.count}</td><td>${formatKes(r.total)}</td></tr>`, emptyRow(3, 'No data'))}</tbody></table></div>
+          <h2 style="font-size:1.1rem">Top products</h2>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Product</th><th>Qty</th><th>Revenue</th></tr></thead>
+            <tbody>${rowsOr(d.top_products, (r) => `<tr><td>${escapeHtml(r.product_name)}</td><td>${r.qty_sold}</td><td>${formatKes(r.revenue)}</td></tr>`, emptyRow(3, 'No data'))}</tbody></table></div>`;
+      });
+      $('#sales-run').onclick = run;
+      await run();
+    }
+
+    /* ---------- Profit & loss ---------- */
+    async function renderPnL(root) {
+      const { from, to } = monthRange();
+      root.innerHTML = `
+        <h1 style="margin-top:0">Profit &amp; loss</h1>
+        <p style="color:var(--muted)">Net profit = Gross profit − Operating expenses</p>
+        <div class="toolbar" style="align-items:end">
+          <div class="form-group" style="margin:0"><label>From</label><input type="date" id="pnl-from" value="${from}" /></div>
+          <div class="form-group" style="margin:0"><label>To</label><input type="date" id="pnl-to" value="${to}" /></div>
+          <button class="btn btn-primary btn-sm" id="pnl-run"><i data-lucide="play"></i> Run</button>
+        </div>
+        <div id="pnl-body"></div>`;
+
+      const line = (label, value, extra = '') =>
+        `<div style="display:flex;justify-content:space-between;margin:0.4rem 0;${extra}"><span>${label}</span><strong>${value}</strong></div>`;
+
+      const run = () => guarded(async () => {
+        const d = await API.adminProfitLoss($('#pnl-from').value, $('#pnl-to').value);
+        const expRows = rowsOr(Object.entries(d.expenses_by_category || {}),
+          ([k, v]) => `<tr><td>${escapeHtml(k)}</td><td>${formatKes(v)}</td></tr>`, emptyRow(2, 'None'));
+        $('#pnl-body').innerHTML = `
+          <div class="card" style="max-width:480px">
+            ${line('Revenue (paid orders)', formatKes(d.revenue))}
+            ${line('Cost of goods sold', formatKes(d.cost_of_goods))}
+            ${line('Gross profit', formatKes(d.gross_profit), 'border-top:1px solid var(--border);padding-top:0.5rem')}
+            ${line('Operating expenses', '− ' + formatKes(d.operating_expenses))}
+            ${line('Net profit', formatKes(d.net_profit), 'border-top:2px solid var(--green);padding-top:0.5rem;font-size:1.15rem')}
+            <p class="hint">${d.order_count} paid orders in period</p>
+          </div>
+          <h2 style="font-size:1.1rem">Expenses by category</h2>
+          <div class="table-wrap" style="max-width:400px"><table class="data-table"><thead><tr><th>Category</th><th>Amount</th></tr></thead><tbody>${expRows}</tbody></table></div>`;
+      });
+      $('#pnl-run').onclick = run;
+      await run();
+    }
+
+    /* ---------- Suppliers & purchase orders ---------- */
+    async function renderSuppliers(root) {
+      const [sup, pos] = await Promise.all([API.adminSuppliers(), API.adminPurchaseOrders()]);
+      const poBadge = (s) => (s === 'received' ? 'paid' : s === 'cancelled' ? 'cancelled' : 'pending');
+
+      root.innerHTML = `
+        <h1 style="margin-top:0">Suppliers &amp; purchase orders</h1>
+        <div class="row-actions" style="margin-bottom:1rem">
+          <button class="btn btn-primary btn-sm" id="add-sup"><i data-lucide="plus"></i> Supplier</button>
+          <button class="btn btn-secondary btn-sm" id="add-po"><i data-lucide="plus"></i> Purchase order</button>
+        </div>
+        <h2 style="font-size:1.1rem">Suppliers</h2>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Name</th><th>Contact</th><th>Phone</th></tr></thead>
+          <tbody>${rowsOr(sup.suppliers, (s) => `<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.contact_person || '')}</td><td>${escapeHtml(s.phone || '')}</td></tr>`, emptyRow(3, 'No suppliers yet'))}</tbody></table></div>
+        <h2 style="font-size:1.1rem">Purchase orders</h2>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>PO #</th><th>Supplier</th><th>Total</th><th>Status</th><th></th></tr></thead>
+          <tbody>${rowsOr(pos.purchase_orders, (p) => `<tr>
+            <td>${escapeHtml(p.po_number)}</td><td>${escapeHtml(p.supplier_name || '')}</td><td>${formatKes(p.total_kes)}</td>
+            <td><span class="badge badge-${poBadge(p.status)}">${p.status}</span></td>
+            <td>${p.status === 'ordered' ? `<button class="btn btn-sm btn-primary" data-recv="${p.id}"><i data-lucide="package-check"></i> Receive stock</button>` : ''}</td>
+          </tr>`, emptyRow(5, 'No purchase orders'))}</tbody></table></div>`;
+
+      $$('[data-recv]', root).forEach((b) => {
+        b.onclick = () => guarded(async () => {
+          if (!confirm('Receive this purchase order and add the stock?')) return;
+          await API.adminReceivePO(b.dataset.recv);
+          flash('Stock received'); navigate('suppliers');
+        });
+      });
+
+      $('#add-sup').onclick = () => {
+        openModal(`
+          <h2>New supplier</h2>
+          <form id="sup-form">
+            <div class="form-group"><label>Name *</label><input name="name" required /></div>
+            <div class="form-group"><label>Contact</label><input name="contact_person" /></div>
+            <div class="form-group"><label>Phone</label><input name="phone" /></div>
+            <div class="form-group"><label>Email</label><input name="email" type="email" /></div>
+            <div class="modal-actions"><button class="btn btn-primary">Save</button><button type="button" class="btn btn-outline" id="c">Cancel</button></div>
+          </form>`);
+        $('#c').onclick = closeModal;
+        $('#sup-form').onsubmit = (e) => {
+          e.preventDefault();
+          guarded(async () => {
+            await API.adminCreateSupplier(Object.fromEntries(new FormData(e.target)));
+            closeModal(); flash('Supplier saved'); navigate('suppliers');
+          });
+        };
+      };
+
+      $('#add-po').onclick = () => guarded(async () => {
+        if (!sup.suppliers.length) { flash('Add a supplier first', 'error'); return; }
+        const prods = await API.adminProducts({ limit: 1000 });
+        const lines = [];
+        openModal(`
+          <h2>New purchase order</h2>
+          <form id="po-form">
+            <div class="form-group"><label>Supplier</label><select name="supplier_id" required>${sup.suppliers.map((s) => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}</select></div>
+            <div class="form-group"><label>Product</label><select id="po-product">${prods.products.map((p) => `<option value="${p.id}" data-cost="${p.cost_kes || 0}">${escapeHtml(p.name)} (${escapeHtml(p.sku || 'no SKU')})</option>`).join('')}</select></div>
+            <div class="form-row">
+              <div class="form-group"><label>Quantity</label><input type="number" id="po-qty" value="10" min="1" /></div>
+              <div class="form-group"><label>Unit cost (KES)</label><input type="number" id="po-cost" step="0.01" min="0" /></div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" id="po-add-line"><i data-lucide="plus"></i> Add line</button>
+            <ul id="po-lines"></ul>
+            <div class="modal-actions"><button class="btn btn-primary">Create PO</button><button type="button" class="btn btn-outline" id="c">Cancel</button></div>
+          </form>`);
+
+        const select = $('#po-product');
+        const syncCost = () => { $('#po-cost').value = select.selectedOptions[0]?.dataset.cost || 0; };
+        syncCost();
+        select.onchange = syncCost;
+
+        $('#po-add-line').onclick = () => {
+          const quantity = Number($('#po-qty').value), unit = Number($('#po-cost').value);
+          if (!(quantity > 0)) { flash('Quantity must be at least 1', 'error'); return; }
+          lines.push({ product_id: Number(select.value), quantity, unit_cost_kes: unit, name: select.selectedOptions[0]?.textContent || '' });
+          $('#po-lines').innerHTML = lines.map((l) => `<li>${escapeHtml(l.name)} × ${l.quantity} @ ${formatKes(l.unit_cost_kes)}</li>`).join('');
+        };
+        $('#c').onclick = closeModal;
+        $('#po-form').onsubmit = (e) => {
+          e.preventDefault();
+          if (!lines.length) { flash('Add at least one line', 'error'); return; }
+          guarded(async () => {
+            await API.adminCreatePO({
+              supplier_id: Number(new FormData(e.target).get('supplier_id')),
+              items: lines.map(({ product_id, quantity, unit_cost_kes }) => ({ product_id, quantity, unit_cost_kes }))
+            });
+            closeModal(); flash('Purchase order created'); navigate('suppliers');
+          });
+        };
+      });
+    }
+
+    /* ---------- Staff ---------- */
+    async function renderStaff(root) {
+      const data = await API.adminStaff();
+      root.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h1 style="margin:0">Staff accounts</h1>
+          <button class="btn btn-primary btn-sm" id="add-staff"><i data-lucide="user-plus"></i> Staff</button>
+        </div>
+        <p style="color:var(--muted);font-size:0.9rem">Roles: owner, manager, inventory, cashier, staff</p>
+        <div class="table-wrap" style="margin-top:1rem"><table class="data-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Active</th></tr></thead>
+          <tbody>${rowsOr(data.users, (u) => `<tr><td>${escapeHtml(u.full_name)}</td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.role)}</td><td>${u.is_active ? 'Yes' : 'No'}</td></tr>`, emptyRow(4, 'No staff'))}</tbody>
+        </table></div>`;
+
+      $('#add-staff').onclick = () => {
+        openModal(`
+          <h2>New staff</h2>
+          <form id="stf">
+            <div class="form-group"><label>Full name</label><input name="full_name" required /></div>
+            <div class="form-group"><label>Email</label><input name="email" type="email" required /></div>
+            <div class="form-group"><label>Password</label><input name="password" type="password" required minlength="6" autocomplete="new-password" /></div>
+            <div class="form-group"><label>Phone</label><input name="phone" /></div>
+            <div class="form-group"><label>Role</label>
+              <select name="role">
+                <option value="staff">Staff</option>
+                <option value="cashier">Cashier</option>
+                <option value="inventory">Inventory</option>
+                <option value="manager">Manager</option>
+              </select>
+            </div>
+            <div class="modal-actions"><button class="btn btn-primary">Create</button><button type="button" class="btn btn-outline" id="c">Cancel</button></div>
+          </form>`);
+        $('#c').onclick = closeModal;
+        $('#stf').onsubmit = (e) => {
+          e.preventDefault();
+          guarded(async () => {
+            await API.adminCreateStaff(Object.fromEntries(new FormData(e.target)));
+            closeModal(); flash('Staff account created'); navigate('staff');
+          });
+        };
+      };
+    }
+
+    /* ---------- Start ---------- */
+    icons();
+    if (isStaffUser(API.getUser())) showApp(); else showLogin();
+  </script>
+</body>
+</html>

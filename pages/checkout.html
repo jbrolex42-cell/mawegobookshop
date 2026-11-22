@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout — Mawego Bookshop</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span> Mawego <span>Bookshop</span></a>
+      <nav class="nav">
+        <a href="/"><i data-lucide="store"></i> Shop</a>
+        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-pad">
+    <h1 style="font-family:var(--font-display);letter-spacing:-0.02em;display:flex;align-items:center;gap:0.5rem"><i data-lucide="credit-card"></i> Checkout</h1>
+    <div id="msg"></div>
+    <div class="checkout-grid" id="checkout">
+      <div class="card">
+        <h2 style="margin-top:0;font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="user"></i> Customer details</h2>
+        <form id="checkout-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customer_name">Full name *</label>
+              <input id="customer_name" name="customer_name" required />
+            </div>
+            <div class="form-group">
+              <label for="customer_phone">Phone (M-Pesa) *</label>
+              <input id="customer_phone" name="customer_phone" placeholder="07XX XXX XXX" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="customer_email">Email (optional)</label>
+            <input id="customer_email" name="customer_email" type="email" />
+          </div>
+
+          <h2 style="font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="package"></i> Fulfilment</h2>
+          <label class="radio-card">
+            <input type="radio" name="fulfilment_type" value="delivery" checked />
+            <div>
+              <strong><i data-lucide="truck" class="icon-sm"></i> Home or business delivery</strong>
+              <div style="font-size:0.9rem;color:var(--muted)">We deliver within our zones. Fee shown in summary.</div>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="fulfilment_type" value="collection" />
+            <div>
+              <strong><i data-lucide="store" class="icon-sm"></i> Collect from shop</strong>
+              <div style="font-size:0.9rem;color:var(--muted)">Free · Pick up at Mawego Bookshop when ready.</div>
+            </div>
+          </label>
+          <div class="form-group" id="address-group">
+            <label for="delivery_address">Delivery address *</label>
+            <textarea id="delivery_address" name="delivery_address" rows="2" placeholder="Estate, road, landmark…"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="delivery_notes">Notes (optional)</label>
+            <input id="delivery_notes" name="delivery_notes" placeholder="Gate code, preferred time…" />
+          </div>
+
+          <h2 style="font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="wallet"></i> Payment</h2>
+          <label class="radio-card">
+            <input type="radio" name="payment_method" value="mpesa" checked />
+            <div>
+              <strong><i data-lucide="smartphone" class="icon-sm"></i> M-Pesa STK Push</strong>
+              <div style="font-size:0.9rem;color:var(--muted)">Pay on your phone after placing the order.</div>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="payment_method" value="card" />
+            <div>
+              <strong><i data-lucide="credit-card" class="icon-sm"></i> Card</strong>
+              <div style="font-size:0.9rem;color:var(--muted)">Visa / Mastercard via payment gateway.</div>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="payment_method" value="cash_on_delivery" />
+            <div>
+              <strong><i data-lucide="banknote" class="icon-sm"></i> Cash on delivery / collection</strong>
+              <div style="font-size:0.9rem;color:var(--muted)">Pay when you receive or pick up the order.</div>
+            </div>
+          </label>
+
+          <div id="points-box" class="card" style="margin:1rem 0;padding:1rem;background:var(--gold-soft);border-color:#e5d6a8;display:none">
+            <strong style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.5rem"><i data-lucide="star"></i> Reward points</strong>
+            <p style="margin:0 0 0.5rem;font-size:0.9rem;color:var(--muted)">You have <strong id="pts-balance">0</strong> points (worth <span id="pts-value">KES 0</span>). Earn 1 point per KES 50 spent. Redeem from 100 points (100 pts = KES 50).</p>
+            <div class="form-group" style="margin:0">
+              <label for="points_redeemed">Points to redeem</label>
+              <input type="number" id="points_redeemed" name="points_redeemed" min="0" step="100" value="0" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem" id="submit-btn">
+            <i data-lucide="check"></i> Place order
+          </button>
+        </form>
+      </div>
+
+      <aside class="card checkout-summary-sticky" id="summary">
+        <h2 style="margin-top:0;font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="clipboard-list"></i> Order summary</h2>
+        <div id="summary-lines"></div>
+      </aside>
+    </div>
+
+    <div id="success" class="hidden card" style="max-width:560px;margin:0 auto;text-align:center">
+      <h2>Order placed</h2>
+      <p id="success-msg"></p>
+      <p><strong>Order number:</strong> <span id="success-number"></span></p>
+      <div id="payment-actions"></div>
+      <p style="margin-top:1.5rem">
+        <a href="/pages/track.html" class="btn btn-outline">Track order</a>
+        <a href="/" class="btn btn-primary" style="margin-left:0.5rem">Back to shop</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    lucide.createIcons();
+    async function loadPoints() {
+      const u = API.getUser();
+      const box = document.getElementById('points-box');
+      if (!u || !box) return;
+      try {
+        const data = await API.pointsBalance();
+        if ((data.reward_points || 0) > 0) {
+          box.style.display = 'block';
+          document.getElementById('pts-balance').textContent = data.reward_points;
+          document.getElementById('pts-value').textContent = formatKes(data.value_kes || 0);
+          document.getElementById('points_redeemed').max = data.reward_points;
+        }
+        lucide.createIcons({ nodes: [box] });
+      } catch (_) {}
+    }
+    loadPoints();
+
+    const FREE_THRESHOLD = 2000;
+    const DELIVERY_FEE = 200;
+
+    function calcDelivery(sub, fulfilment) {
+      if (fulfilment === 'collection') return 0;
+      if (sub >= FREE_THRESHOLD) return 0;
+      return DELIVERY_FEE;
+    }
+
+    function renderSummary() {
+      const items = Cart.get();
+      const fulfilment = document.querySelector('input[name="fulfilment_type"]:checked')?.value || 'delivery';
+      const sub = Cart.subtotal();
+      const fee = calcDelivery(sub, fulfilment);
+      const total = sub + fee;
+      document.getElementById('summary-lines').innerHTML = `
+        ${items
+          .map(
+            (i) =>
+              `<div style="display:flex;justify-content:space-between;margin:0.35rem 0;font-size:0.95rem">
+                <span>${escapeHtml(i.name)} × ${i.quantity}</span>
+                <span>${formatKes(i.price_kes * i.quantity)}</span>
+              </div>`
+          )
+          .join('')}
+        <hr style="border:none;border-top:1px solid var(--border);margin:0.75rem 0" />
+        <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${formatKes(sub)}</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Delivery</span><span>${fee ? formatKes(fee) : 'Free'}</span></div>
+        <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-top:0.5rem;color:var(--green-dark)">
+          <span>Total</span><span>${formatKes(total)}</span>
+        </div>`;
+    }
+
+    function toggleAddress() {
+      const f = document.querySelector('input[name="fulfilment_type"]:checked')?.value;
+      const group = document.getElementById('address-group');
+      const input = document.getElementById('delivery_address');
+      if (f === 'collection') {
+        group.style.display = 'none';
+        input.required = false;
+      } else {
+        group.style.display = 'block';
+        input.required = true;
+      }
+      renderSummary();
+    }
+
+    document.querySelectorAll('input[name="fulfilment_type"]').forEach((r) =>
+      r.addEventListener('change', toggleAddress)
+    );
+
+    if (!Cart.get().length) {
+      document.getElementById('checkout').innerHTML =
+        '<div class="empty-state card">Your basket is empty. <a href="/">Go shopping</a></div>';
+    } else {
+      renderSummary();
+      toggleAddress();
+      lucide.createIcons();
+    async function loadPoints() {
+      const u = API.getUser();
+      const box = document.getElementById('points-box');
+      if (!u || !box) return;
+      try {
+        const data = await API.pointsBalance();
+        if ((data.reward_points || 0) > 0) {
+          box.style.display = 'block';
+          document.getElementById('pts-balance').textContent = data.reward_points;
+          document.getElementById('pts-value').textContent = formatKes(data.value_kes || 0);
+          document.getElementById('points_redeemed').max = data.reward_points;
+        }
+        lucide.createIcons({ nodes: [box] });
+      } catch (_) {}
+    }
+    loadPoints();
+    }
+
+    document.getElementById('checkout-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const msg = document.getElementById('msg');
+      msg.innerHTML = '';
+      btn.disabled = true;
+      btn.textContent = 'Placing order…';
+
+      const fd = new FormData(e.target);
+      const payload = {
+        customer_name: fd.get('customer_name'),
+        customer_phone: fd.get('customer_phone'),
+        customer_email: fd.get('customer_email') || undefined,
+        fulfilment_type: fd.get('fulfilment_type'),
+        delivery_address: fd.get('delivery_address') || undefined,
+        delivery_notes: fd.get('delivery_notes') || undefined,
+        payment_method: fd.get('payment_method'),
+        items: Cart.get().map((i) => ({ product_id: i.product_id, quantity: i.quantity })),
+        points_redeemed: parseInt(document.getElementById('points_redeemed')?.value || '0', 10) || 0
+      };
+
+      try {
+        const data = await API.createOrder(payload);
+        Cart.clear();
+        document.getElementById('checkout').classList.add('hidden');
+        document.getElementById('success').classList.remove('hidden');
+        lucide.createIcons();
+    async function loadPoints() {
+      const u = API.getUser();
+      const box = document.getElementById('points-box');
+      if (!u || !box) return;
+      try {
+        const data = await API.pointsBalance();
+        if ((data.reward_points || 0) > 0) {
+          box.style.display = 'block';
+          document.getElementById('pts-balance').textContent = data.reward_points;
+          document.getElementById('pts-value').textContent = formatKes(data.value_kes || 0);
+          document.getElementById('points_redeemed').max = data.reward_points;
+        }
+        lucide.createIcons({ nodes: [box] });
+      } catch (_) {}
+    }
+    loadPoints();
+        document.getElementById('success-number').textContent = data.order.order_number;
+        document.getElementById('success-msg').textContent = data.message;
+
+        const actions = document.getElementById('payment-actions');
+        if (data.order.payment_method === 'mpesa') {
+          actions.innerHTML = `
+            <p class="alert alert-info">Enter the phone that will receive the M-Pesa prompt:</p>
+            <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
+              <input id="stk-phone" value="${escapeHtml(data.order.customer_phone)}" style="padding:0.5rem;border-radius:8px;border:1px solid var(--border)" />
+              <button class="btn btn-primary" id="stk-btn">Send M-Pesa prompt</button>
+            </div>
+            <p id="stk-result" style="margin-top:0.75rem;font-size:0.9rem"></p>`;
+          document.getElementById('stk-btn').addEventListener('click', async () => {
+            const phone = document.getElementById('stk-phone').value;
+            const resultEl = document.getElementById('stk-result');
+            try {
+              const r = await API.mpesaStk(data.order.id, phone);
+              resultEl.innerHTML = `<span class="alert alert-info" style="display:inline-block">${escapeHtml(r.message)}</span>`;
+            } catch (err) {
+              resultEl.innerHTML = `<span class="alert alert-warning" style="display:inline-block">${escapeHtml(err.message || err.data?.message || 'STK not available yet')}</span>`;
+            }
+          });
+        } else if (data.order.payment_method === 'card') {
+          actions.innerHTML = `<button class="btn btn-primary" id="card-btn">Pay with card</button>
+            <p id="card-result" style="margin-top:0.75rem"></p>`;
+          document.getElementById('card-btn').addEventListener('click', async () => {
+            try {
+              const r = await API.cardInitiate(data.order.id);
+              document.getElementById('card-result').innerHTML =
+                `<span class="alert alert-info" style="display:inline-block">${escapeHtml(r.message)}</span>`;
+            } catch (err) {
+              document.getElementById('card-result').innerHTML =
+                `<span class="alert alert-warning" style="display:inline-block">${escapeHtml(err.message || err.data?.message || '')}</span>`;
+            }
+          });
+        } else {
+          actions.innerHTML = `<p class="alert alert-success">Pay cash when your order is delivered or collected.</p>`;
+        }
+      } catch (err) {
+        msg.innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
+        btn.disabled = false;
+        btn.textContent = 'Place order';
+      }
+    });
+  </script>
+</body>
+</html>

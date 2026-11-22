@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#176b45">
+  <meta name="description" content="Official Mawego Bookshop purchase receipt.">
+
+  <title>Purchase Receipt | Mawego Bookshop</title>
+
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+
+  <style>
+    :root {
+      --receipt-green: #176b45;
+      --receipt-dark: #123b2b;
+      --receipt-muted: #64748b;
+      --receipt-border: #e2e8f0;
+      --receipt-bg: #f1f5f9;
+    }
+
+    body {
+      background: var(--receipt-bg);
+    }
+
+    .receipt-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 35px 16px 60px;
+    }
+
+    .receipt-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .receipt-actions .actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .receipt-paper {
+      background: #fff;
+      border: 1px solid var(--receipt-border);
+      border-radius: 12px;
+      padding: 38px;
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .receipt-brand {
+      text-align: center;
+      padding-bottom: 25px;
+      border-bottom: 2px solid var(--receipt-green);
+    }
+
+    .receipt-brand h1 {
+      color: var(--receipt-dark);
+      font-size: 27px;
+      margin: 0 0 6px;
+      font-weight: 800;
+      letter-spacing: -0.7px;
+    }
+
+    .receipt-brand .tagline {
+      color: var(--receipt-muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .receipt-brand .shop-contact {
+      color: var(--receipt-muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .receipt-title {
+      text-align: center;
+      margin: 25px 0;
+    }
+
+    .receipt-title h2 {
+      font-size: 21px;
+      margin: 0 0 5px;
+      color: #172033;
+    }
+
+    .receipt-title p {
+      color: var(--receipt-muted);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .receipt-section {
+      margin: 25px 0;
+    }
+
+    .section-heading {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 800;
+      color: var(--receipt-green);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--receipt-border);
+      margin-bottom: 14px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px 25px;
+    }
+
+    .detail-label {
+      display: block;
+      font-size: 11px;
+      color: var(--receipt-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .detail-value {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      overflow-wrap: anywhere;
+    }
+
+    .receipt-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    .receipt-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--receipt-border);
+    }
+
+    .receipt-table td {
+      padding: 13px 8px;
+      border-bottom: 1px solid var(--receipt-border);
+      color: #334155;
+      vertical-align: top;
+    }
+
+    .receipt-table .right {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .receipt-table .item-name {
+      font-weight: 600;
+      color: #172033;
+    }
+
+    .receipt-totals {
+      max-width: 310px;
+      margin: 20px 0 0 auto;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 8px 0;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .total-row.grand-total {
+      margin-top: 10px;
+      padding: 15px 0;
+      border-top: 2px solid var(--receipt-green);
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--receipt-dark);
+    }
+
+    .receipt-footer {
+      margin-top: 35px;
+      padding-top: 22px;
+      border-top: 1px dashed #cbd5e1;
+      text-align: center;
+    }
+
+    .receipt-footer h3 {
+      font-size: 17px;
+      color: var(--receipt-green);
+      margin: 0 0 7px;
+    }
+
+    .receipt-footer p {
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--receipt-muted);
+      margin: 0;
+    }
+
+    .payment-status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 20px;
+      background: #ecfdf5;
+      color: #166534;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .loading-state,
+    .error-state {
+      background: white;
+      padding: 35px;
+      text-align: center;
+      border-radius: 12px;
+      border: 1px solid var(--receipt-border);
+    }
+
+    .error-state {
+      color: #b91c1c;
+    }
+
+    @media (max-width: 600px) {
+      .receipt-page {
+        padding: 18px 10px 35px;
+      }
+
+      .receipt-paper {
+        padding: 22px 15px;
+      }
+
+      .receipt-brand h1 {
+        font-size: 23px;
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 10px;
+      }
+
+      .receipt-table {
+        font-size: 11px;
+      }
+
+      .receipt-table th,
+      .receipt-table td {
+        padding: 10px 5px;
+      }
+
+      .receipt-actions {
+        align-items: stretch;
+      }
+    }
+
+    @media print {
+      @page {
+        size: auto;
+        margin: 12mm;
+      }
+
+      body {
+        background: white !important;
+        color: #111 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .receipt-page {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      .receipt-paper {
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 5px;
+      }
+
+      .receipt-table tr,
+      .receipt-section,
+      .receipt-totals {
+        break-inside: avoid;
+      }
+
+      .receipt-brand {
+        border-bottom: 2px solid #176b45;
+      }
+
+      .receipt-footer {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header no-print">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-mark">
+          <i data-lucide="book-open"></i>
+        </span>
+        Mawego <span>Bookshop</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">
+          <i data-lucide="store"></i>
+          Shop
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="receipt-page">
+
+    <div class="receipt-actions no-print">
+      <a href="/" class="btn btn-outline">
+        <i data-lucide="arrow-left"></i>
+        Back to shop
+      </a>
+
+      <div class="actions-right">
+        <button class="btn btn-primary" onclick="window.print()">
+          <i data-lucide="printer"></i>
+          Print / Save PDF
+        </button>
+      </div>
+    </div>
+
+    <div id="content" class="loading-state">
+      <i data-lucide="loader-circle"></i>
+      <p>Loading your receipt...</p>
+    </div>
+
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const orderNumber = params.get("order");
+    const orderId = params.get("id");
+    const phone = params.get("phone");
+
+    const content = document.getElementById("content");
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    function formatKes(value) {
+      const amount = Number(value || 0);
+
+      return "KES " + amount.toLocaleString("en-KE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return escapeHtml(value || "Not available");
+      }
+
+      return escapeHtml(date.toLocaleString("en-KE", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }));
+    }
+
+    function detail(label, value) {
+      return `
+        <div>
+          <span class="detail-label">${escapeHtml(label)}</span>
+          <span class="detail-value">${escapeHtml(value || "Not provided")}</span>
+        </div>
+      `;
+    }
+
+    function renderReceipt(receipt) {
+      if (!receipt || !receipt.order || !receipt.shop) {
+        throw new Error("The receipt information is incomplete.");
+      }
+
+      const o = receipt.order;
+      const shop = receipt.shop;
+
+      document.title =
+        `Receipt ${receipt.receipt_number} | ${shop.name}`;
+
+      const items = Array.isArray(o.items) ? o.items : [];
+
+      const itemRows = items.map(item => `
+        <tr>
+          <td>
+            <span class="item-name">
+              ${escapeHtml(item.product_name)}
+            </span>
+          </td>
+          <td class="right">${escapeHtml(item.quantity)}</td>
+          <td class="right">
+            ${formatKes(item.line_total_kes)}
+          </td>
+        </tr>
+      `).join("");
+
+      content.className = "";
+
+      content.innerHTML = `
+        <article class="receipt-paper">
+
+          <div class="receipt-brand">
+            <h1>${escapeHtml(shop.name)}</h1>
+
+            <div class="tagline">
+              Quality Books. Knowledge. Excellence.
+            </div>
+
+            <div class="shop-contact">
+              ${escapeHtml(shop.address || "")}<br>
+              ${escapeHtml(shop.phone || "")}
+              ${shop.email ? `<br>${escapeHtml(shop.email)}` : ""}
+            </div>
+          </div>
+
+          <div class="receipt-title">
+            <h2>PAYMENT RECEIPT</h2>
+            <p>Thank you for shopping with us.</p>
+          </div>
+
+          <section class="receipt-section">
+            <div class="section-heading">Receipt Information</div>
+
+            <div class="details-grid">
+              ${detail("Receipt Number", receipt.receipt_number)}
+              ${detail("Order Number", o.order_number)}
+              ${detail("Date", formatDate(o.created_at))}
+              ${detail("Customer", o.customer_name)}
+              ${detail("Phone Number", o.customer_phone)}
+              ${detail(
+                "Fulfilment",
+                o.fulfilment_type === "delivery" ? "Delivery" : "Collection"
+              )}
+            </div>
+
+            ${o.delivery_address ? `
+              <div style="margin-top:15px">
+                ${detail("Delivery Address", o.delivery_address)}
+              </div>
+            ` : ""}
+          </section>
+
+          <section class="receipt-section">
+            <div class="section-heading">Payment Information</div>
+
+            <div class="details-grid">
+              ${detail(
+                "Payment Method",
+                String(o.payment_method || "Not specified").replace(/_/g, " ")
+              )}
+
+              <div>
+                <span class="detail-label">Payment Status</span>
+                <span class="payment-status">
+                  ${escapeHtml(o.payment_status || "Pending")}
+                </span>
+              </div>
+
+              ${o.mpesa_receipt
+                ? detail("M-Pesa Transaction", o.mpesa_receipt)
+                : ""}
+            </div>
+          </section>
+
+          <section class="receipt-section">
+            <div class="section-heading">Purchased Items</div>
+
+            <table class="receipt-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th class="right">Qty</th>
+                  <th class="right">Amount</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${itemRows || `
+                  <tr>
+                    <td colspan="3">No items found.</td>
+                  </tr>
+                `}
+              </tbody>
+            </table>
+
+            <div class="receipt-totals">
+
+              <div class="total-row">
+                <span>Subtotal</span>
+                <strong>${formatKes(o.subtotal_kes)}</strong>
+              </div>
+
+              <div class="total-row">
+                <span>Delivery Fee</span>
+                <strong>
+                  ${Number(o.delivery_fee_kes || 0) > 0
+                    ? formatKes(o.delivery_fee_kes)
+                    : "FREE"}
+                </strong>
+              </div>
+
+              <div class="total-row grand-total">
+                <span>TOTAL</span>
+                <span>${formatKes(o.total_kes)}</span>
+              </div>
+
+            </div>
+          </section>
+
+          <footer class="receipt-footer">
+            <h3>Thank You for Your Purchase!</h3>
+
+            <p>
+              ${escapeHtml(shop.footer || "Thank you for choosing Mawego Bookshop. We appreciate your business.")}
+              <br>
+              We look forward to serving you again.
+              <br><br>
+              <strong>Mawego Bookshop</strong>
+            </p>
+          </footer>
+
+        </article>
+      `;
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function showError(message) {
+      content.className = "error-state";
+
+      content.innerHTML = `
+        <i data-lucide="alert-circle"></i>
+        <h3>Unable to Load Receipt</h3>
+        <p>${escapeHtml(message)}</p>
+        <a href="/" class="btn btn-primary">Return to Shop</a>
+      `;
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    async function loadReceipt() {
+      try {
+        let data;
+
+        if (orderId) {
+          data = await API.receiptByOrderId(orderId);
+        } else if (orderNumber) {
+          data = await API.receiptByNumber(orderNumber, phone);
+        } else {
+          throw new Error("Missing order reference. Please check your receipt link.");
+        }
+
+        if (!data || !data.receipt) {
+          throw new Error("Receipt not found.");
+        }
+
+        renderReceipt(data.receipt);
+
+      } catch (error) {
+        console.error("Receipt loading error:", error);
+        showError(error.message || "Something went wrong while loading your receipt.");
+      }
+    }
+
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    loadReceipt();
+  </script>
+
+</body>
+</html>

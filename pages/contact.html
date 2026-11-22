@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — Mawego Bookshop</title>
+  <meta name="description" content="Contact Mawego Bookshop for orders, school supplies and collection." />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+        Mawego <span>Bookshop</span>
+      </a>
+      <nav class="nav">
+        <a href="/"><i data-lucide="store"></i> Shop</a>
+        <a href="/pages/contact.html" class="active"><i data-lucide="phone"></i> Contact</a>
+        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+      </nav>
+    </div>
+  </header>
+  <main class="container page-pad" style="max-width:720px">
+    <h1 style="font-family:var(--font-display);display:flex;align-items:center;gap:0.5rem"><i data-lucide="map-pin"></i> Visit &amp; contact</h1>
+    <div class="features-grid" style="margin-top:1.5rem">
+      <div class="feature-card">
+        <div class="ficon"><i data-lucide="store"></i></div>
+        <h3>Shop location</h3>
+        <p id="shop-address">Mawego, Kenya</p>
+      </div>
+      <div class="feature-card">
+        <div class="ficon"><i data-lucide="phone"></i></div>
+        <h3>Phone / WhatsApp</h3>
+        <p id="shop-phone">See shop for number</p>
+      </div>
+      <div class="feature-card">
+        <div class="ficon"><i data-lucide="clock"></i></div>
+        <h3>Hours</h3>
+        <p>Monday – Saturday<br />Closed Sundays &amp; public holidays</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5rem">
+      <h2 style="margin-top:0;font-size:1.1rem">Orders &amp; collection</h2>
+      <p class="text-muted" style="margin:0;line-height:1.6">
+        Place orders online for delivery or collection. Track any order with your order number and phone number.
+        Pay with M-Pesa, card, or cash when you receive or collect your books.
+      </p>
+      <p style="margin-top:1rem">
+        <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Browse shop</a>
+        <a href="/pages/track.html" class="btn btn-outline"><i data-lucide="package-search"></i> Track order</a>
+      </p>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-bottom" style="border:none;padding:0">
+      <span>© Mawego Bookshop · KES</span>
+      <a href="/">Home</a>
+    </div>
+  </footer>
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    lucide.createIcons();
+    API.settings().then(({ settings }) => {
+      if (settings.shop_address) document.getElementById('shop-address').textContent = settings.shop_address;
+      if (settings.shop_phone) document.getElementById('shop-phone').textContent = settings.shop_phone;
+    }).catch(() => {});
+  </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My account — Mawego Bookshop</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span> Mawego <span>Bookshop</span></a>
+      <nav class="nav">
+        <a href="/"><i data-lucide="store"></i> Shop</a>
+        <a href="/pages/track.html"><i data-lucide="map-pin"></i> Track</a>
+        <a href="/pages/account.html" class="active"><i data-lucide="user"></i> Account</a>
+        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-pad" style="max-width:640px">
+    <div id="auth-panel"></div>
+    <div id="account-panel" class="hidden"></div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    lucide.createIcons();
+
+    function showAuth() {
+      document.getElementById('auth-panel').classList.remove('hidden');
+      document.getElementById('account-panel').classList.add('hidden');
+      document.getElementById('auth-panel').innerHTML = `
+        <h1 style="display:flex;align-items:center;gap:0.5rem;font-family:var(--font-display)"><i data-lucide="user-round"></i> Customer account</h1>
+        <div class="card" style="margin-bottom:1rem">
+          <h2 style="margin-top:0;font-size:1.1rem">Sign in</h2>
+          <div id="login-msg"></div>
+          <form id="login-form">
+            <div class="form-group"><label>Email</label><input name="email" type="email" required /></div>
+            <div class="form-group"><label>Password</label><input name="password" type="password" required /></div>
+            <button class="btn btn-primary" type="submit"><i data-lucide="log-in"></i> Sign in</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2 style="margin-top:0;font-size:1.1rem">Create account</h2>
+          <div id="reg-msg"></div>
+          <form id="reg-form">
+            <div class="form-group"><label>Full name</label><input name="full_name" required /></div>
+            <div class="form-group"><label>Email</label><input name="email" type="email" required /></div>
+            <div class="form-group"><label>Phone</label><input name="phone" placeholder="07XX XXX XXX" /></div>
+            <div class="form-group"><label>Password</label><input name="password" type="password" required minlength="6" /></div>
+            <button class="btn btn-primary" type="submit"><i data-lucide="user-plus"></i> Register</button>
+          </form>
+        </div>`;
+
+      document.getElementById('login-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        try {
+          const data = await API.login(fd.get('email'), fd.get('password'));
+          API.setAuth(data.token, data.user);
+          showAccount();
+        } catch (err) {
+          document.getElementById('login-msg').innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
+        }
+      };
+      lucide.createIcons({ nodes: [document.getElementById('auth-panel')] });
+      document.getElementById('reg-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        try {
+          const data = await API.register(Object.fromEntries(fd));
+          API.setAuth(data.token, data.user);
+          showAccount();
+        } catch (err) {
+          document.getElementById('reg-msg').innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
+        }
+      };
+    }
+
+    async function showAccount() {
+      const user = API.getUser();
+      if (!user) return showAuth();
+      document.getElementById('auth-panel').classList.add('hidden');
+      document.getElementById('account-panel').classList.remove('hidden');
+      const panel = document.getElementById('account-panel');
+      panel.innerHTML = `<div class="loading">Loading orders…</div>`;
+
+      try {
+        const { orders } = await API.myOrders();
+        let ptsHtml = '';
+        try {
+          const pts = await API.pointsBalance();
+          ptsHtml = `<div class="points-chip" style="margin:0.75rem 0"><i data-lucide="star"></i> ${pts.reward_points || 0} reward points · worth ${formatKes(pts.value_kes || 0)}</div>
+            <p style="font-size:0.85rem;color:var(--muted);margin:0 0 1rem">Earn 1 point per KES 50 spent. Redeem from 100 points at checkout (100 pts = KES 50 off).</p>`;
+        } catch(_) {}
+        panel.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem">
+            <h1 style="margin:0">Hello, ${escapeHtml(user.full_name)}</h1>
+            <button class="btn btn-outline btn-sm" id="logout"><i data-lucide="log-out"></i> Log out</button>
+          </div>
+          <p style="color:var(--muted)">${escapeHtml(user.email)}${user.phone ? ' · ' + escapeHtml(user.phone) : ''}</p>
+          ${ptsHtml}
+          <h2 style="font-size:1.15rem">Order history</h2>
+          ${
+            orders.length
+              ? orders
+                  .map(
+                    (o) => `
+            <div class="card" style="margin-bottom:0.75rem">
+              <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem">
+                <strong>${escapeHtml(o.order_number)}</strong>
+                <span>
+                  <span class="badge badge-${o.order_status}">${o.order_status.replace(/_/g, ' ')}</span>
+                  <span class="badge badge-${o.payment_status}">${o.payment_status}</span>
+                </span>
+              </div>
+              <p style="margin:0.35rem 0;font-size:0.9rem;color:var(--muted)">${escapeHtml(o.created_at)} · ${o.fulfilment_type}</p>
+              <p style="margin:0"><strong>${formatKes(o.total_kes)}</strong></p>
+              <ul style="margin:0.5rem 0 0;padding-left:1.2rem;font-size:0.9rem">
+                ${(o.items || []).map((i) => `<li>${escapeHtml(i.product_name)} × ${i.quantity}</li>`).join('')}
+              </ul>
+              <p style="margin-top:0.75rem">
+                <a href="/pages/receipt.html?order=${encodeURIComponent(o.order_number)}&phone=${encodeURIComponent(o.customer_phone)}" class="btn btn-sm btn-outline"><i data-lucide="receipt"></i> Receipt</a>
+                <a href="/pages/track.html" class="btn btn-sm btn-outline"><i data-lucide="map-pin"></i> Track</a>
+              </p>
+            </div>`
+                  )
+                  .join('')
+              : '<div class="empty-state card"><div class="empty-icon"><i data-lucide="package-open"></i></div><p>No orders yet.</p> <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Start shopping</a></div>'
+          }`;
+        lucide.createIcons({ nodes: [panel] });
+        document.getElementById('logout').onclick = () => {
+          API.clearAuth();
+          showAuth();
+        };
+      } catch (err) {
+        if (err.status === 401) {
+          API.clearAuth();
+          showAuth();
+        } else {
+          panel.innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
+        }
+      }
+    }
+
+    if (API.getUser()) showAccount();
+    else showAuth();
+  </script>
+</body>
+</html>

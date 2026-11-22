@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Track order — Mawego Bookshop</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo"><span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span> Mawego <span>Bookshop</span></a>
+      <nav class="nav">
+        <a href="/"><i data-lucide="store"></i> Shop</a>
+        <a href="/pages/track.html" class="active"><i data-lucide="map-pin"></i> Track</a>
+        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-pad" style="max-width:560px">
+    <h1 style="display:flex;align-items:center;gap:0.5rem;font-family:var(--font-display)"><i data-lucide="package-search"></i> Track your order</h1>
+    <div class="card">
+      <form id="track-form">
+        <div class="form-group">
+          <label for="order_number">Order number</label>
+          <input id="order_number" required placeholder="MB-20241121-1234" />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone used on the order</label>
+          <input id="phone" required placeholder="07XX XXX XXX" />
+        </div>
+        <button type="submit" class="btn btn-primary"><i data-lucide="search"></i> Track</button>
+      </form>
+    </div>
+    <div id="result" style="margin-top:1.25rem"></div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    lucide.createIcons();
+
+    document.getElementById('track-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const orderNumber = document.getElementById('order_number').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const result = document.getElementById('result');
+      result.innerHTML = '<div class="loading">Looking up…</div>';
+      try {
+        const { order } = await API.trackOrder(orderNumber, phone);
+        result.innerHTML = `
+          <div class="card">
+            <h2 style="margin-top:0">${escapeHtml(order.order_number)}</h2>
+            <p>
+              <span class="badge badge-${escapeHtml(order.order_status)}">${escapeHtml(order.order_status.replace(/_/g, ' '))}</span>
+              <span class="badge badge-${escapeHtml(order.payment_status)}" style="margin-left:0.35rem">${escapeHtml(order.payment_status)}</span>
+            </p>
+            <p><strong>Customer:</strong> ${escapeHtml(order.customer_name)} · ${escapeHtml(order.customer_phone)}</p>
+            <p><strong>Fulfilment:</strong> ${order.fulfilment_type === 'delivery' ? 'Delivery' : 'Shop collection'}
+              ${order.delivery_address ? ' — ' + escapeHtml(order.delivery_address) : ''}</p>
+            <p><strong>Payment:</strong> ${escapeHtml(order.payment_method.replace(/_/g, ' '))}</p>
+            <p><strong>Total:</strong> ${formatKes(order.total_kes)}</p>
+            <h3>Items</h3>
+            <ul>
+              ${(order.items || [])
+                .map((i) => `<li>${escapeHtml(i.product_name)} × ${i.quantity} — ${formatKes(i.line_total_kes)}</li>`)
+                .join('')}
+            </ul>
+            <p style="font-size:0.85rem;color:var(--muted)">Placed ${escapeHtml(order.created_at)}</p>
+          </div>`;
+        lucide.createIcons({ nodes: [result] });
+      } catch (err) {
+        result.innerHTML = `<div class="alert alert-error"><i data-lucide="alert-circle"></i> ${escapeHtml(err.message)}</div>`;
+        lucide.createIcons({ nodes: [result] });
+      }
+    });
+  </script>
+</body>
+</html>

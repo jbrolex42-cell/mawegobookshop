@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Page not found — Mawego Bookshop</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+        Mawego <span>Bookshop</span>
+      </a>
+      <nav class="nav">
+        <a href="/"><i data-lucide="store"></i> Shop</a>
+        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container page-pad">
+    <div class="empty-state card" style="max-width:480px;margin:3rem auto">
+      <div class="empty-icon"><i data-lucide="file-question"></i></div>
+      <h1 style="font-family:var(--font-display);margin:0.5rem 0">Page not found</h1>
+      <p class="text-muted">That link may be outdated or the page was moved.</p>
+      <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.25rem">
+        <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Back to shop</a>
+        <a href="/pages/track.html" class="btn btn-outline"><i data-lucide="map-pin"></i> Track order</a>
+      </div>
+    </div>
+  </main>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product — Mawego Bookshop</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script src="https://unpkg.com/lucide@0.469.0"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+        Mawego <span>Bookshop</span>
+      </a>
+      <nav class="nav">
+        <a href="/"><i data-lucide="store"></i> Shop</a>
+        <a href="/pages/account.html"><i data-lucide="user"></i> Account</a>
+        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-pad" id="content">
+    <div class="loading">Loading product</div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom" style="border:none;padding:0;opacity:0.85">
+      <span>Mawego Bookshop · Prices in KES</span>
+      <a href="/"><i data-lucide="arrow-left"></i> Continue shopping</a>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script>
+    lucide.createIcons();
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('slug');
+
+    function toast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = '<i data-lucide="check-circle"></i> ' + msg;
+      document.body.appendChild(t);
+      lucide.createIcons({ nodes: [t] });
+      setTimeout(() => t.remove(), 2200);
+    }
+
+    async function load() {
+      const el = document.getElementById('content');
+      if (!slug) {
+        el.innerHTML = '<div class="alert alert-error"><i data-lucide="alert-circle"></i> Product not specified. <a href="/">Back to shop</a></div>';
+        lucide.createIcons({ nodes: [el] });
+        return;
+      }
+      try {
+        const { product: p } = await API.product(slug);
+        document.title = p.name + ' — Mawego Bookshop';
+        const out = p.stock_qty <= 0;
+        const sale = p.sale_active && p.final_price_kes != null && p.final_price_kes < p.price_kes;
+        const displayPrice = sale ? p.final_price_kes : p.price_kes;
+        const img = p.image_url
+          ? `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)}" />`
+          : `<span class="thumb-placeholder"><i data-lucide="book-open"></i></span>`;
+
+        el.innerHTML = `
+          <nav style="font-size:0.88rem;color:var(--muted);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap">
+            <a href="/"><i data-lucide="store"></i> Shop</a>
+            <i data-lucide="chevron-right" class="icon-sm"></i>
+            ${p.category_name ? `<span>${escapeHtml(p.category_name)}</span><i data-lucide="chevron-right" class="icon-sm"></i>` : ''}
+            <span style="color:var(--ink)">${escapeHtml(p.name)}</span>
+          </nav>
+          <div class="product-detail">
+            <div class="product-gallery">
+              <div class="main-img">${img}</div>
+            </div>
+            <div class="product-info">
+              <div class="cat" style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);font-weight:600">${escapeHtml(p.category_name || '')}</div>
+              <h1>${escapeHtml(p.name)}</h1>
+              <div class="product-price">${sale ? `<span class="price-was">${formatKes(p.price_kes)}</span> <span class="price-now">${formatKes(displayPrice)}</span>` : formatKes(displayPrice)}
+                ${sale ? `<span class="badge-sale" style="position:static;margin-left:0.5rem">${escapeHtml(p.sale_label || p.discount_percent + '% OFF')}</span>` : ''}</div>
+              <div class="product-meta">
+                <span><i data-lucide="package" class="icon-sm"></i> <strong>Stock:</strong> ${out ? '<span style="color:var(--danger)">Out of stock</span>' : p.stock_qty + ' available'}</span>
+                ${p.sku ? `<span><i data-lucide="hash" class="icon-sm"></i> <strong>SKU:</strong> ${escapeHtml(p.sku)}</span>` : ''}
+                ${p.barcode ? `<span><i data-lucide="barcode" class="icon-sm"></i> <strong>Barcode:</strong> ${escapeHtml(p.barcode)}</span>` : ''}
+              </div>
+              <div class="product-desc">${escapeHtml(p.description || 'Quality product from Mawego Bookshop.')}</div>
+              <div class="product-buy">
+                <div class="qty-control">
+                  <button type="button" id="dec" aria-label="Decrease"><i data-lucide="minus"></i></button>
+                  <input type="number" id="qty" min="1" value="1" max="${Math.max(1, p.stock_qty || 1)}" aria-label="Quantity" />
+                  <button type="button" id="inc" aria-label="Increase"><i data-lucide="plus"></i></button>
+                </div>
+                <button class="btn btn-primary btn-lg" id="add" ${out ? 'disabled' : ''}><i data-lucide="shopping-bag"></i> Add to basket</button>
+                <a href="/pages/cart.html" class="btn btn-outline"><i data-lucide="arrow-right"></i> View basket</a>
+              </div>
+              <div class="card" style="margin-top:1.75rem;background:var(--green-soft);border-color:var(--border)">
+                <strong style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.35rem"><i data-lucide="info"></i> Fulfilment &amp; payment</strong>
+                <p style="margin:0;font-size:0.9rem;color:var(--muted);line-height:1.5">
+                  Delivery or shop collection · M-Pesa, card or cash on delivery · Track with your order number
+                </p>
+              </div>
+            </div>
+          </div>`;
+        lucide.createIcons({ nodes: [el] });
+        document.querySelector('footer') && lucide.createIcons({ nodes: [document.querySelector('footer')] });
+
+        const qtyInput = document.getElementById('qty');
+        document.getElementById('inc').onclick = () => {
+          qtyInput.value = Math.min(p.stock_qty || 99, (parseInt(qtyInput.value, 10) || 1) + 1);
+        };
+        document.getElementById('dec').onclick = () => {
+          qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) - 1);
+        };
+        document.getElementById('add').onclick = () => {
+          Cart.add({
+            ...p,
+            price_kes: displayPrice,
+            original_price_kes: p.price_kes,
+            sale_active: !!sale,
+            discount_percent: p.discount_percent || 0
+          }, parseInt(qtyInput.value, 10) || 1);
+          toast('Added to basket');
+          const btn = document.getElementById('add');
+          btn.innerHTML = '<i data-lucide="check"></i> Added';
+          lucide.createIcons({ nodes: [btn] });
+          setTimeout(() => {
+            btn.innerHTML = '<i data-lucide="shopping-bag"></i> Add to basket';
+            lucide.createIcons({ nodes: [btn] });
+          }, 1400);
+        };
+      } catch (err) {
+        el.innerHTML = `<div class="alert alert-error"><i data-lucide="alert-circle"></i> ${escapeHtml(err.message)} <a href="/">Back to shop</a></div>`;
+        lucide.createIcons({ nodes: [el] });
+      }
+    }
+    load();
+  </script>
+</body>
+</html>
