@@ -209,16 +209,14 @@
   <script src="/js/notifications.js"></script>
   <script>
     lucide.createIcons();
-    (function splashDismiss() {
-      const el = document.getElementById('splash');
-      if (!el) return;
-      const seen = sessionStorage.getItem('mb_splash_seen');
-      if (seen) { el.classList.add('is-done'); return; }
-      setTimeout(() => {
-        el.classList.add('is-done');
-        sessionStorage.setItem('mb_splash_seen', '1');
-      }, 2800);
-    })();
+   (function splashDismiss() {
+  const el = document.getElementById('splash');
+  if (!el) return;
+
+  setTimeout(() => {
+    el.classList.add('is-done');
+  }, 5000);
+})();
     document.getElementById('year').textContent = new Date().getFullYear();
 
     let currentCategory = '';
