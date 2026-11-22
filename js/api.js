@@ -1,5 +1,5 @@
-const API = {
-  base: '/api',
+﻿const API = {
+  base: 'https://mawegobookbackend.onrender.com/api',
 
   getToken() {
     return localStorage.getItem('mb_token');
@@ -283,3 +283,4 @@ function escapeHtml(str) {
 }
 
 document.addEventListener('DOMContentLoaded', () => Cart.updateBadge());
+
