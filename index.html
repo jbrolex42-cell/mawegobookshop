@@ -1274,11 +1274,6 @@ if (typeof Cart !== 'undefined') {
   });
 }
 
-
-// ======================================================
-// HOMEPAGE INITIALIZATION
-// ======================================================
-
 async function initializeHomepage() {
   try {
     await loadCategories();
@@ -1318,11 +1313,6 @@ async function initializeHomepage() {
       ?.addEventListener('click', initializeHomepage);
   }
 }
-
-
-// ======================================================
-// START APPLICATION
-// ======================================================
 
 initializeHomepage();
 
