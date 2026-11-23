@@ -387,113 +387,244 @@ const API = {
 // SHOPPING CART
 // ======================================================
 
+
 const Cart = {
   key: 'mb_cart',
 
+  // Get a consistent product ID from different API formats.
+  getProductId(product) {
+    if (!product) return '';
+
+    const id =
+      product.product_id ??
+      product.id ??
+      product._id;
+
+    if (id && typeof id === 'object') {
+      return String(id._id ?? id.id ?? '');
+    }
+
+    return id == null ? '' : String(id);
+  },
+
+  // Normalize stored basket items.
   get() {
     try {
-      return JSON.parse(
+      const stored = JSON.parse(
         localStorage.getItem(this.key) || '[]'
       );
-    } catch {
+
+      if (!Array.isArray(stored)) return [];
+
+      return stored.map(item => {
+        const productId = this.getProductId(item);
+
+        return {
+          ...item,
+          product_id: productId,
+          name: item.name || item.product_name || item.title || 'Unnamed product',
+          price_kes: Number(item.price_kes ?? item.price ?? 0),
+          quantity: Math.max(
+            1,
+            Math.floor(Number(item.quantity) || 1)
+          ),
+          stock_qty: Number(item.stock_qty ?? item.stock ?? 99)
+        };
+      }).filter(item => item.product_id);
+
+    } catch (error) {
+      console.error('Cart storage error:', error);
       return [];
     }
   },
 
+  // Save basket.
   save(items) {
-    localStorage.setItem(
-      this.key,
-      JSON.stringify(items)
-    );
+    try {
+      localStorage.setItem(
+        this.key,
+        JSON.stringify(items)
+      );
 
-    this.updateBadge();
+      this.updateBadge();
+
+      window.dispatchEvent(
+        new CustomEvent('cart:updated', {
+          detail: { items }
+        })
+      );
+
+      return true;
+
+    } catch (error) {
+      console.error('Unable to save basket:', error);
+      return false;
+    }
   },
 
+  // Add a product.
   add(product, qty = 1) {
+    if (!product || typeof product !== 'object') {
+      throw new Error('Invalid product.');
+    }
+
+    const productId = this.getProductId(product);
+
+    if (!productId) {
+      throw new Error('Product ID is missing.');
+    }
+
+    const price = Number(
+      product.price_kes ?? product.price ?? 0
+    );
+
+    if (!Number.isFinite(price) || price < 0) {
+      throw new Error('Invalid product price.');
+    }
+
+    const rawStock =
+      product.stock_qty ??
+      product.stock ??
+      99;
+
+    const stock = Math.max(
+      0,
+      Number(rawStock) || 0
+    );
+
+    if (stock < 1) {
+      throw new Error('This product is currently out of stock.');
+    }
+
+    const quantity = Math.max(
+      1,
+      Math.floor(Number(qty) || 1)
+    );
+
     const items = this.get();
 
     const existing = items.find(
-      item => item.product_id === product.id
+      item => String(item.product_id) === productId
     );
 
     if (existing) {
       existing.quantity = Math.min(
-        existing.quantity + qty,
-        product.stock_qty || 99
+        existing.quantity + quantity,
+        stock
       );
+
+      existing.stock_qty = stock;
+
     } else {
       items.push({
-        product_id: product.id,
-        name: product.name,
-        price_kes: product.price_kes,
-        original_price_kes:
-          product.original_price_kes || product.price_kes,
+        product_id: productId,
+        name: product.name || product.product_name || product.title || 'Unnamed product',
+
+        price_kes: price,
+
+        original_price_kes: Number(
+          product.original_price_kes ??
+          product.original_price ??
+          price
+        ),
+
         sale_active: !!product.sale_active,
-        discount_percent: product.discount_percent || 0,
-        image_url: product.image_url,
-        slug: product.slug,
-        stock_qty: product.stock_qty,
-        quantity: Math.min(
-          qty,
-          product.stock_qty || 99
-        )
+
+        discount_percent: Number(
+          product.discount_percent || 0
+        ),
+
+        image_url: product.image_url || '',
+        slug: product.slug || '',
+        stock_qty: stock,
+
+        quantity: Math.min(quantity, stock)
       });
     }
 
-    this.save(items);
+    if (!this.save(items)) {
+      throw new Error('Unable to save this product to your basket.');
+    }
+
+    return items;
   },
 
+  // Update quantity.
   updateQty(productId, quantity) {
-    const items = this.get()
-      .map(item => {
-        if (item.product_id === productId) {
-          item.quantity = Math.max(1, quantity);
-        }
+    const id = String(productId);
 
+    const items = this.get().map(item => {
+      if (String(item.product_id) !== id) {
         return item;
-      })
-      .filter(item => item.quantity > 0);
+      }
 
-    this.save(items);
+      const requested = Math.max(
+        1,
+        Math.floor(Number(quantity) || 1)
+      );
+
+      const stock = Math.max(
+        1,
+        Number(item.stock_qty) || 99
+      );
+
+      item.quantity = Math.min(requested, stock);
+
+      return item;
+    });
+
+    return this.save(items);
   },
 
+  // Remove product.
   remove(productId) {
-    this.save(
+    const id = String(productId);
+
+    return this.save(
       this.get().filter(
-        item => item.product_id !== productId
+        item => String(item.product_id) !== id
       )
     );
   },
 
+  // Empty basket.
   clear() {
-    this.save([]);
+    return this.save([]);
   },
 
+  // Total item count.
   count() {
     return this.get().reduce(
-      (sum, item) => sum + item.quantity,
+      (sum, item) => sum + Number(item.quantity || 0),
       0
     );
   },
 
+  // Basket subtotal.
   subtotal() {
     return this.get().reduce(
-      (sum, item) => sum + item.price_kes * item.quantity,
+      (sum, item) =>
+        sum +
+        Number(item.price_kes || 0) *
+        Number(item.quantity || 0),
       0
     );
   },
 
+  // Update all basket badges.
   updateBadge() {
-    document.querySelectorAll('.cart-count').forEach(el => {
-      const count = this.count();
+    const count = this.count();
 
+    document.querySelectorAll('.cart-count').forEach(el => {
       el.textContent = count;
+
       el.style.display = count
         ? 'inline-flex'
         : 'none';
     });
   }
 };
+
 
 // ======================================================
 // SHARED HELPERS
