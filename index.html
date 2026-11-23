@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,1322 +28,1532 @@
 
 <body>
 
-  <!-- Accessibility: skip navigation -->
-  <a href="#catalogue" class="skip-link">
-    Skip to catalogue
-  </a>
+<!-- =====================================================
+     SPLASH SCREEN
+====================================================== -->
 
-  <!-- ======================================================
-       SPLASH SCREEN
-       Duration: 5 seconds
-  ======================================================= -->
+<div class="splash" id="splash" aria-hidden="true">
 
-  <div class="splash" id="splash" aria-hidden="true">
-    <div class="splash-orbit">
+  <div class="splash-orbit">
 
-      <div class="splash-center">
+    <div class="splash-center">
+      <i data-lucide="book-open"></i>
+    </div>
+
+    <div class="splash-icon"><i data-lucide="pencil"></i></div>
+    <div class="splash-icon"><i data-lucide="notebook"></i></div>
+    <div class="splash-icon"><i data-lucide="ruler"></i></div>
+    <div class="splash-icon"><i data-lucide="calculator"></i></div>
+    <div class="splash-icon"><i data-lucide="backpack"></i></div>
+    <div class="splash-icon"><i data-lucide="graduation-cap"></i></div>
+    <div class="splash-icon"><i data-lucide="pen-line"></i></div>
+    <div class="splash-icon"><i data-lucide="library"></i></div>
+
+  </div>
+
+  <div class="splash-brand">
+    Mawego <span>Bookshop</span>
+  </div>
+
+  <div class="splash-sub">
+    Your learning journey starts here
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<header class="site-header">
+
+  <div class="container header-inner">
+
+    <a href="/" class="logo" aria-label="Mawego Bookshop home">
+
+      <span class="logo-mark" aria-hidden="true">
         <i data-lucide="book-open"></i>
+      </span>
+
+      Mawego <span>Bookshop</span>
+
+    </a>
+
+    <nav class="nav" aria-label="Main navigation">
+
+      <a href="/" class="active" aria-current="page">
+        <i data-lucide="store"></i>
+        Shop
+      </a>
+
+      <a href="#catalogue">
+        <i data-lucide="layout-grid"></i>
+        Catalogue
+      </a>
+
+      <a href="/pages/track.html">
+        <i data-lucide="map-pin"></i>
+        Track
+      </a>
+
+      <a href="/pages/account.html">
+        <i data-lucide="user"></i>
+        Account
+      </a>
+
+      <a href="/pages/admin.html">
+        <i data-lucide="settings"></i>
+        Admin
+      </a>
+
+      <a href="/pages/cart.html" class="cart-btn">
+        <i data-lucide="shopping-bag"></i>
+        Basket
+        <span class="cart-count">0</span>
+      </a>
+
+    </nav>
+
+  </div>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="hero">
+
+  <div class="container hero-grid">
+
+    <div>
+
+      <div class="hero-badge">
+        <i data-lucide="map-pinned"></i>
+        Serving Mawego &amp; surrounding areas
       </div>
 
-      <div class="splash-icon"><i data-lucide="pencil"></i></div>
-      <div class="splash-icon"><i data-lucide="notebook"></i></div>
-      <div class="splash-icon"><i data-lucide="ruler"></i></div>
-      <div class="splash-icon"><i data-lucide="calculator"></i></div>
-      <div class="splash-icon"><i data-lucide="backpack"></i></div>
-      <div class="splash-icon"><i data-lucide="graduation-cap"></i></div>
-      <div class="splash-icon"><i data-lucide="pen-line"></i></div>
-      <div class="splash-icon"><i data-lucide="library"></i></div>
+      <h1>
+        Books &amp; stationery for every learner
+      </h1>
+
+      <p class="lead">
+        Curriculum textbooks, set books, revision guides and
+        quality stationery — delivered to your door or ready
+        for collection. All prices in Kenyan Shillings.
+      </p>
+
+      <div class="hero-actions">
+
+        <a href="#catalogue" class="btn btn-primary btn-lg">
+          <i data-lucide="search"></i>
+          Browse catalogue
+        </a>
+
+        <a href="/pages/track.html" class="btn btn-outline btn-lg">
+          <i data-lucide="package-search"></i>
+          Track your order
+        </a>
+
+      </div>
+
+      <form class="search-bar" id="search-form" role="search">
+
+        <input
+          type="search"
+          id="search-input"
+          placeholder="Search books, stationery, SKU..."
+          autocomplete="off"
+          aria-label="Search books and stationery"
+        >
+
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="search"></i>
+          Search
+        </button>
+
+      </form>
 
     </div>
 
-    <div class="splash-brand">
-      Mawego <span>Bookshop</span>
+
+    <div class="hero-visual" aria-hidden="true">
+
+      <div class="hero-stats">
+
+        <div class="hero-stat">
+          <span class="num">7</span>
+          <span class="lbl">Categories</span>
+        </div>
+
+        <div class="hero-stat">
+          <span class="num">KES</span>
+          <span class="lbl">Local pricing</span>
+        </div>
+
+        <div class="hero-stat">
+          <span class="num">M-Pesa</span>
+          <span class="lbl">Easy payments</span>
+        </div>
+
+        <div class="hero-stat">
+          <span class="num">Fast</span>
+          <span class="lbl">Delivery / pickup</span>
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="splash-sub">
-      Your learning journey starts here
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     TRUST BAR
+====================================================== -->
+
+<section class="trust-bar" aria-label="Shopping benefits">
+
+  <div class="container trust-grid">
+
+    <div class="trust-item">
+
+      <div class="trust-icon">
+        <i data-lucide="truck"></i>
+      </div>
+
+      <strong>Delivery or collection</strong>
+      <span>Home, business or in-shop</span>
+
     </div>
+
+    <div class="trust-item">
+
+      <div class="trust-icon">
+        <i data-lucide="wallet"></i>
+      </div>
+
+      <strong>Flexible payments</strong>
+      <span>M-Pesa · Card · Cash</span>
+
+    </div>
+
+    <div class="trust-item">
+
+      <div class="trust-icon">
+        <i data-lucide="graduation-cap"></i>
+      </div>
+
+      <strong>Curriculum ready</strong>
+      <span>KCPE · KCSE · Set books</span>
+
+    </div>
+
+    <div class="trust-item">
+
+      <div class="trust-icon">
+        <i data-lucide="shield-check"></i>
+      </div>
+
+      <strong>Secure checkout</strong>
+      <span>Order tracking included</span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     CATALOGUE
+====================================================== -->
+
+<main class="container page-pad" id="catalogue">
+
+  <div
+    class="categories-strip"
+    id="categories"
+    role="navigation"
+    aria-label="Product categories"
+  ></div>
+
+
+  <div class="section-title">
+
+    <h2 id="list-title">All products</h2>
+
+    <select
+      id="sort-select"
+      class="sort-select"
+      aria-label="Sort products"
+    >
+
+      <option value="name">Name A–Z</option>
+      <option value="price_asc">Price: low to high</option>
+      <option value="price_desc">Price: high to low</option>
+      <option value="newest">Newest</option>
+
+    </select>
+
   </div>
 
 
-  <!-- ======================================================
-       HEADER / NAVIGATION
-  ======================================================= -->
+  <div
+    id="catalogue-status"
+    class="sr-only"
+    role="status"
+    aria-live="polite"
+  ></div>
 
-  <header class="site-header">
-    <div class="container header-inner">
 
-      <a href="/" class="logo" aria-label="Mawego Bookshop home">
-        <span class="logo-mark" aria-hidden="true">
-          <i data-lucide="book-open"></i>
-        </span>
+  <div id="product-grid" class="product-grid">
 
-        Mawego <span>Bookshop</span>
-      </a>
-
-      <nav class="nav" aria-label="Main navigation">
-
-        <a href="/" class="active" aria-current="page">
-          <i data-lucide="store"></i>
-          Shop
-        </a>
-
-        <a href="#catalogue">
-          <i data-lucide="layout-grid"></i>
-          Catalogue
-        </a>
-
-        <a href="/pages/track.html">
-          <i data-lucide="map-pin"></i>
-          Track
-        </a>
-
-        <a href="/pages/account.html">
-          <i data-lucide="user"></i>
-          Account
-        </a>
-
-        <a href="/pages/admin.html">
-          <i data-lucide="settings"></i>
-          Admin
-        </a>
-
-        <a href="/pages/cart.html" class="cart-btn">
-          <i data-lucide="shopping-bag"></i>
-          Basket
-          <span class="cart-count" aria-label="Items in basket">0</span>
-        </a>
-
-      </nav>
+    <div class="loading">
+      Loading products...
     </div>
-  </header>
+
+  </div>
 
 
-  <!-- ======================================================
-       HERO SECTION
-  ======================================================= -->
+  <div
+    id="pagination"
+    class="pagination"
+    aria-label="Product pagination"
+  ></div>
 
-  <section class="hero">
-    <div class="container hero-grid">
+
+  <!-- =================================================
+       FEATURES
+  ================================================== -->
+
+  <section class="features-section" aria-label="Why shop with us">
+
+    <div class="section-title">
+      <h2>Why Mawego Bookshop</h2>
+    </div>
+
+    <div class="features-grid">
+
+      <article class="feature-card">
+
+        <div class="ficon">
+          <i data-lucide="backpack"></i>
+        </div>
+
+        <h3>Built for students &amp; schools</h3>
+
+        <p>
+          Textbooks, revision packs and stationery selected
+          for Kenyan curricula — from early learning through
+          secondary.
+        </p>
+
+      </article>
+
+
+      <article class="feature-card">
+
+        <div class="ficon">
+          <i data-lucide="bike"></i>
+        </div>
+
+        <h3>Delivery or collect in store</h3>
+
+        <p>
+          Choose home or business delivery, or pick up at
+          the shop when your order is ready.
+        </p>
+
+      </article>
+
+
+      <article class="feature-card">
+
+        <div class="ficon">
+          <i data-lucide="smartphone"></i>
+        </div>
+
+        <h3>Pay the way you prefer</h3>
+
+        <p>
+          M-Pesa STK Push, card, or cash on delivery /
+          collection. Track your order using your order
+          number and phone.
+        </p>
+
+      </article>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<footer class="site-footer">
+
+  <div class="container">
+
+    <div class="footer-grid">
+
 
       <div>
 
-        <div class="hero-badge">
-          <i data-lucide="map-pinned"></i>
-          Serving Mawego &amp; surrounding areas
+        <div class="footer-brand">
+          Mawego <span>Bookshop</span>
         </div>
 
-        <h1>
-          Books &amp; stationery for every learner
-        </h1>
-
-        <p class="lead">
-          Curriculum textbooks, set books, revision guides and
-          quality stationery — delivered to your door or ready
-          for collection. All prices in Kenyan Shillings.
+        <p style="margin:0.5rem 0 0;opacity:0.9;max-width:22rem;line-height:1.55">
+          Your local bookshop online. Curriculum books,
+          stationery, TVET and university materials for
+          students and schools across the region.
         </p>
 
-        <div class="hero-actions">
 
-          <a href="#catalogue" class="btn btn-primary btn-lg">
-            <i data-lucide="search"></i>
-            Browse catalogue
-          </a>
-
-          <a href="/pages/track.html" class="btn btn-outline btn-lg">
-            <i data-lucide="package-search"></i>
-            Track your order
-          </a>
-
-        </div>
-
-        <!-- Product search -->
-        <form class="search-bar" id="search-form" role="search">
-
-          <input
-            type="search"
-            id="search-input"
-            placeholder="Search books, stationery, SKU..."
-            autocomplete="off"
-            aria-label="Search books and stationery"
-          >
-
-          <button type="submit" class="btn btn-primary">
-            <i data-lucide="search"></i>
-            Search
-          </button>
-
-        </form>
-
-      </div>
-
-
-      <!-- Hero statistics -->
-      <div class="hero-visual" aria-hidden="true">
-
-        <div class="hero-stats">
-
-          <div class="hero-stat">
-            <span class="num">7</span>
-            <span class="lbl">Categories</span>
-          </div>
-
-          <div class="hero-stat">
-            <span class="num">KES</span>
-            <span class="lbl">Local pricing</span>
-          </div>
-
-          <div class="hero-stat">
-            <span class="num">M-Pesa</span>
-            <span class="lbl">Easy payments</span>
-          </div>
-
-          <div class="hero-stat">
-            <span class="num">Fast</span>
-            <span class="lbl">Delivery / pickup</span>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ======================================================
-       TRUST / BENEFITS BAR
-  ======================================================= -->
-
-  <section class="trust-bar" aria-label="Shopping benefits">
-
-    <div class="container trust-grid">
-
-      <div class="trust-item">
-        <div class="trust-icon">
-          <i data-lucide="truck"></i>
-        </div>
-
-        <strong>Delivery or collection</strong>
-        <span>Home, business or in-shop</span>
-      </div>
-
-      <div class="trust-item">
-        <div class="trust-icon">
-          <i data-lucide="wallet"></i>
-        </div>
-
-        <strong>Flexible payments</strong>
-        <span>M-Pesa · Card · Cash</span>
-      </div>
-
-      <div class="trust-item">
-        <div class="trust-icon">
-          <i data-lucide="graduation-cap"></i>
-        </div>
-
-        <strong>Curriculum ready</strong>
-        <span>KCPE · KCSE · Set books</span>
-      </div>
-
-      <div class="trust-item">
-        <div class="trust-icon">
-          <i data-lucide="shield-check"></i>
-        </div>
-
-        <strong>Secure checkout</strong>
-        <span>Order tracking included</span>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ======================================================
-       MAIN CATALOGUE
-  ======================================================= -->
-
-  <main class="container page-pad" id="catalogue">
-
-    <!-- Categories generated from the API -->
-    <div
-      class="categories-strip"
-      id="categories"
-      role="navigation"
-      aria-label="Product categories"
-    ></div>
-
-
-    <!-- Catalogue heading and sorting -->
-    <div class="section-title">
-
-      <h2 id="list-title">
-        All products
-      </h2>
-
-      <select
-        id="sort-select"
-        class="sort-select"
-        aria-label="Sort products"
-      >
-        <option value="name">Name A–Z</option>
-        <option value="price_asc">Price: low to high</option>
-        <option value="price_desc">Price: high to low</option>
-        <option value="newest">Newest</option>
-      </select>
-
-    </div>
-
-
-    <!-- Accessible product loading announcements -->
-    <div
-      id="catalogue-status"
-      class="sr-only"
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-    ></div>
-
-
-    <!-- Product grid -->
-    <div id="product-grid" class="product-grid">
-      <div class="loading">Loading products...</div>
-    </div>
-
-
-    <!-- Pagination -->
-    <div
-      id="pagination"
-      class="pagination"
-      aria-label="Product pagination"
-    ></div>
-
-
-    <!-- ==================================================
-         WHY SHOP WITH US
-    =================================================== -->
-
-    <section class="features-section" aria-label="Why shop with us">
-
-      <div class="section-title">
-        <h2>Why Mawego Bookshop</h2>
-      </div>
-
-      <div class="features-grid">
-
-        <article class="feature-card">
-
-          <div class="ficon">
-            <i data-lucide="backpack"></i>
-          </div>
-
-          <h3>Built for students &amp; schools</h3>
-
-          <p>
-            Textbooks, revision packs and stationery selected
-            for Kenyan curricula — from early learning through
-            secondary.
-          </p>
-
-        </article>
-
-
-        <article class="feature-card">
-
-          <div class="ficon">
-            <i data-lucide="bike"></i>
-          </div>
-
-          <h3>Delivery or collect in store</h3>
-
-          <p>
-            Choose home or business delivery, or pick up at
-            the shop when your order is ready.
-          </p>
-
-        </article>
-
-
-        <article class="feature-card">
-
-          <div class="ficon">
-            <i data-lucide="smartphone"></i>
-          </div>
-
-          <h3>Pay the way you prefer</h3>
-
-          <p>
-            M-Pesa STK Push, card, or cash on delivery /
-            collection. Track your order using your order
-            number and phone.
-          </p>
-
-        </article>
-
-      </div>
-    </section>
-
-  </main>
-
-
-  <!-- ======================================================
-       FOOTER
-  ======================================================= -->
-
-  <footer class="site-footer">
-
-    <div class="container">
-
-      <div class="footer-grid">
-
-        <!-- Brand -->
-        <div>
-
-          <div class="footer-brand">
-            Mawego <span>Bookshop</span>
-          </div>
-
-          <p style="margin:0.5rem 0 0;opacity:0.9;max-width:22rem;line-height:1.55">
-            Your local bookshop online. Curriculum books,
-            stationery, TVET and university materials for
-            students and schools across the region.
-          </p>
-
-          <!-- Social media -->
-          <div class="footer-social" aria-label="Social links">
-
-            <a
-              href="https://facebook.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Facebook"
-              aria-label="Facebook"
-            >
-              <i data-lucide="facebook"></i>
-            </a>
-
-            <a
-              href="https://wa.me/qr/WYE74MOMBBA3J1"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="WhatsApp"
-              aria-label="WhatsApp"
-            >
-              <i data-lucide="message-circle"></i>
-            </a>
-
-            <a
-              href="https://www.instagram.com/icedrolex1/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Instagram"
-              aria-label="Instagram"
-            >
-              <i data-lucide="instagram"></i>
-            </a>
-
-            <a
-              href="https://x.com/kenduniccur?s=11"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="X"
-              aria-label="X"
-            >
-              <i data-lucide="twitter"></i>
-            </a>
-
-            <a
-              href="https://youtube.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="YouTube"
-              aria-label="YouTube"
-            >
-              <i data-lucide="youtube"></i>
-            </a>
-
-            <a
-              href="https://maps.app.goo.gl/f3eSQpFqC9bXjWWC6"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Find us on the map"
-              aria-label="Map location"
-            >
-              <i data-lucide="map-pin"></i>
-            </a>
-
-          </div>
-        </div>
-
-
-        <!-- Shop links -->
-        <div class="footer-col">
-
-          <h4>Shop</h4>
-
-          <ul>
-            <li><a href="#catalogue">All products</a></li>
-            <li><a href="/pages/cart.html">Basket</a></li>
-            <li><a href="/pages/account.html">My account</a></li>
-            <li><a href="/pages/track.html">Track order</a></li>
-          </ul>
-
-        </div>
-
-
-        <!-- Order information -->
-        <div class="footer-col">
-
-          <h4>Orders</h4>
-
-          <ul>
-            <li>Delivery &amp; collection</li>
-            <li>M-Pesa · Card · Cash</li>
-            <li>Cyber Services</li>
-            <li><a href="/pages/receipt.html">Receipts</a></li>
-          </ul>
-
-        </div>
-
-
-        <!-- Contact -->
-        <div class="footer-col">
-
-          <h4>Contact</h4>
-
-          <ul>
-            <li>Mawego, Kenya</li>
-            <li>Shop hours: Mon–Fri & Sun</li>
-            <li><a href="/pages/contact.html">Contact us</a></li>
-            <li><a href="/pages/admin.html">Staff login</a></li>
-            <li><a href="/pages/privacy.html">Privacy policy</a></li>
-          </ul>
-
-        </div>
-
-      </div>
-
-
-      <!-- Copyright -->
-      <div class="footer-bottom">
-
-        <span>
-          © <span id="year"></span> Mawego Bookshop.
-          All rights reserved.
-        </span>
-
-        <span>
-          <a href="/pages/privacy.html" style="color:inherit;opacity:0.9">
-            Privacy
-          </a>
-        </span>
-
-      </div>
-
-    </div>
-  </footer>
-
-
-  <!-- ======================================================
-       APPLICATION SCRIPTS
-  ======================================================= -->
-
-  <script src="/js/api.js"></script>
-  <script src="/js/notifications.js"></script>
-
-  <script>
-
-    'use strict';
-
-    /* =====================================================
-       INITIALIZATION
-    ====================================================== */
-
-    lucide.createIcons();
-
-    document.getElementById('year').textContent =
-      new Date().getFullYear();
-
-
-    /* =====================================================
-       SPLASH SCREEN
-       5000 milliseconds = 5 seconds
-
-       Appears on every homepage load.
-    ====================================================== */
-
-    (function splashDismiss() {
-
-      const splash = document.getElementById('splash');
-
-      if (!splash) return;
-
-      setTimeout(() => {
-        splash.classList.add('is-done');
-      }, 5000);
-
-    })();
-
-
-    /* =====================================================
-       GLOBAL STATE
-    ====================================================== */
-
-    let currentCategory = '';
-    let currentPage = 1;
-    let currentQ = '';
-
-    const productGrid = document.getElementById('product-grid');
-    const pagination = document.getElementById('pagination');
-    const catalogueStatus = document.getElementById('catalogue-status');
-
-
-    /* =====================================================
-       ICON REFRESHER
-
-       Required when dynamically creating HTML.
-    ====================================================== */
-
-    function refreshIcons(root) {
-
-      if (!window.lucide) return;
-
-      lucide.createIcons(
-        root ? { nodes: [root] } : undefined
-      );
-
-    }
-
-
-    /* =====================================================
-       ACCESSIBLE STATUS ANNOUNCEMENTS
-    ====================================================== */
-
-    function announce(message) {
-
-      if (catalogueStatus) {
-        catalogueStatus.textContent = message;
-      }
-
-    }
-
-
-    /* =====================================================
-       SAFE TOAST NOTIFICATIONS
-    ====================================================== */
-
-    function toast(message) {
-
-      const notification = document.createElement('div');
-
-      notification.className = 'toast';
-
-      const icon = document.createElement('i');
-      icon.setAttribute('data-lucide', 'check-circle');
-
-      const text = document.createElement('span');
-      text.textContent = message;
-
-      notification.appendChild(icon);
-      notification.appendChild(text);
-
-      document.body.appendChild(notification);
-
-      refreshIcons(notification);
-
-      setTimeout(() => {
-        notification.remove();
-      }, 2500);
-
-    }
-
-
-    /* =====================================================
-       SAFE HTML ESCAPING
-    ====================================================== */
-
-    function escapeHtml(value) {
-
-      return String(value ?? '').replace(/[&<>"']/g, char => {
-
-        const entities = {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#39;'
-        };
-
-        return entities[char];
-
-      });
-
-    }
-
-
-    /* =====================================================
-       LOAD CATEGORIES
-    ====================================================== */
-
-    async function loadCategories() {
-
-      const response = await API.categories();
-
-      const categories = response.categories || [];
-
-      const categoryContainer =
-        document.getElementById('categories');
-
-      categoryContainer.innerHTML = [
-
-        `<a href="#catalogue"
-            class="cat-chip active"
-            data-slug=""
-            aria-current="true">
-            <i data-lucide="layout-grid"></i>
-            All
-         </a>`,
-
-        ...categories.map(category => {
-
-          return `
-            <a
-              href="#catalogue"
-              class="cat-chip"
-              data-slug="${escapeHtml(category.slug)}"
-            >
-              ${escapeHtml(category.name)}
-            </a>
-          `;
-
-        })
-
-      ].join('');
-
-      refreshIcons(categoryContainer);
-
-      categoryContainer
-        .querySelectorAll('.cat-chip')
-        .forEach(chip => {
-
-          chip.addEventListener('click', event => {
-
-            event.preventDefault();
-
-            categoryContainer
-              .querySelectorAll('.cat-chip')
-              .forEach(item => {
-                item.classList.remove('active');
-                item.removeAttribute('aria-current');
-              });
-
-            chip.classList.add('active');
-            chip.setAttribute('aria-current', 'true');
-
-            currentCategory = chip.dataset.slug || '';
-            currentPage = 1;
-
-            loadProducts();
-
-          });
-
-        });
-
-    }
-
-
-    /* =====================================================
-       PRODUCT CARD
-    ====================================================== */
-
-    function productCard(product) {
-
-      const out = Number(product.stock_qty) <= 0;
-
-      const sale =
-        Boolean(product.sale_active) &&
-        product.final_price_kes != null &&
-        Number(product.final_price_kes) < Number(product.price_kes);
-
-      const displayPrice = sale
-        ? product.final_price_kes
-        : product.price_kes;
-
-      const thumb = product.image_url
-
-        ? `
-          <img
-            src="${escapeHtml(product.image_url)}"
-            alt="${escapeHtml(product.name)}"
-            loading="lazy"
-            decoding="async"
-          >
-        `
-
-        : `
-          <span class="thumb-placeholder">
-            <i data-lucide="book-open"></i>
-          </span>
-        `;
-
-
-      const priceHtml = sale
-
-        ? `
-          <span class="price-was">
-            ${formatKes(product.price_kes)}
-          </span>
-
-          <span class="price-now">
-            ${formatKes(displayPrice)}
-          </span>
-        `
-
-        : formatKes(displayPrice);
-
-
-      const cartPayload = {
-
-        id: product.id,
-        name: product.name,
-
-        price_kes: displayPrice,
-        original_price_kes: product.price_kes,
-
-        stock_qty: product.stock_qty,
-
-        slug: product.slug,
-        image_url: product.image_url,
-
-        sale_active: Boolean(sale),
-
-        discount_percent: product.discount_percent || 0
-
-      };
-
-
-      const safePayload = escapeHtml(
-        JSON.stringify(cartPayload)
-      );
-
-
-      return `
-
-        <article class="product-card">
+        <div class="footer-social" aria-label="Social links">
 
           <a
-            href="/pages/product.html?slug=${encodeURIComponent(product.slug)}"
-            class="thumb"
-            aria-label="View ${escapeHtml(product.name)}"
+            href="https://facebook.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Facebook"
+            aria-label="Facebook"
           >
-
-            ${thumb}
-
-            <span class="badge-stock ${out ? 'out' : ''}">
-              ${out ? 'Out of stock' : 'In stock'}
-            </span>
-
-            ${
-              sale
-                ? `
-                  <span class="badge-sale">
-                    ${escapeHtml(
-                      product.sale_label ||
-                      (product.discount_percent + '% OFF')
-                    )}
-                  </span>
-                `
-                : ''
-            }
-
+            <i data-lucide="facebook"></i>
           </a>
 
-
-          <div class="body">
-
-            <div class="cat">
-              ${escapeHtml(product.category_name || '')}
-            </div>
-
-            <h3>
-              <a href="/pages/product.html?slug=${encodeURIComponent(product.slug)}">
-                ${escapeHtml(product.name)}
-              </a>
-            </h3>
-
-            <div class="stock ${out ? 'out' : ''}">
-              ${
-                out
-                  ? 'Currently unavailable'
-                  : escapeHtml(product.stock_qty) + ' available'
-              }
-            </div>
-
-            <div class="price">
-              ${priceHtml}
-            </div>
-
-            <div class="actions">
-
-              <button
-                class="btn btn-primary btn-sm"
-                type="button"
-                ${out ? 'disabled' : ''}
-                data-add="${safePayload}"
-              >
-
-                <i data-lucide="plus"></i>
-                Add to basket
-
-              </button>
-
-            </div>
-
-          </div>
-
-        </article>
-
-      `;
-
-    }
-
-
-    /* =====================================================
-       ADD TO BASKET
-    ====================================================== */
-
-    function setupAddToBasket() {
-
-      productGrid
-        .querySelectorAll('[data-add]')
-        .forEach(button => {
-
-          button.addEventListener('click', () => {
-
-            try {
-
-              const product = JSON.parse(
-                button.getAttribute('data-add')
-              );
-
-              if (!window.Cart || typeof Cart.add !== 'function') {
-                throw new Error('Basket service is unavailable.');
-              }
-
-              Cart.add(product, 1);
-
-              toast('Added to basket');
-
-              button.disabled = true;
-
-              button.innerHTML = `
-                <i data-lucide="check"></i>
-                Added
-              `;
-
-              refreshIcons(button);
-
-              setTimeout(() => {
-
-                button.innerHTML = `
-                  <i data-lucide="plus"></i>
-                  Add to basket
-                `;
-
-                button.disabled = false;
-
-                refreshIcons(button);
-
-              }, 1400);
-
-            } catch (error) {
-
-              console.error('Basket error:', error);
-
-              toast('Could not add this product');
-
-            }
-
-          });
-
-        });
-
-    }
-
-
-    /* =====================================================
-       PAGINATION
-    ====================================================== */
-
-    function setupPagination(page, pages) {
-
-      if (pages <= 1) {
-
-        pagination.innerHTML = '';
-        return;
-
-      }
-
-      pagination.innerHTML = `
-
-        <button
-          class="btn btn-outline btn-sm"
-          id="prev-page"
-          type="button"
-          ${page <= 1 ? 'disabled' : ''}
-        >
-          <i data-lucide="chevron-left"></i>
-          Previous
-        </button>
-
-        <span>
-          Page ${page} of ${pages}
-        </span>
-
-        <button
-          class="btn btn-outline btn-sm"
-          id="next-page"
-          type="button"
-          ${page >= pages ? 'disabled' : ''}
-        >
-          Next
-          <i data-lucide="chevron-right"></i>
-        </button>
-
-      `;
-
-      refreshIcons(pagination);
-
-
-      document.getElementById('prev-page')
-        ?.addEventListener('click', () => {
-
-          if (currentPage <= 1) return;
-
-          currentPage--;
-
-          loadProducts();
-
-          document.getElementById('catalogue')
-            .scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-
-        });
-
-
-      document.getElementById('next-page')
-        ?.addEventListener('click', () => {
-
-          if (currentPage >= pages) return;
-
-          currentPage++;
-
-          loadProducts();
-
-          document.getElementById('catalogue')
-            .scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-
-        });
-
-    }
-
-
-    /* =====================================================
-       LOAD PRODUCTS
-    ====================================================== */
-
-    async function loadProducts() {
-
-      productGrid.innerHTML = `
-        <div class="loading">
-          Loading products...
-        </div>
-      `;
-
-      pagination.innerHTML = '';
-
-      announce('Loading products');
-
-
-      const sort =
-        document.getElementById('sort-select').value;
-
-
-      const params = {
-        page: currentPage,
-        limit: 12,
-        sort
-      };
-
-
-      if (currentCategory) {
-        params.category = currentCategory;
-      }
-
-      if (currentQ) {
-        params.q = currentQ;
-      }
-
-
-      try {
-
-        const data = await API.products(params);
-
-        const products = data.products || [];
-
-        const title = document.getElementById('list-title');
-
-
-        if (currentQ) {
-
-          title.textContent =
-            `Results for "${currentQ}"`;
-
-        } else if (currentCategory) {
-
-          const chip = document.querySelector(
-            `.cat-chip[data-slug="${CSS.escape(currentCategory)}"]`
-          );
-
-          title.textContent =
-            chip ? chip.textContent.trim() : 'Products';
-
-        } else {
-
-          title.textContent = 'All products';
-
-        }
-
-
-        /* Empty catalogue */
-        if (!products.length) {
-
-          productGrid.innerHTML = `
-
-            <div class="empty-state card" style="grid-column:1/-1">
-
-              <div class="empty-icon">
-                <i data-lucide="package-x"></i>
-              </div>
-
-              <h3>No products found</h3>
-
-              <p>
-                Try another search or select a different category.
-              </p>
-
-              <button
-                type="button"
-                class="btn btn-outline btn-sm"
-                id="reset-filters"
-              >
-                <i data-lucide="rotate-ccw"></i>
-                Reset filters
-              </button>
-
-            </div>
-
-          `;
-
-          refreshIcons(productGrid);
-
-          document.getElementById('reset-filters')
-            ?.addEventListener('click', () => {
-
-              currentCategory = '';
-              currentPage = 1;
-              currentQ = '';
-
-              document.getElementById('search-input').value = '';
-
-              document.querySelectorAll('.cat-chip')
-                .forEach(chip => {
-                  chip.classList.toggle(
-                    'active',
-                    chip.dataset.slug === ''
-                  );
-                });
-
-              loadProducts();
-
-            });
-
-          announce('No products found');
-
-          return;
-
-        }
-
-
-        /* Display products */
-        productGrid.innerHTML =
-          products.map(productCard).join('');
-
-
-        refreshIcons(productGrid);
-
-        setupAddToBasket();
-
-
-        /* Pagination */
-        const page = data.pagination?.page || currentPage;
-        const pages = data.pagination?.pages || 1;
-
-        setupPagination(page, pages);
-
-
-        announce(
-          `${products.length} products displayed`
-        );
-
-
-      } catch (error) {
-
-        console.error('Product loading error:', error);
-
-        productGrid.innerHTML = `
-
-          <div
-            class="alert alert-error"
-            style="grid-column:1/-1"
+          <a
+            href="https://wa.me/qr/WYE74MOMBBA3J1"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="WhatsApp"
+            aria-label="WhatsApp"
           >
+            <i data-lucide="message-circle"></i>
+          </a>
 
-            <i data-lucide="alert-circle"></i>
+          <a
+            href="https://www.instagram.com/icedrolex1/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Instagram"
+            aria-label="Instagram"
+          >
+            <i data-lucide="instagram"></i>
+          </a>
 
-            <strong>Unable to load products</strong>
+          <a
+            href="https://x.com/kenduniccur?s=11"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="X"
+            aria-label="X"
+          >
+            <i data-lucide="twitter"></i>
+          </a>
 
-            <p>
-              Please check your internet connection and try again.
-            </p>
+          <a
+            href="https://youtube.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="YouTube"
+            aria-label="YouTube"
+          >
+            <i data-lucide="youtube"></i>
+          </a>
 
-            <button
-              class="btn btn-outline btn-sm"
-              type="button"
-              id="retry-products"
-            >
-              <i data-lucide="refresh-cw"></i>
-              Try again
-            </button>
+          <a
+            href="https://maps.app.goo.gl/f3eSQpFqC9bXjWWC6"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Find us on the map"
+            aria-label="Map location"
+          >
+            <i data-lucide="map-pin"></i>
+          </a>
 
-          </div>
+        </div>
 
-        `;
-
-        refreshIcons(productGrid);
-
-        document.getElementById('retry-products')
-          ?.addEventListener('click', loadProducts);
-
-        announce('Unable to load products');
-
-      }
-
-    }
+      </div>
 
 
-    /* =====================================================
-       SEARCH
-    ====================================================== */
+      <div class="footer-col">
 
-    document.getElementById('search-form')
-      .addEventListener('submit', event => {
+        <h4>Shop</h4>
+
+        <ul>
+          <li><a href="#catalogue">All products</a></li>
+          <li><a href="/pages/cart.html">Basket</a></li>
+          <li><a href="/pages/account.html">My account</a></li>
+          <li><a href="/pages/track.html">Track order</a></li>
+        </ul>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h4>Orders</h4>
+
+        <ul>
+          <li>Delivery &amp; collection</li>
+          <li>M-Pesa · Card · Cash</li>
+          <li>Cyber Services</li>
+          <li><a href="/pages/receipt.html">Receipts</a></li>
+        </ul>
+
+      </div>
+
+
+      <div class="footer-col">
+
+        <h4>Contact</h4>
+
+        <ul>
+          <li>Mawego, Kenya</li>
+          <li>Shop hours: Mon–Fri &amp; Sun</li>
+          <li><a href="/pages/contact.html">Contact us</a></li>
+          <li><a href="/pages/admin.html">Staff login</a></li>
+          <li><a href="/pages/privacy.html">Privacy policy</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <span>
+        © <span id="year"></span> Mawego Bookshop.
+        All rights reserved.
+      </span>
+
+      <span>
+        <a href="/pages/privacy.html" style="color:inherit;opacity:0.9">
+          Privacy
+        </a>
+      </span>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- =====================================================
+     APPLICATION SCRIPTS
+====================================================== -->
+
+<script src="/js/api.js"></script>
+<script src="/js/notifications.js"></script>
+
+<script>
+
+'use strict';
+
+
+// ======================================================
+// INITIALIZATION
+// ======================================================
+
+if (window.lucide) {
+  lucide.createIcons();
+}
+
+document.getElementById('year').textContent =
+  new Date().getFullYear();
+
+
+// ======================================================
+// SPLASH SCREEN
+// ======================================================
+
+(function () {
+
+  const splash = document.getElementById('splash');
+
+  if (!splash) return;
+
+  setTimeout(() => {
+    splash.classList.add('is-done');
+  }, 5000);
+
+})();
+
+
+// ======================================================
+// APPLICATION STATE
+// ======================================================
+
+let currentCategory = '';
+let currentPage = 1;
+let currentQ = '';
+
+let productsRequest = 0;
+
+const productGrid =
+  document.getElementById('product-grid');
+
+const pagination =
+  document.getElementById('pagination');
+
+const catalogueStatus =
+  document.getElementById('catalogue-status');
+
+
+// ======================================================
+// ICONS
+// ======================================================
+
+function refreshIcons(element) {
+
+  if (!window.lucide) return;
+
+  if (element) {
+    lucide.createIcons({
+      nodes: [element]
+    });
+  } else {
+    lucide.createIcons();
+  }
+
+}
+
+
+// ======================================================
+// SAFE HTML
+// ======================================================
+
+function escapeHtml(value) {
+
+  return String(value ?? '').replace(/[&<>"']/g, char => {
+
+    const entities = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
+
+    return entities[char];
+
+  });
+
+}
+
+
+// ======================================================
+// SAFE CURRENCY
+// ======================================================
+
+function money(value) {
+
+  return formatKes(Number(value) || 0);
+
+}
+
+
+// ======================================================
+// STATUS ANNOUNCEMENTS
+// ======================================================
+
+function announce(message) {
+
+  catalogueStatus.textContent = message;
+
+}
+
+
+// ======================================================
+// NOTIFICATIONS
+// ======================================================
+
+function toast(message, type = 'success') {
+
+  const notification = document.createElement('div');
+
+  notification.className =
+    'toast' + (type === 'error' ? ' toast-error' : '');
+
+  const icon = document.createElement('i');
+
+  icon.setAttribute(
+    'data-lucide',
+    type === 'error' ? 'alert-circle' : 'check-circle'
+  );
+
+  const text = document.createElement('span');
+
+  text.textContent = message;
+
+  notification.append(icon, text);
+
+  document.body.appendChild(notification);
+
+  refreshIcons(notification);
+
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+
+}
+
+
+// ======================================================
+// PRODUCT ID
+// ======================================================
+
+function getProductId(product) {
+
+  const id =
+    product?._id ??
+    product?.id ??
+    product?.product_id;
+
+  return id == null ? '' : String(id);
+
+}
+
+
+// ======================================================
+// PRODUCT STOCK
+// ======================================================
+
+function getProductStock(product) {
+
+  const raw =
+    product.stock_qty ??
+    product.stock_quantity ??
+    product.quantity_in_stock;
+
+  if (raw === undefined || raw === null || raw === '') {
+    return null;
+  }
+
+  const stock = Number(raw);
+
+  return Number.isFinite(stock)
+    ? Math.max(0, stock)
+    : null;
+
+}
+
+
+// ======================================================
+// PRODUCT PRICE
+// ======================================================
+
+function getProductPrice(product) {
+
+  const price = Number(product.price_kes);
+
+  return Number.isFinite(price) && price >= 0
+    ? price
+    : 0;
+
+}
+
+
+function getDisplayPrice(product) {
+
+  const regularPrice = getProductPrice(product);
+
+  const possibleSalePrice = Number(
+    product.final_price_kes ??
+    product.sale_price_kes ??
+    product.price_kes
+  );
+
+  const saleActive =
+    Boolean(product.sale_active) &&
+    Number.isFinite(possibleSalePrice) &&
+    possibleSalePrice >= 0 &&
+    possibleSalePrice < regularPrice;
+
+  return saleActive
+    ? possibleSalePrice
+    : regularPrice;
+
+}
+
+
+// ======================================================
+// LOAD CATEGORIES
+// ======================================================
+
+async function loadCategories() {
+
+  const response = await API.categories();
+
+  const categories = Array.isArray(response)
+    ? response
+    : response.categories || [];
+
+  const container =
+    document.getElementById('categories');
+
+  const categoryLinks = [
+
+    `
+      <a
+        href="#catalogue"
+        class="cat-chip active"
+        data-slug=""
+        aria-current="true"
+      >
+        <i data-lucide="layout-grid"></i>
+        All
+      </a>
+    `,
+
+    ...categories.map(category => `
+
+      <a
+        href="#catalogue"
+        class="cat-chip"
+        data-slug="${escapeHtml(category.slug)}"
+      >
+        ${escapeHtml(category.name)}
+      </a>
+
+    `)
+
+  ];
+
+  container.innerHTML = categoryLinks.join('');
+
+  refreshIcons(container);
+
+  container.querySelectorAll('.cat-chip')
+    .forEach(chip => {
+
+      chip.addEventListener('click', event => {
 
         event.preventDefault();
 
-        currentQ = document.getElementById('search-input')
-          .value
-          .trim();
+        currentCategory = chip.dataset.slug || '';
 
         currentPage = 1;
 
-        loadProducts();
+        container.querySelectorAll('.cat-chip')
+          .forEach(item => {
 
-        document.getElementById('catalogue')
-          .scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
+            item.classList.remove('active');
+            item.removeAttribute('aria-current');
+
           });
 
-      });
+        chip.classList.add('active');
 
-
-    /* =====================================================
-       SORTING
-    ====================================================== */
-
-    document.getElementById('sort-select')
-      .addEventListener('change', () => {
-
-        currentPage = 1;
+        chip.setAttribute('aria-current', 'true');
 
         loadProducts();
 
       });
 
+    });
 
-    /* =====================================================
-       INITIAL PAGE LOAD
-    ====================================================== */
+}
 
-    async function initializeHomepage() {
 
-      try {
+// ======================================================
+// PRODUCT CARD
+// ======================================================
 
-        await loadCategories();
+function productCard(product) {
 
-        await loadProducts();
+  const productId = getProductId(product);
 
-      } catch (error) {
+  const stock = getProductStock(product);
 
-        console.error('Homepage initialization error:', error);
+  const outOfStock = stock === 0;
 
-        productGrid.innerHTML = `
+  const regularPrice = getProductPrice(product);
 
-          <div
-            class="alert alert-error"
-            style="grid-column:1/-1"
+  const displayPrice = getDisplayPrice(product);
+
+  const sale = displayPrice < regularPrice;
+
+  const image = product.image_url
+    ? `
+      <img
+        src="${escapeHtml(product.image_url)}"
+        alt="${escapeHtml(product.name)}"
+        loading="lazy"
+        decoding="async"
+      >
+    `
+    : `
+      <span class="thumb-placeholder">
+        <i data-lucide="book-open"></i>
+      </span>
+    `;
+
+
+  const priceHtml = sale
+
+    ? `
+      <span class="price-was">
+        ${money(regularPrice)}
+      </span>
+
+      <span class="price-now">
+        ${money(displayPrice)}
+      </span>
+    `
+
+    : money(displayPrice);
+
+
+  // IMPORTANT:
+  // Use the actual MongoDB ID, not an assumed numeric ID.
+
+  const cartProduct = {
+
+    id: productId,
+
+    name: product.name || 'Unnamed product',
+
+    price_kes: displayPrice,
+
+    original_price_kes: regularPrice,
+
+    sale_active: sale,
+
+    discount_percent:
+      Number(product.discount_percent) || 0,
+
+    image_url: product.image_url || '',
+
+    slug: product.slug || '',
+
+    stock_qty: stock
+
+  };
+
+
+  const payload = escapeHtml(
+    JSON.stringify(cartProduct)
+  );
+
+
+  const productUrl =
+    '/pages/product.html?slug=' +
+    encodeURIComponent(product.slug || '');
+
+
+  return `
+
+    <article class="product-card">
+
+      <a
+        href="${productUrl}"
+        class="thumb"
+        aria-label="View ${escapeHtml(product.name)}"
+      >
+
+        ${image}
+
+        <span class="badge-stock ${outOfStock ? 'out' : ''}">
+          ${outOfStock ? 'Out of stock' : 'In stock'}
+        </span>
+
+        ${
+          sale
+            ? `
+              <span class="badge-sale">
+                ${escapeHtml(
+                  product.sale_label ||
+                  (product.discount_percent
+                    ? product.discount_percent + '% OFF'
+                    : 'SALE')
+                )}
+              </span>
+            `
+            : ''
+        }
+
+      </a>
+
+
+      <div class="body">
+
+        <div class="cat">
+          ${escapeHtml(product.category_name || '')}
+        </div>
+
+        <h3>
+          <a href="${productUrl}">
+            ${escapeHtml(product.name)}
+          </a>
+        </h3>
+
+        <div class="stock ${outOfStock ? 'out' : ''}">
+
+          ${
+            outOfStock
+              ? 'Currently unavailable'
+              : stock === null
+                ? 'Available'
+                : stock + ' available'
+          }
+
+        </div>
+
+        <div class="price">
+          ${priceHtml}
+        </div>
+
+        <div class="actions">
+
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            data-add="${payload}"
+            ${outOfStock || !productId ? 'disabled' : ''}
           >
 
-            <i data-lucide="server-off"></i>
+            <i data-lucide="plus"></i>
+            Add to basket
 
-            <strong>Catalogue unavailable</strong>
+          </button>
 
-            <p>
-              We could not connect to the shop catalogue.
-              Please try again shortly.
-            </p>
+        </div>
 
-            <button
-              class="btn btn-outline btn-sm"
-              id="retry-homepage"
-              type="button"
-            >
-              <i data-lucide="refresh-cw"></i>
-              Retry
-            </button>
+      </div>
 
-          </div>
+    </article>
 
-        `;
+  `;
 
-        refreshIcons(productGrid);
+}
 
-        document.getElementById('retry-homepage')
-          ?.addEventListener('click', initializeHomepage);
 
-      }
+// ======================================================
+// ADD TO BASKET
+// ======================================================
+
+function setupAddToBasket() {
+
+  productGrid.querySelectorAll('[data-add]')
+    .forEach(button => {
+
+      button.addEventListener('click', () => {
+
+        try {
+
+          const product = JSON.parse(
+            button.getAttribute('data-add')
+          );
+
+          if (!product.id) {
+            throw new Error(
+              'Product ID is missing. Please refresh the catalogue.'
+            );
+          }
+
+          if (!window.Cart || typeof Cart.add !== 'function') {
+            throw new Error(
+              'Shopping basket is unavailable. Please refresh the page.'
+            );
+          }
+
+          Cart.add(product, 1);
+
+          toast('Product added to basket');
+
+          button.disabled = true;
+
+          button.innerHTML = `
+            <i data-lucide="check"></i>
+            Added
+          `;
+
+          refreshIcons(button);
+
+          setTimeout(() => {
+
+            button.innerHTML = `
+              <i data-lucide="plus"></i>
+              Add to basket
+            `;
+
+            button.disabled = false;
+
+            refreshIcons(button);
+
+          }, 1400);
+
+        } catch (error) {
+
+          console.error(
+            'ADD TO BASKET ERROR:',
+            error
+          );
+
+          toast(
+            error.message || 'Could not add this product',
+            'error'
+          );
+
+        }
+
+      });
+
+    });
+
+}
+
+
+// ======================================================
+// PAGINATION
+// ======================================================
+
+function setupPagination(page, pages) {
+
+  if (pages <= 1) {
+
+    pagination.innerHTML = '';
+
+    return;
+
+  }
+
+  pagination.innerHTML = `
+
+    <button
+      class="btn btn-outline btn-sm"
+      type="button"
+      id="prev-page"
+      ${page <= 1 ? 'disabled' : ''}
+    >
+      <i data-lucide="chevron-left"></i>
+      Previous
+    </button>
+
+    <span>
+      Page ${page} of ${pages}
+    </span>
+
+    <button
+      class="btn btn-outline btn-sm"
+      type="button"
+      id="next-page"
+      ${page >= pages ? 'disabled' : ''}
+    >
+      Next
+      <i data-lucide="chevron-right"></i>
+    </button>
+
+  `;
+
+  refreshIcons(pagination);
+
+
+  document.getElementById('prev-page')
+    ?.addEventListener('click', () => {
+
+      if (currentPage <= 1) return;
+
+      currentPage--;
+
+      loadProducts();
+
+      document.getElementById('catalogue')
+        .scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+    });
+
+
+  document.getElementById('next-page')
+    ?.addEventListener('click', () => {
+
+      if (currentPage >= pages) return;
+
+      currentPage++;
+
+      loadProducts();
+
+      document.getElementById('catalogue')
+        .scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+    });
+
+}
+
+
+// ======================================================
+// EMPTY CATALOGUE
+// ======================================================
+
+function showEmptyCatalogue() {
+
+  productGrid.innerHTML = `
+
+    <div
+      class="empty-state card"
+      style="grid-column:1/-1"
+    >
+
+      <div class="empty-icon">
+        <i data-lucide="package-x"></i>
+      </div>
+
+      <h3>No products found</h3>
+
+      <p>
+        Try another search or choose a different category.
+      </p>
+
+      <button
+        type="button"
+        class="btn btn-outline btn-sm"
+        id="reset-filters"
+      >
+        <i data-lucide="rotate-ccw"></i>
+        Reset filters
+      </button>
+
+    </div>
+
+  `;
+
+  refreshIcons(productGrid);
+
+  document.getElementById('reset-filters')
+    ?.addEventListener('click', () => {
+
+      currentCategory = '';
+      currentPage = 1;
+      currentQ = '';
+
+      document.getElementById('search-input').value = '';
+
+      document.querySelectorAll('.cat-chip')
+        .forEach(chip => {
+
+          const selected = chip.dataset.slug === '';
+
+          chip.classList.toggle('active', selected);
+
+          if (selected) {
+            chip.setAttribute('aria-current', 'true');
+          } else {
+            chip.removeAttribute('aria-current');
+          }
+
+        });
+
+      loadProducts();
+
+    });
+
+}
+
+
+// ======================================================
+// LOAD PRODUCTS
+// ======================================================
+
+async function loadProducts() {
+
+  const requestId = ++productsRequest;
+
+  productGrid.innerHTML = `
+    <div class="loading">
+      Loading products...
+    </div>
+  `;
+
+  pagination.innerHTML = '';
+
+  announce('Loading products');
+
+
+  const sort =
+    document.getElementById('sort-select').value;
+
+
+  const params = {
+
+    page: currentPage,
+
+    limit: 12,
+
+    sort
+
+  };
+
+
+  if (currentCategory) {
+    params.category = currentCategory;
+  }
+
+  if (currentQ) {
+    params.q = currentQ;
+  }
+
+
+  try {
+
+    const response = await API.products(params);
+
+    // Ignore old requests if the customer changes filters quickly.
+    if (requestId !== productsRequest) return;
+
+
+    const products = Array.isArray(response)
+      ? response
+      : response.products || [];
+
+
+    const title = document.getElementById('list-title');
+
+
+    if (currentQ) {
+
+      title.textContent = `Results for "${currentQ}"`;
+
+    } else if (currentCategory) {
+
+      const selected = Array.from(
+        document.querySelectorAll('.cat-chip')
+      ).find(chip =>
+        chip.dataset.slug === currentCategory
+      );
+
+      title.textContent = selected
+        ? selected.textContent.trim()
+        : 'Products';
+
+    } else {
+
+      title.textContent = 'All products';
 
     }
 
 
-    initializeHomepage();
+    if (!products.length) {
 
-  </script>
+      showEmptyCatalogue();
+
+      announce('No products found');
+
+      return;
+
+    }
+
+
+    // Render product cards.
+    productGrid.innerHTML =
+      products.map(productCard).join('');
+
+
+    refreshIcons(productGrid);
+
+
+    // Attach basket handlers.
+    setupAddToBasket();
+
+
+    // Pagination response compatibility.
+    const paginationData = response.pagination || {};
+
+    const page = Number(
+      paginationData.page ??
+      response.page ??
+      currentPage
+    );
+
+    const pages = Number(
+      paginationData.pages ??
+      response.pages ??
+      1
+    );
+
+
+    setupPagination(
+      Math.max(1, page),
+      Math.max(1, pages)
+    );
+
+
+    announce(`${products.length} products displayed`);
+
+
+  } catch (error) {
+
+    if (requestId !== productsRequest) return;
+
+    console.error(
+      'PRODUCT LOADING ERROR:',
+      error
+    );
+
+    productGrid.innerHTML = `
+
+      <div
+        class="alert alert-error"
+        style="grid-column:1/-1"
+      >
+
+        <i data-lucide="alert-circle"></i>
+
+        <strong>Unable to load products</strong>
+
+        <p>
+          We could not connect to the shop catalogue.
+          Please check your connection and try again.
+        </p>
+
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          id="retry-products"
+        >
+          <i data-lucide="refresh-cw"></i>
+          Try again
+        </button>
+
+      </div>
+
+    `;
+
+    refreshIcons(productGrid);
+
+    document.getElementById('retry-products')
+      ?.addEventListener('click', loadProducts);
+
+    announce('Unable to load products');
+
+  }
+
+}
+
+
+// ======================================================
+// SEARCH
+// ======================================================
+
+document.getElementById('search-form')
+  .addEventListener('submit', event => {
+
+    event.preventDefault();
+
+    currentQ = document.getElementById('search-input')
+      .value
+      .trim();
+
+    currentPage = 1;
+
+    loadProducts();
+
+    document.getElementById('catalogue')
+      .scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+  });
+
+
+// ======================================================
+// SORTING
+// ======================================================
+
+document.getElementById('sort-select')
+  .addEventListener('change', () => {
+
+    currentPage = 1;
+
+    loadProducts();
+
+  });
+
+
+// ======================================================
+// HOMEPAGE INITIALIZATION
+// ======================================================
+
+async function initializeHomepage() {
+
+  try {
+
+    await loadCategories();
+
+    await loadProducts();
+
+  } catch (error) {
+
+    console.error(
+      'HOMEPAGE INITIALIZATION ERROR:',
+      error
+    );
+
+    productGrid.innerHTML = `
+
+      <div
+        class="alert alert-error"
+        style="grid-column:1/-1"
+      >
+
+        <i data-lucide="server-off"></i>
+
+        <strong>Catalogue unavailable</strong>
+
+        <p>
+          We could not connect to Mawego Bookshop.
+          Please try again shortly.
+        </p>
+
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          id="retry-homepage"
+        >
+          <i data-lucide="refresh-cw"></i>
+          Retry
+        </button>
+
+      </div>
+
+    `;
+
+    refreshIcons(productGrid);
+
+    document.getElementById('retry-homepage')
+      ?.addEventListener('click', initializeHomepage);
+
+  }
+
+}
+
+
+// ======================================================
+// START APPLICATION
+// ======================================================
+
+initializeHomepage();
+
+</script>
 
 </body>
 </html>

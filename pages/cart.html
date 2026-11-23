@@ -1,128 +1,632 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Basket — Mawego Bookshop</title>
+
+  <title>Your Basket — Mawego Bookshop</title>
+
+  <meta
+    name="description"
+    content="Review your shopping basket and proceed to checkout at Mawego Bookshop."
+  />
+
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
   <script src="https://unpkg.com/lucide@0.469.0"></script>
 </head>
+
 <body>
+
+  <!-- HEADER -->
   <header class="site-header">
     <div class="container header-inner">
+
       <a href="/" class="logo">
-        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+        <span class="logo-mark" aria-hidden="true">
+          <i data-lucide="book-open"></i>
+        </span>
         Mawego <span>Bookshop</span>
       </a>
-      <nav class="nav">
-        <a href="/"><i data-lucide="store"></i> Shop</a>
-        <a href="/pages/track.html"><i data-lucide="map-pin"></i> Track</a>
-        <a href="/pages/account.html"><i data-lucide="user"></i> Account</a>
-        <a href="/pages/cart.html" class="cart-btn active"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/">
+          <i data-lucide="store"></i>
+          Shop
+        </a>
+
+        <a href="/pages/track.html">
+          <i data-lucide="map-pin"></i>
+          Track
+        </a>
+
+        <a href="/pages/account.html">
+          <i data-lucide="user"></i>
+          Account
+        </a>
+
+        <a href="/pages/cart.html" class="cart-btn active">
+          <i data-lucide="shopping-bag"></i>
+          Basket
+          <span class="cart-count">0</span>
+        </a>
       </nav>
+
     </div>
   </header>
 
+
+  <!-- MAIN CONTENT -->
   <main class="container page-pad">
-    <h1 style="font-family:var(--font-display);display:flex;align-items:center;gap:0.5rem"><i data-lucide="shopping-bag"></i> Your basket</h1>
-    <div id="cart-content"></div>
+
+    <h1
+      style="
+        font-family: var(--font-display);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      "
+    >
+      <i data-lucide="shopping-bag"></i>
+      Your basket
+    </h1>
+
+    <div id="cart-content" aria-live="polite">
+      <p>Loading your basket...</p>
+    </div>
+
   </main>
 
+
+  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="container"><p style="margin:0;opacity:0.9">Mawego Bookshop · Prices in KES</p></div>
+    <div class="container">
+      <p style="margin:0;opacity:0.9">
+        Mawego Bookshop · Prices in KES
+      </p>
+    </div>
   </footer>
 
+
+  <!-- SCRIPTS -->
   <script src="/js/api.js"></script>
   <script src="/js/notifications.js"></script>
+
   <script>
-    lucide.createIcons();
+    'use strict';
+
+    // =========================================
+    // CONFIGURATION
+    // =========================================
+
     const FREE_THRESHOLD = 2000;
     const DELIVERY_FEE = 200;
 
-    function render() {
+    const cartContent = document.getElementById('cart-content');
+
+
+    // =========================================
+    // INITIALIZE ICONS
+    // =========================================
+
+    function refreshIcons() {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+
+    // =========================================
+    // SAFE HTML ESCAPING
+    // =========================================
+
+    function safeHtml(value) {
+      if (typeof escapeHtml === 'function') {
+        return escapeHtml(String(value ?? ''));
+      }
+
+      return String(value ?? '').replace(
+        /[&<>"']/g,
+        (character) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        })[character]
+      );
+    }
+
+
+    // =========================================
+    // CURRENCY FORMATTING
+    // =========================================
+
+    function money(amount) {
+      const value = Number(amount) || 0;
+
+      if (typeof formatKes === 'function') {
+        return formatKes(value);
+      }
+
+      return 'KES ' + value.toLocaleString('en-KE');
+    }
+
+
+    // =========================================
+    // GET BASKET ITEMS
+    // =========================================
+
+    function getItems() {
+      if (typeof Cart === 'undefined') {
+        throw new Error('Cart service is unavailable.');
+      }
+
       const items = Cart.get();
-      const el = document.getElementById('cart-content');
-      if (!items.length) {
-        el.innerHTML = `
-          <div class="empty-state card">
-            <div class="empty-icon"><i data-lucide="shopping-cart"></i></div>
-            <p>Your basket is empty.</p>
-            <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Continue shopping</a>
-          </div>`;
-        lucide.createIcons({ nodes: [el] });
+
+      return Array.isArray(items) ? items : [];
+    }
+
+
+    // =========================================
+    // CALCULATE SUBTOTAL
+    // =========================================
+
+    function getSubtotal(items) {
+      if (typeof Cart.subtotal === 'function') {
+        return Number(Cart.subtotal()) || 0;
+      }
+
+      return items.reduce((total, item) => {
+        return total +
+          (Number(item.price_kes) || 0) *
+          (Number(item.quantity) || 0);
+      }, 0);
+    }
+
+
+    // =========================================
+    // EMPTY BASKET
+    // =========================================
+
+    function renderEmptyBasket() {
+
+      cartContent.innerHTML = `
+        <div class="empty-state card">
+
+          <div class="empty-icon">
+            <i data-lucide="shopping-cart"></i>
+          </div>
+
+          <h2>Your basket is empty</h2>
+
+          <p>
+            You haven't added any products to your basket yet.
+          </p>
+
+          <a href="/" class="btn btn-primary">
+            <i data-lucide="store"></i>
+            Continue shopping
+          </a>
+
+        </div>
+      `;
+
+      refreshIcons();
+    }
+
+
+    // =========================================
+    // RENDER BASKET
+    // =========================================
+
+    function render() {
+
+      try {
+
+        const items = getItems();
+
+        if (items.length === 0) {
+          renderEmptyBasket();
+          return;
+        }
+
+        const subtotal = getSubtotal(items);
+
+        const delivery = subtotal >= FREE_THRESHOLD
+          ? 0
+          : DELIVERY_FEE;
+
+        const total = subtotal + delivery;
+
+        const rows = items.map((item) => {
+
+          const id = String(item.product_id ?? '');
+
+          const quantity = Math.max(
+            1,
+            Number(item.quantity) || 1
+          );
+
+          const price = Number(item.price_kes) || 0;
+
+          const originalPrice =
+            Number(item.original_price_kes) || price;
+
+          const hasSale =
+            item.sale_active &&
+            originalPrice > price;
+
+          return `
+            <tr data-id="${safeHtml(id)}">
+
+              <td>
+                <strong>
+                  ${safeHtml(item.name || 'Unnamed product')}
+                </strong>
+              </td>
+
+              <td>
+                ${
+                  hasSale
+                    ? `
+                      <span class="price-was">
+                        ${money(originalPrice)}
+                      </span>
+
+                      <span class="price-now">
+                        ${money(price)}
+                      </span>
+                    `
+                    : money(price)
+                }
+              </td>
+
+              <td>
+                <div class="qty-control">
+
+                  <button
+                    type="button"
+                    data-dec
+                    aria-label="Decrease quantity"
+                  >
+                    <i data-lucide="minus"></i>
+                  </button>
+
+                  <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    value="${quantity}"
+                    data-qty
+                    aria-label="Product quantity"
+                  />
+
+                  <button
+                    type="button"
+                    data-inc
+                    aria-label="Increase quantity"
+                  >
+                    <i data-lucide="plus"></i>
+                  </button>
+
+                </div>
+              </td>
+
+              <td>
+                <strong>
+                  ${money(price * quantity)}
+                </strong>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  data-remove
+                  aria-label="Remove ${safeHtml(item.name)}"
+                >
+                  <i data-lucide="trash-2"></i>
+                </button>
+              </td>
+
+            </tr>
+          `;
+
+        }).join('');
+
+
+        cartContent.innerHTML = `
+
+          <div class="card">
+
+            <div style="overflow-x:auto">
+
+              <table class="cart-table">
+
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  ${rows}
+                </tbody>
+
+              </table>
+
+            </div>
+
+
+            <!-- ORDER TOTALS -->
+
+            <div class="totals">
+
+              <div class="row">
+                <span>Subtotal</span>
+                <strong>${money(subtotal)}</strong>
+              </div>
+
+              <div class="row">
+                <span>Delivery</span>
+                <strong>
+                  ${delivery === 0 ? 'FREE' : money(delivery)}
+                </strong>
+              </div>
+
+              <p
+                style="
+                  font-size:0.9rem;
+                  color:var(--muted);
+                  margin:0.5rem 0;
+                  display:flex;
+                  align-items:center;
+                  gap:0.35rem;
+                  justify-content:flex-end;
+                "
+              >
+                <i data-lucide="truck"></i>
+
+                ${
+                  delivery === 0
+                    ? 'You qualify for free delivery!'
+                    : `Delivery from ${money(DELIVERY_FEE)}. Free over ${money(FREE_THRESHOLD)}. Collection is free.`
+                }
+
+              </p>
+
+              <div class="row" style="margin-top:1rem">
+                <strong>Grand total</strong>
+                <strong>${money(total)}</strong>
+              </div>
+
+
+              <!-- ACTION BUTTONS -->
+
+              <div style="margin-top:1rem">
+
+                <a
+                  href="/pages/checkout.html"
+                  class="btn btn-primary"
+                >
+                  <i data-lucide="credit-card"></i>
+                  Proceed to checkout
+                </a>
+
+                <a
+                  href="/"
+                  class="btn btn-outline"
+                  style="margin-left:0.5rem"
+                >
+                  <i data-lucide="arrow-left"></i>
+                  Continue shopping
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+        refreshIcons();
+
+      } catch (error) {
+
+        console.error('Basket rendering error:', error);
+
+        cartContent.innerHTML = `
+          <div class="card empty-state">
+
+            <div class="empty-icon">
+              <i data-lucide="alert-circle"></i>
+            </div>
+
+            <h2>Unable to load basket</h2>
+
+            <p>
+              Something went wrong while loading your basket.
+              Please refresh the page.
+            </p>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="render()"
+            >
+              Try again
+            </button>
+
+          </div>
+        `;
+
+        refreshIcons();
+      }
+
+    }
+
+
+    // =========================================
+    // FIND BASKET ITEM
+    // =========================================
+
+    function findItem(productId) {
+
+      return getItems().find((item) => {
+
+        return String(item.product_id) === String(productId);
+
+      });
+
+    }
+
+
+    // =========================================
+    // UPDATE QUANTITY
+    // =========================================
+
+    function changeQuantity(productId, quantity) {
+
+      const item = findItem(productId);
+
+      if (!item) {
+        console.error('Basket product not found:', productId);
         return;
       }
 
-      const sub = Cart.subtotal();
-      el.innerHTML = `
-        <div class="card">
-          <table class="cart-table">
-            <thead>
-              <tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr>
-            </thead>
-            <tbody>
-              ${items
-                .map(
-                  (i) => `
-                <tr data-id="${i.product_id}">
-                  <td><strong>${escapeHtml(i.name)}</strong></td>
-                  <td>${i.sale_active && i.original_price_kes > i.price_kes
-                    ? `<span class="price-was">${formatKes(i.original_price_kes)}</span> <span class="price-now">${formatKes(i.price_kes)}</span>`
-                    : formatKes(i.price_kes)}</td>
-                  <td>
-                    <div class="qty-control">
-                      <button type="button" data-dec aria-label="Decrease"><i data-lucide="minus"></i></button>
-                      <input type="number" min="1" value="${i.quantity}" data-qty />
-                      <button type="button" data-inc aria-label="Increase"><i data-lucide="plus"></i></button>
-                    </div>
-                  </td>
-                  <td>${formatKes(i.price_kes * i.quantity)}</td>
-                  <td><button class="btn btn-sm btn-danger" data-remove aria-label="Remove"><i data-lucide="trash-2"></i></button></td>
-                </tr>`
-                )
-                .join('')}
-            </tbody>
-          </table>
-          <div class="totals">
-            <div class="row"><span>Subtotal</span><span>${formatKes(sub)}</span></div>
-            <p style="font-size:0.9rem;color:var(--muted);margin:0.5rem 0;display:flex;align-items:center;gap:0.35rem;justify-content:flex-end">
-              <i data-lucide="truck" class="icon-sm"></i>
-              Delivery from ${formatKes(DELIVERY_FEE)} · Free over ${formatKes(FREE_THRESHOLD)}. Collection is free.
-            </p>
-            <div style="margin-top:1rem">
-              <a href="/pages/checkout.html" class="btn btn-primary"><i data-lucide="credit-card"></i> Proceed to checkout</a>
-              <a href="/" class="btn btn-outline" style="margin-left:0.5rem"><i data-lucide="arrow-left"></i> Continue shopping</a>
-            </div>
-          </div>
-        </div>`;
-      lucide.createIcons({ nodes: [el] });
+      const newQuantity = Math.max(
+        1,
+        Math.floor(Number(quantity) || 1)
+      );
 
-      el.querySelectorAll('tr[data-id]').forEach((row) => {
-        const id = Number(row.dataset.id);
-        row.querySelector('[data-inc]')?.addEventListener('click', () => {
-          const item = Cart.get().find((x) => x.product_id === id);
-          Cart.updateQty(id, (item?.quantity || 1) + 1);
-          render();
-        });
-        row.querySelector('[data-dec]')?.addEventListener('click', () => {
-          const item = Cart.get().find((x) => x.product_id === id);
-          if ((item?.quantity || 1) <= 1) Cart.remove(id);
-          else Cart.updateQty(id, item.quantity - 1);
-          render();
-        });
-        row.querySelector('[data-qty]')?.addEventListener('change', (e) => {
-          Cart.updateQty(id, parseInt(e.target.value, 10) || 1);
-          render();
-        });
-        row.querySelector('[data-remove]')?.addEventListener('click', () => {
-          Cart.remove(id);
-          render();
-        });
-      });
+      Cart.updateQty(
+        String(productId),
+        newQuantity
+      );
+
+      render();
     }
 
+
+    // =========================================
+    // REMOVE PRODUCT
+    // =========================================
+
+    function removeItem(productId) {
+
+      if (!findItem(productId)) {
+        return;
+      }
+
+      Cart.remove(String(productId));
+
+      render();
+    }
+
+
+    // =========================================
+    // BASKET EVENT HANDLERS
+    // =========================================
+
+    cartContent.addEventListener('click', (event) => {
+
+      const row = event.target.closest('tr[data-id]');
+
+      if (!row) return;
+
+      const productId = row.dataset.id;
+
+      if (event.target.closest('[data-inc]')) {
+
+        const item = findItem(productId);
+
+        if (item) {
+          changeQuantity(
+            productId,
+            (Number(item.quantity) || 1) + 1
+          );
+        }
+
+        return;
+      }
+
+
+      if (event.target.closest('[data-dec]')) {
+
+        const item = findItem(productId);
+
+        if (!item) return;
+
+        const quantity = Number(item.quantity) || 1;
+
+        if (quantity <= 1) {
+          removeItem(productId);
+        } else {
+          changeQuantity(productId, quantity - 1);
+        }
+
+        return;
+      }
+
+
+      if (event.target.closest('[data-remove]')) {
+
+        removeItem(productId);
+
+      }
+
+    });
+
+
+    // =========================================
+    // MANUAL QUANTITY INPUT
+    // =========================================
+
+    cartContent.addEventListener('change', (event) => {
+
+      if (!event.target.matches('[data-qty]')) {
+        return;
+      }
+
+      const row = event.target.closest('tr[data-id]');
+
+      if (!row) return;
+
+      const productId = row.dataset.id;
+
+      const quantity = parseInt(
+        event.target.value,
+        10
+      );
+
+      changeQuantity(productId, quantity);
+
+    });
+
+
+    // =========================================
+    // INITIALIZE PAGE
+    // =========================================
+
+    document.addEventListener('DOMContentLoaded', () => {
+      render();
+      refreshIcons();
+    });
+
+    // Also render immediately because scripts are at the
+    // bottom of the page.
+
     render();
+
   </script>
+
 </body>
 </html>
