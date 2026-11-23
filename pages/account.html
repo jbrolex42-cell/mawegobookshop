@@ -3,153 +3,1005 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My account — Mawego Bookshop</title>
+  <meta name="theme-color" content="#ffffff" />
+
+  <title>My Account | Mawego Bookshop</title>
+
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <script src="https://unpkg.com/lucide@0.469.0"></script>
-</head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="/" class="logo"><span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span> Mawego <span>Bookshop</span></a>
-      <nav class="nav">
-        <a href="/"><i data-lucide="store"></i> Shop</a>
-        <a href="/pages/track.html"><i data-lucide="map-pin"></i> Track</a>
-        <a href="/pages/account.html" class="active"><i data-lucide="user"></i> Account</a>
-        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="container page-pad" style="max-width:640px">
-    <div id="auth-panel"></div>
-    <div id="account-panel" class="hidden"></div>
-  </main>
-
-  <script src="/js/api.js"></script>
-  <script src="/js/notifications.js"></script>
-  <script>
-    lucide.createIcons();
-
-    function showAuth() {
-      document.getElementById('auth-panel').classList.remove('hidden');
-      document.getElementById('account-panel').classList.add('hidden');
-      document.getElementById('auth-panel').innerHTML = `
-        <h1 style="display:flex;align-items:center;gap:0.5rem;font-family:var(--font-display)"><i data-lucide="user-round"></i> Customer account</h1>
-        <div class="card" style="margin-bottom:1rem">
-          <h2 style="margin-top:0;font-size:1.1rem">Sign in</h2>
-          <div id="login-msg"></div>
-          <form id="login-form">
-            <div class="form-group"><label>Email</label><input name="email" type="email" required /></div>
-            <div class="form-group"><label>Password</label><input name="password" type="password" required /></div>
-            <button class="btn btn-primary" type="submit"><i data-lucide="log-in"></i> Sign in</button>
-          </form>
-        </div>
-        <div class="card">
-          <h2 style="margin-top:0;font-size:1.1rem">Create account</h2>
-          <div id="reg-msg"></div>
-          <form id="reg-form">
-            <div class="form-group"><label>Full name</label><input name="full_name" required /></div>
-            <div class="form-group"><label>Email</label><input name="email" type="email" required /></div>
-            <div class="form-group"><label>Phone</label><input name="phone" placeholder="07XX XXX XXX" /></div>
-            <div class="form-group"><label>Password</label><input name="password" type="password" required minlength="6" /></div>
-            <button class="btn btn-primary" type="submit"><i data-lucide="user-plus"></i> Register</button>
-          </form>
-        </div>`;
-
-      document.getElementById('login-form').onsubmit = async (e) => {
-        e.preventDefault();
-        const fd = new FormData(e.target);
-        try {
-          const data = await API.login(fd.get('email'), fd.get('password'));
-          API.setAuth(data.token, data.user);
-          showAccount();
-        } catch (err) {
-          document.getElementById('login-msg').innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
-        }
-      };
-      lucide.createIcons({ nodes: [document.getElementById('auth-panel')] });
-      document.getElementById('reg-form').onsubmit = async (e) => {
-        e.preventDefault();
-        const fd = new FormData(e.target);
-        try {
-          const data = await API.register(Object.fromEntries(fd));
-          API.setAuth(data.token, data.user);
-          showAccount();
-        } catch (err) {
-          document.getElementById('reg-msg').innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
-        }
-      };
+  <style>
+    .account-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
     }
 
-    async function showAccount() {
-      const user = API.getUser();
-      if (!user) return showAuth();
-      document.getElementById('auth-panel').classList.add('hidden');
-      document.getElementById('account-panel').classList.remove('hidden');
-      const panel = document.getElementById('account-panel');
-      panel.innerHTML = `<div class="loading">Loading orders…</div>`;
+    .account-heading {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
 
-      try {
-        const { orders } = await API.myOrders();
-        let ptsHtml = '';
-        try {
-          const pts = await API.pointsBalance();
-          ptsHtml = `<div class="points-chip" style="margin:0.75rem 0"><i data-lucide="star"></i> ${pts.reward_points || 0} reward points · worth ${formatKes(pts.value_kes || 0)}</div>
-            <p style="font-size:0.85rem;color:var(--muted);margin:0 0 1rem">Earn 1 point per KES 50 spent. Redeem from 100 points at checkout (100 pts = KES 50 off).</p>`;
-        } catch(_) {}
-        panel.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem">
-            <h1 style="margin:0">Hello, ${escapeHtml(user.full_name)}</h1>
-            <button class="btn btn-outline btn-sm" id="logout"><i data-lucide="log-out"></i> Log out</button>
-          </div>
-          <p style="color:var(--muted)">${escapeHtml(user.email)}${user.phone ? ' · ' + escapeHtml(user.phone) : ''}</p>
-          ${ptsHtml}
-          <h2 style="font-size:1.15rem">Order history</h2>
-          ${
-            orders.length
-              ? orders
-                  .map(
-                    (o) => `
-            <div class="card" style="margin-bottom:0.75rem">
-              <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem">
-                <strong>${escapeHtml(o.order_number)}</strong>
-                <span>
-                  <span class="badge badge-${o.order_status}">${o.order_status.replace(/_/g, ' ')}</span>
-                  <span class="badge badge-${o.payment_status}">${o.payment_status}</span>
-                </span>
-              </div>
-              <p style="margin:0.35rem 0;font-size:0.9rem;color:var(--muted)">${escapeHtml(o.created_at)} · ${o.fulfilment_type}</p>
-              <p style="margin:0"><strong>${formatKes(o.total_kes)}</strong></p>
-              <ul style="margin:0.5rem 0 0;padding-left:1.2rem;font-size:0.9rem">
-                ${(o.items || []).map((i) => `<li>${escapeHtml(i.product_name)} × ${i.quantity}</li>`).join('')}
-              </ul>
-              <p style="margin-top:0.75rem">
-                <a href="/pages/receipt.html?order=${encodeURIComponent(o.order_number)}&phone=${encodeURIComponent(o.customer_phone)}" class="btn btn-sm btn-outline"><i data-lucide="receipt"></i> Receipt</a>
-                <a href="/pages/track.html" class="btn btn-sm btn-outline"><i data-lucide="map-pin"></i> Track</a>
-              </p>
-            </div>`
-                  )
-                  .join('')
-              : '<div class="empty-state card"><div class="empty-icon"><i data-lucide="package-open"></i></div><p>No orders yet.</p> <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Start shopping</a></div>'
-          }`;
-        lucide.createIcons({ nodes: [panel] });
-        document.getElementById('logout').onclick = () => {
-          API.clearAuth();
-          showAuth();
-        };
-      } catch (err) {
-        if (err.status === 401) {
-          API.clearAuth();
-          showAuth();
-        } else {
-          panel.innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
-        }
+    .account-heading h1 {
+      font-family: var(--font-display);
+      margin-bottom: .5rem;
+    }
+
+    .account-heading p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .auth-card {
+      background: var(--surface, #fff);
+      border: 1px solid var(--border, #e5e7eb);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .auth-card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: .8rem;
+      border: 1px solid var(--border, #ddd);
+      background: transparent;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .auth-tab.active {
+      background: var(--primary, #2563eb);
+      color: white;
+      border-color: var(--primary, #2563eb);
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap input {
+      width: 100%;
+      padding-right: 48px;
+      box-sizing: border-box;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: var(--muted, #666);
+      padding: 7px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+
+    .password-toggle:hover {
+      background: rgba(128,128,128,.12);
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      margin-top: .6rem;
+      font-size: .9rem;
+      cursor: pointer;
+      color: var(--primary, #2563eb);
+      text-decoration: none;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .auth-submit {
+      width: 100%;
+      justify-content: center;
+      margin-top: .7rem;
+    }
+
+    .auth-message {
+      margin-bottom: 1rem;
+    }
+
+    .auth-message:empty {
+      display: none;
+    }
+
+    .account-welcome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .account-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .account-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--primary, #2563eb);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .points-card {
+      border-radius: 14px;
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      background: var(--surface, #fff);
+      border: 1px solid var(--border, #ddd);
+    }
+
+    .points-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin: .3rem 0;
+    }
+
+    .order-card {
+      border: 1px solid var(--border, #ddd);
+      border-radius: 13px;
+      padding: 1rem;
+      margin-bottom: .9rem;
+      background: var(--surface, #fff);
+    }
+
+    .order-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .6rem;
+    }
+
+    .order-items {
+      padding-left: 1.2rem;
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    .order-actions {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .order-actions a {
+      text-decoration: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin: 1rem 0;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border, #ddd);
+    }
+
+    @media(max-width: 480px) {
+      .account-wrap {
+        padding: 1.3rem .8rem 3rem;
+      }
+
+      .auth-card {
+        padding: 1.1rem;
+      }
+
+      .account-welcome {
+        align-items: flex-start;
+      }
+
+      .order-actions > a {
+        flex: 1;
+        text-align: center;
       }
     }
+  </style>
+</head>
 
-    if (API.getUser()) showAccount();
-    else showAuth();
-  </script>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+
+    <a href="/" class="logo">
+      <span class="logo-mark" aria-hidden="true">
+        <i data-lucide="book-open"></i>
+      </span>
+      Mawego <span>Bookshop</span>
+    </a>
+
+    <nav class="nav">
+      <a href="/"><i data-lucide="store"></i> Shop</a>
+      <a href="/pages/track.html"><i data-lucide="map-pin"></i> Track</a>
+      <a href="/pages/account.html" class="active">
+        <i data-lucide="user"></i> Account
+      </a>
+      <a href="/pages/cart.html" class="cart-btn">
+        <i data-lucide="shopping-bag"></i>
+        Basket <span class="cart-count">0</span>
+      </a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="account-wrap">
+
+  <section id="auth-panel">
+
+    <div class="account-heading">
+      <h1>Welcome to Mawego Bookshop</h1>
+      <p>Your books, orders and rewards — all in one place.</p>
+    </div>
+
+    <div class="auth-card">
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" id="login-tab">
+          Sign in
+        </button>
+
+        <button type="button" class="auth-tab" id="register-tab">
+          Create account
+        </button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="login-section">
+
+        <h2>Welcome back!</h2>
+        <p style="color:var(--muted);font-size:.9rem">
+          Sign in to manage your orders and rewards.
+        </p>
+
+        <div id="login-msg" class="auth-message" role="status"></div>
+
+        <form id="login-form">
+
+          <div class="form-group">
+            <label for="login-email">Email address</label>
+            <input
+              id="login-email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+
+            <div class="password-wrap">
+              <input
+                id="login-password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+
+              <button
+                type="button"
+                class="password-toggle"
+                data-password="login-password"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+
+            <a href="#" class="forgot-link" id="forgot-link">
+              Forgot password?
+            </a>
+          </div>
+
+          <button class="btn btn-primary auth-submit" type="submit">
+            <i data-lucide="log-in"></i>
+            Sign in to your account
+          </button>
+
+        </form>
+
+      </div>
+
+      <!-- REGISTRATION -->
+      <div id="register-section" class="hidden">
+
+        <h2>Create your account</h2>
+
+        <p style="color:var(--muted);font-size:.9rem">
+          Join Mawego Bookshop and enjoy convenient shopping.
+        </p>
+
+        <div id="reg-msg" class="auth-message" role="status"></div>
+
+        <form id="reg-form">
+
+          <div class="form-group">
+            <label for="reg-name">Full name</label>
+            <input
+              id="reg-name"
+              name="full_name"
+              placeholder="Your full name"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">Email address</label>
+            <input
+              id="reg-email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-phone">Phone number</label>
+            <input
+              id="reg-phone"
+              name="phone"
+              type="tel"
+              placeholder="07XX XXX XXX"
+              autocomplete="tel"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Create password</label>
+
+            <div class="password-wrap">
+              <input
+                id="reg-password"
+                name="password"
+                type="password"
+                minlength="6"
+                placeholder="At least 6 characters"
+                autocomplete="new-password"
+                required
+              />
+
+              <button
+                type="button"
+                class="password-toggle"
+                data-password="reg-password"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary auth-submit" type="submit">
+            <i data-lucide="user-plus"></i>
+            Create my account
+          </button>
+
+        </form>
+
+      </div>
+
+      <!-- FORGOT PASSWORD -->
+      <div id="forgot-section" class="hidden">
+
+        <h2>Reset your password</h2>
+
+        <p style="color:var(--muted);font-size:.9rem">
+          Enter your registered email address. If an account exists,
+          we will send instructions to reset your password.
+        </p>
+
+        <div id="forgot-msg" class="auth-message" role="status"></div>
+
+        <form id="forgot-form">
+
+          <div class="form-group">
+            <label for="forgot-email">Email address</label>
+
+            <input
+              id="forgot-email"
+              name="email"
+              type="email"
+              placeholder="Enter your registered email"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <button class="btn btn-primary auth-submit" type="submit">
+            <i data-lucide="mail"></i>
+            Send reset instructions
+          </button>
+
+        </form>
+
+        <p style="text-align:center;margin-top:1rem">
+          <a href="#" id="back-login">
+            <i data-lucide="arrow-left"></i>
+            Back to sign in
+          </a>
+        </p>
+
+      </div>
+
+    </div>
+
+    <p style="text-align:center;color:var(--muted);font-size:.85rem">
+      <i data-lucide="shield-check"></i>
+      Your account and shopping information are protected.
+    </p>
+
+  </section>
+
+  <!-- CUSTOMER ACCOUNT -->
+  <section id="account-panel" class="hidden"></section>
+
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/notifications.js"></script>
+
+<script>
+
+  const $ = (id) => document.getElementById(id);
+
+  function refreshIcons() {
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  }
+
+  function showMessage(id, message, type = 'error') {
+    const el = $(id);
+
+    el.innerHTML = '';
+
+    const div = document.createElement('div');
+    div.className = `alert alert-${type}`;
+    div.textContent = message;
+
+    el.appendChild(div);
+  }
+
+  function clearMessages() {
+    ['login-msg', 'reg-msg', 'forgot-msg'].forEach(id => {
+      $(id).innerHTML = '';
+    });
+  }
+
+  // AUTH NAVIGATION
+
+  function showAuthSection(section) {
+
+    ['login-section', 'register-section', 'forgot-section']
+      .forEach(id => $(id).classList.add('hidden'));
+
+    $(section).classList.remove('hidden');
+
+    $('login-tab').classList.toggle(
+      'active',
+      section === 'login-section'
+    );
+
+    $('register-tab').classList.toggle(
+      'active',
+      section === 'register-section'
+    );
+
+    clearMessages();
+    refreshIcons();
+  }
+
+  $('login-tab').onclick = () => showAuthSection('login-section');
+
+  $('register-tab').onclick = () => showAuthSection('register-section');
+
+  $('forgot-link').onclick = (e) => {
+    e.preventDefault();
+
+    $('forgot-email').value = $('login-email').value;
+
+    showAuthSection('forgot-section');
+  };
+
+  $('back-login').onclick = (e) => {
+    e.preventDefault();
+    showAuthSection('login-section');
+  };
+
+  // SHOW / HIDE PASSWORD
+
+  document.querySelectorAll('.password-toggle').forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      const input = $(button.dataset.password);
+
+      const visible = input.type === 'password';
+
+      input.type = visible ? 'text' : 'password';
+
+      button.setAttribute(
+        'aria-label',
+        visible ? 'Hide password' : 'Show password'
+      );
+
+      button.setAttribute('aria-pressed', String(visible));
+
+      button.innerHTML = `<i data-lucide="${visible ? 'eye-off' : 'eye'}"></i>`;
+
+      refreshIcons();
+
+    });
+
+  });
+
+  // LOGIN
+
+  $('login-form').onsubmit = async (e) => {
+
+    e.preventDefault();
+
+    const button = e.submitter;
+    const original = button.innerHTML;
+
+    button.disabled = true;
+    button.textContent = 'Signing in...';
+
+    try {
+
+      const fd = new FormData(e.target);
+
+      const data = await API.login(
+        fd.get('email'),
+        fd.get('password')
+      );
+
+      if (!data.token || !data.user) {
+        throw new Error('Invalid login response. Please try again.');
+      }
+
+      API.setAuth(data.token, data.user);
+
+      await showAccount();
+
+    } catch (err) {
+
+      showMessage(
+        'login-msg',
+        err.message || 'Unable to sign in. Please try again.'
+      );
+
+    } finally {
+
+      button.disabled = false;
+      button.innerHTML = original;
+      refreshIcons();
+
+    }
+
+  };
+
+  // REGISTRATION
+
+  $('reg-form').onsubmit = async (e) => {
+
+    e.preventDefault();
+
+    const button = e.submitter;
+    const original = button.innerHTML;
+
+    button.disabled = true;
+    button.textContent = 'Creating account...';
+
+    try {
+
+      const fd = new FormData(e.target);
+
+      const data = await API.register(
+        Object.fromEntries(fd)
+      );
+
+      if (!data.token || !data.user) {
+        throw new Error('Registration response was incomplete.');
+      }
+
+      API.setAuth(data.token, data.user);
+
+      await showAccount();
+
+    } catch (err) {
+
+      showMessage(
+        'reg-msg',
+        err.message || 'Unable to create your account.'
+      );
+
+    } finally {
+
+      button.disabled = false;
+      button.innerHTML = original;
+      refreshIcons();
+
+    }
+
+  };
+
+  // FORGOT PASSWORD
+
+  $('forgot-form').onsubmit = async (e) => {
+
+    e.preventDefault();
+
+    const button = e.submitter;
+    const original = button.innerHTML;
+
+    button.disabled = true;
+    button.textContent = 'Sending...';
+
+    try {
+
+      const email = $('forgot-email').value.trim();
+
+      if (!email) {
+        throw new Error('Please enter your email address.');
+      }
+
+      if (typeof API.forgotPassword !== 'function') {
+        throw new Error(
+          'Password reset is not yet connected. Please contact the bookshop administrator.'
+        );
+      }
+
+      await API.forgotPassword(email);
+
+      showMessage(
+        'forgot-msg',
+        'If an account exists with that email, password reset instructions have been sent. Please check your inbox.',
+        'success'
+      );
+
+      e.target.reset();
+
+    } catch (err) {
+
+      showMessage(
+        'forgot-msg',
+        err.message || 'Unable to send reset instructions.'
+      );
+
+    } finally {
+
+      button.disabled = false;
+      button.innerHTML = original;
+      refreshIcons();
+
+    }
+
+  };
+
+  // CUSTOMER DASHBOARD
+
+  async function showAccount() {
+
+    const user = API.getUser();
+
+    if (!user) {
+      showAuth();
+      return;
+    }
+
+    $('auth-panel').classList.add('hidden');
+    $('account-panel').classList.remove('hidden');
+
+    const panel = $('account-panel');
+
+    panel.innerHTML = '<div class="loading">Loading your account...</div>';
+
+    refreshIcons();
+
+    try {
+
+      const response = await API.myOrders();
+      const orders = response.orders || [];
+
+      let pointsHtml = '';
+
+      try {
+
+        const pts = await API.pointsBalance();
+
+        pointsHtml = `
+          <div class="points-card">
+
+            <div style="display:flex;align-items:center;gap:.5rem">
+              <i data-lucide="award"></i>
+              <strong>My reward points</strong>
+            </div>
+
+            <div class="points-number">
+              ${Number(pts.reward_points || 0).toLocaleString()}
+            </div>
+
+            <p style="color:var(--muted);margin:0;font-size:.9rem">
+              Worth ${formatKes(pts.value_kes || 0)}
+            </p>
+
+            <p style="font-size:.82rem;color:var(--muted)">
+              Earn 1 point for every KES 50 spent.
+              Redeem from 100 points at checkout.
+            </p>
+
+          </div>
+        `;
+
+      } catch (_) {}
+
+      const initial = (user.full_name || 'C').charAt(0).toUpperCase();
+
+      panel.innerHTML = `
+
+        <div class="account-welcome">
+
+          <div class="account-profile">
+
+            <div class="account-avatar">
+              ${escapeHtml(initial)}
+            </div>
+
+            <div>
+              <h1 style="margin:0">
+                Hello, ${escapeHtml(user.full_name || 'Customer')}!
+              </h1>
+
+              <p style="color:var(--muted);margin:.3rem 0">
+                Welcome to your customer dashboard.
+              </p>
+            </div>
+
+          </div>
+
+          <button class="btn btn-outline btn-sm" id="logout">
+            <i data-lucide="log-out"></i>
+            Log out
+          </button>
+
+        </div>
+
+        <div class="card" style="padding:1rem;margin-bottom:1.2rem">
+
+          <strong><i data-lucide="user-circle"></i> Account details</strong>
+
+          <p style="margin:.5rem 0">
+            ${escapeHtml(user.email || '')}
+          </p>
+
+          ${user.phone ? `
+            <p style="margin:0;color:var(--muted)">
+              ${escapeHtml(user.phone)}
+            </p>
+          ` : ''}
+
+        </div>
+
+        ${pointsHtml}
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:1rem">
+
+          <h2 style="font-size:1.2rem;margin:0">
+            <i data-lucide="package"></i> My orders
+          </h2>
+
+          <a href="/" class="btn btn-primary btn-sm">
+            <i data-lucide="shopping-bag"></i>
+            Shop now
+          </a>
+
+        </div>
+
+        ${
+          orders.length
+
+            ? orders.map(o => `
+
+              <div class="order-card">
+
+                <div class="order-top">
+
+                  <strong>${escapeHtml(o.order_number || '')}</strong>
+
+                  <div>
+                    <span class="badge badge-${escapeHtml(o.order_status || 'pending')}">
+                      ${escapeHtml((o.order_status || 'pending').replace(/_/g, ' '))}
+                    </span>
+
+                    <span class="badge badge-${escapeHtml(o.payment_status || 'pending')}">
+                      ${escapeHtml(o.payment_status || 'pending')}
+                    </span>
+                  </div>
+
+                </div>
+
+                <p style="font-size:.85rem;color:var(--muted);margin:.6rem 0">
+                  ${escapeHtml(o.created_at || '')}
+                  · ${escapeHtml(o.fulfilment_type || '')}
+                </p>
+
+                <h3 style="margin:.5rem 0">
+                  ${formatKes(o.total_kes || 0)}
+                </h3>
+
+                <ul class="order-items">
+
+                  ${(o.items || []).map(i => `
+                    <li>
+                      ${escapeHtml(i.product_name || 'Book')}
+                      × ${Number(i.quantity || 0)}
+                    </li>
+                  `).join('')}
+
+                </ul>
+
+                <div class="order-actions">
+
+                  <a
+                    href="/pages/receipt.html?order=${encodeURIComponent(o.order_number || '')}&phone=${encodeURIComponent(o.customer_phone || user.phone || '')}"
+                    class="btn btn-outline btn-sm"
+                  >
+                    <i data-lucide="receipt"></i>
+                    Receipt
+                  </a>
+
+                  <a
+                    href="/pages/track.html"
+                    class="btn btn-outline btn-sm"
+                  >
+                    <i data-lucide="map-pin"></i>
+                    Track order
+                  </a>
+
+                </div>
+
+              </div>
+
+            `).join('')
+
+            : `
+
+              <div class="empty-state card" style="padding:2rem;text-align:center">
+
+                <div class="empty-icon">
+                  <i data-lucide="package-open"></i>
+                </div>
+
+                <h3>No orders yet</h3>
+
+                <p style="color:var(--muted)">
+                  Your shopping journey starts here!
+                  Explore our collection and find your next favourite book.
+                </p>
+
+                <a href="/" class="btn btn-primary">
+                  <i data-lucide="store"></i>
+                  Explore books
+                </a>
+
+              </div>
+
+            `
+        }
+
+      `;
+
+      refreshIcons();
+
+      $('logout').onclick = () => {
+
+        API.clearAuth();
+
+        showAuth();
+
+      };
+
+    } catch (err) {
+
+      if (err.status === 401) {
+
+        API.clearAuth();
+        showAuth();
+
+      } else {
+
+        panel.innerHTML = `
+          <div class="alert alert-error">
+            ${escapeHtml(err.message || 'Unable to load your account.')}
+          </div>
+
+          <button class="btn btn-primary" onclick="showAccount()">
+            Try again
+          </button>
+        `;
+
+      }
+
+    }
+
+  }
+
+  function showAuth() {
+
+    $('account-panel').classList.add('hidden');
+    $('auth-panel').classList.remove('hidden');
+
+    showAuthSection('login-section');
+
+  }
+
+  // INITIALIZE
+
+  refreshIcons();
+
+  if (API.getUser()) {
+    showAccount();
+  } else {
+    showAuth();
+  }
+
+</script>
+
 </body>
 </html>
