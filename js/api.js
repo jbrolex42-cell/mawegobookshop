@@ -2,10 +2,6 @@
 const API = {
   base: 'https://mawegobookbackend.onrender.com/api',
 
-  // ==================================================
-  // AUTHENTICATION STORAGE
-  // ==================================================
-
   getToken() {
     return localStorage.getItem('mb_token');
   },
@@ -27,10 +23,6 @@ const API = {
       return null;
     }
   },
-
-  // ==================================================
-  // API REQUEST HANDLER
-  // ==================================================
 
   async request(path, options = {}) {
     const headers = { ...(options.headers || {}) };
@@ -105,10 +97,6 @@ const API = {
     });
   },
 
-  // ==================================================
-  // PRODUCTS AND CATEGORIES
-  // ==================================================
-
   categories() {
     return this.get('/categories');
   },
@@ -126,10 +114,6 @@ const API = {
   settings() {
     return this.get('/settings');
   },
-
-  // ==================================================
-  // CUSTOMER AUTHENTICATION
-  // ==================================================
 
   login(email, password) {
     return this.post('/auth/login', {
@@ -150,10 +134,6 @@ const API = {
     return this.get('/auth/my-orders');
   },
 
-  // ==================================================
-  // PASSWORD RECOVERY
-  // ==================================================
-
   forgotPassword(email) {
     return this.post('/auth/forgot-password', {
       email
@@ -167,10 +147,6 @@ const API = {
     });
   },
 
-  // ==================================================
-  // STAFF MANAGEMENT
-  // ==================================================
-
   adminStaff() {
     return this.get('/auth/staff');
   },
@@ -182,10 +158,6 @@ const API = {
   adminUpdateStaff(id, body) {
     return this.patch('/auth/staff/' + id, body);
   },
-
-  // ==================================================
-  // ORDERS
-  // ==================================================
 
   createOrder(payload) {
     return this.post('/orders', payload);
@@ -201,10 +173,6 @@ const API = {
     );
   },
 
-  // ==================================================
-  // PAYMENTS
-  // ==================================================
-
   mpesaStk(orderId, phone) {
     return this.post('/payments/mpesa/stk', {
       order_id: orderId,
@@ -217,10 +185,6 @@ const API = {
       order_id: orderId
     });
   },
-
-  // ==================================================
-  // RECEIPTS
-  // ==================================================
 
   receiptByOrderId(orderId) {
     return this.get('/receipts/order/' + orderId);
@@ -236,17 +200,9 @@ const API = {
     );
   },
 
-  // ==================================================
-  // ADMIN DASHBOARD
-  // ==================================================
-
   adminDashboard() {
     return this.get('/admin/dashboard');
   },
-
-  // ==================================================
-  // ADMIN PRODUCTS
-  // ==================================================
 
   adminProducts(params = {}) {
     const q = new URLSearchParams(params).toString();
@@ -282,10 +238,6 @@ const API = {
     });
   },
 
-  // ==================================================
-  // ADMIN ORDERS
-  // ==================================================
-
   adminOrders(params = {}) {
     const q = new URLSearchParams(params).toString();
 
@@ -304,10 +256,6 @@ const API = {
     return this.post('/admin/orders/' + id + '/mark-paid', body);
   },
 
-  // ==================================================
-  // REPORTS
-  // ==================================================
-
   adminSalesReport(from, to) {
     return this.get(
       `/admin/reports/sales?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`
@@ -323,10 +271,6 @@ const API = {
       `/admin/reports/profit-loss?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`
     );
   },
-
-  // ==================================================
-  // SUPPLIERS AND PURCHASE ORDERS
-  // ==================================================
 
   adminSuppliers() {
     return this.get('/admin/suppliers');
@@ -348,10 +292,6 @@ const API = {
     return this.post('/admin/purchase-orders/' + id + '/receive');
   },
 
-  // ==================================================
-  // EXPENSES
-  // ==================================================
-
   adminExpenses(params = {}) {
     const q = new URLSearchParams(params).toString();
 
@@ -370,10 +310,6 @@ const API = {
     return this.del('/admin/expenses/' + id);
   },
 
-  // ==================================================
-  // LOYALTY POINTS
-  // ==================================================
-
   pointsBalance() {
     return this.get('/points/balance');
   },
@@ -383,15 +319,10 @@ const API = {
   }
 };
 
-// ======================================================
-// SHOPPING CART
-// ======================================================
-
 
 const Cart = {
   key: 'mb_cart',
 
-  // Get a consistent product ID from different API formats.
   getProductId(product) {
     if (!product) return '';
 
@@ -406,8 +337,6 @@ const Cart = {
 
     return id == null ? '' : String(id);
   },
-
-  // Normalize stored basket items.
   get() {
     try {
       const stored = JSON.parse(
@@ -438,7 +367,6 @@ const Cart = {
     }
   },
 
-  // Save basket.
   save(items) {
     try {
       localStorage.setItem(
@@ -462,7 +390,6 @@ const Cart = {
     }
   },
 
-  // Add a product.
   add(product, qty = 1) {
     if (!product || typeof product !== 'object') {
       throw new Error('Invalid product.');
@@ -549,7 +476,6 @@ const Cart = {
     return items;
   },
 
-  // Update quantity.
   updateQty(productId, quantity) {
     const id = String(productId);
 
@@ -576,7 +502,6 @@ const Cart = {
     return this.save(items);
   },
 
-  // Remove product.
   remove(productId) {
     const id = String(productId);
 
@@ -587,12 +512,10 @@ const Cart = {
     );
   },
 
-  // Empty basket.
   clear() {
     return this.save([]);
   },
 
-  // Total item count.
   count() {
     return this.get().reduce(
       (sum, item) => sum + Number(item.quantity || 0),
@@ -600,7 +523,6 @@ const Cart = {
     );
   },
 
-  // Basket subtotal.
   subtotal() {
     return this.get().reduce(
       (sum, item) =>
@@ -611,7 +533,6 @@ const Cart = {
     );
   },
 
-  // Update all basket badges.
   updateBadge() {
     const count = this.count();
 
@@ -624,11 +545,6 @@ const Cart = {
     });
   }
 };
-
-
-// ======================================================
-// SHARED HELPERS
-// ======================================================
 
 function formatKes(amount) {
   return 'KES ' + Number(amount).toLocaleString(
@@ -649,10 +565,6 @@ function escapeHtml(value) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
-
-// ======================================================
-// INITIALIZE CART BADGE
-// ======================================================
 
 document.addEventListener('DOMContentLoaded', () => {
   Cart.updateBadge();
