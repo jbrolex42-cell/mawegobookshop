@@ -1,6 +1,28 @@
 ﻿
+/* =========================================================
+   MAWEGO BOOKSHOP — MAIN FRONTEND API
+   Local development: http://localhost:3000/api
+   Production: Render backend
+========================================================= */
+
+'use strict';
+
 const API = {
-  base: 'https://mawegobookbackend.onrender.com/api',
+
+  // =======================================================
+  // API CONFIGURATION
+  // =======================================================
+
+  base: (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+  )
+    ? 'http://localhost:3000/api'
+    : 'https://mawegobookbackend.onrender.com/api',
+
+  // =======================================================
+  // AUTHENTICATION
+  // =======================================================
 
   getToken() {
     return localStorage.getItem('mb_token');
@@ -18,18 +40,26 @@ const API = {
 
   getUser() {
     try {
-      return JSON.parse(localStorage.getItem('mb_user') || 'null');
+      return JSON.parse(
+        localStorage.getItem('mb_user') || 'null'
+      );
     } catch {
       return null;
     }
   },
 
+  // =======================================================
+  // CORE HTTP REQUEST
+  // =======================================================
+
   async request(path, options = {}) {
     const headers = { ...(options.headers || {}) };
 
-    const isFormData = options.body instanceof FormData;
+    const isFormData =
+      typeof FormData !== 'undefined' &&
+      options.body instanceof FormData;
 
-    if (!isFormData) {
+    if (!isFormData && options.body !== undefined) {
       headers['Content-Type'] =
         headers['Content-Type'] || 'application/json';
     }
@@ -37,27 +67,44 @@ const API = {
     const token = this.getToken();
 
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers.Authorization = `Bearer ${token}`;
     }
 
-    const res = await fetch(this.base + path, {
-      ...options,
-      headers,
-      body: isFormData
-        ? options.body
-        : options.body
-          ? JSON.stringify(options.body)
-          : undefined
-    });
+    let response;
 
-    const data = await res.json().catch(() => ({}));
-
-    if (!res.ok) {
+    try {
+      response = await fetch(this.base + path, {
+        ...options,
+        headers,
+        body: isFormData
+          ? options.body
+          : options.body !== undefined
+            ? (
+                typeof options.body === 'string'
+                  ? options.body
+                  : JSON.stringify(options.body)
+              )
+            : undefined
+      });
+    } catch (networkError) {
       const error = new Error(
-        data.error || data.message || 'Request failed'
+        'Unable to connect to Mawego Bookshop server. Check that the backend is running.'
       );
 
-      error.status = res.status;
+      error.cause = networkError;
+      throw error;
+    }
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const error = new Error(
+        data.error ||
+        data.message ||
+        `Request failed (${response.status})`
+      );
+
+      error.status = response.status;
       error.data = data;
 
       throw error;
@@ -66,25 +113,29 @@ const API = {
     return data;
   },
 
+  // =======================================================
+  // HTTP METHODS
+  // =======================================================
+
   get(path) {
     return this.request(path);
   },
 
-  post(path, body) {
+  post(path, body = {}) {
     return this.request(path, {
       method: 'POST',
       body
     });
   },
 
-  put(path, body) {
+  put(path, body = {}) {
     return this.request(path, {
       method: 'PUT',
       body
     });
   },
 
-  patch(path, body) {
+  patch(path, body = {}) {
     return this.request(path, {
       method: 'PATCH',
       body
@@ -97,6 +148,10 @@ const API = {
     });
   },
 
+  // =======================================================
+  // CATEGORIES AND PRODUCTS
+  // =======================================================
+
   categories() {
     return this.get('/categories');
   },
@@ -104,16 +159,24 @@ const API = {
   products(params = {}) {
     const q = new URLSearchParams(params).toString();
 
-    return this.get('/products' + (q ? '?' + q : ''));
+    return this.get(
+      '/products' + (q ? '?' + q : '')
+    );
   },
 
   product(slug) {
-    return this.get('/products/' + encodeURIComponent(slug));
+    return this.get(
+      '/products/' + encodeURIComponent(slug)
+    );
   },
 
   settings() {
     return this.get('/settings');
   },
+
+  // =======================================================
+  // CUSTOMER AUTHENTICATION
+  // =======================================================
 
   login(email, password) {
     return this.post('/auth/login', {
@@ -147,6 +210,10 @@ const API = {
     });
   },
 
+  // =======================================================
+  // STAFF MANAGEMENT
+  // =======================================================
+
   adminStaff() {
     return this.get('/auth/staff');
   },
@@ -156,8 +223,15 @@ const API = {
   },
 
   adminUpdateStaff(id, body) {
-    return this.patch('/auth/staff/' + id, body);
+    return this.patch(
+      '/auth/staff/' + encodeURIComponent(id),
+      body
+    );
   },
+
+  // =======================================================
+  // ORDERS AND CHECKOUT
+  // =======================================================
 
   createOrder(payload) {
     return this.post('/orders', payload);
@@ -169,9 +243,31 @@ const API = {
       : '';
 
     return this.get(
-      '/orders/track/' + encodeURIComponent(orderNumber) + q
+      '/orders/track/' +
+      encodeURIComponent(orderNumber) + q
     );
   },
+
+  orderStatus(id) {
+    return this.get(
+      '/orders/' +
+      encodeURIComponent(id) +
+      '/status'
+    );
+  },
+
+  cancelOrder(id) {
+    return this.post(
+      '/orders/' +
+      encodeURIComponent(id) +
+      '/cancel',
+      {}
+    );
+  },
+
+  // =======================================================
+  // PAYMENTS
+  // =======================================================
 
   mpesaStk(orderId, phone) {
     return this.post('/payments/mpesa/stk', {
@@ -186,8 +282,15 @@ const API = {
     });
   },
 
+  // =======================================================
+  // RECEIPTS
+  // =======================================================
+
   receiptByOrderId(orderId) {
-    return this.get('/receipts/order/' + orderId);
+    return this.get(
+      '/receipts/order/' +
+      encodeURIComponent(orderId)
+    );
   },
 
   receiptByNumber(orderNumber, phone) {
@@ -196,18 +299,85 @@ const API = {
       : '';
 
     return this.get(
-      '/receipts/number/' + encodeURIComponent(orderNumber) + q
+      '/receipts/number/' +
+      encodeURIComponent(orderNumber) + q
     );
   },
+
+  // =======================================================
+  // PROMOTIONAL COUPONS
+  // =======================================================
+
+  validatePromo(code, subtotal) {
+    return this.post('/promos/validate', {
+      code,
+      subtotal
+    });
+  },
+
+  adminPromos() {
+    return this.get('/admin/promos');
+  },
+
+  adminCreatePromo(body) {
+    return this.post('/admin/promos', body);
+  },
+
+  // =======================================================
+  // CUSTOMER NOTIFICATIONS
+  // =======================================================
+
+  notifications(params = {}) {
+    const q = new URLSearchParams(params).toString();
+
+    return this.get(
+      '/notifications' + (q ? '?' + q : '')
+    );
+  },
+
+  notificationUnreadCount() {
+    return this.get('/notifications/unread-count');
+  },
+
+  notificationMarkRead(id) {
+    return this.patch(
+      '/notifications/' +
+      encodeURIComponent(id) +
+      '/read',
+      {}
+    );
+  },
+
+  notificationMarkAllRead() {
+    return this.post('/notifications/read-all', {});
+  },
+
+  notificationClearRead() {
+    return this.del('/notifications/clear-read');
+  },
+
+  notificationClearAll() {
+    return this.del('/notifications/clear-all');
+  },
+
+  // =======================================================
+  // ADMIN DASHBOARD
+  // =======================================================
 
   adminDashboard() {
     return this.get('/admin/dashboard');
   },
 
+  // =======================================================
+  // ADMIN PRODUCT MANAGEMENT
+  // =======================================================
+
   adminProducts(params = {}) {
     const q = new URLSearchParams(params).toString();
 
-    return this.get('/admin/products' + (q ? '?' + q : ''));
+    return this.get(
+      '/admin/products' + (q ? '?' + q : '')
+    );
   },
 
   adminCreateProduct(formData) {
@@ -218,18 +388,28 @@ const API = {
   },
 
   adminUpdateProduct(id, formData) {
-    return this.request('/admin/products/' + id, {
-      method: 'PUT',
-      body: formData
-    });
+    return this.request(
+      '/admin/products/' + encodeURIComponent(id),
+      {
+        method: 'PUT',
+        body: formData
+      }
+    );
   },
 
   adminDeleteProduct(id) {
-    return this.del('/admin/products/' + id);
+    return this.del(
+      '/admin/products/' + encodeURIComponent(id)
+    );
   },
 
   adminAdjustStock(id, body) {
-    return this.post('/admin/products/' + id + '/stock', body);
+    return this.post(
+      '/admin/products/' +
+      encodeURIComponent(id) +
+      '/stock',
+      body
+    );
   },
 
   adminImportProducts(products) {
@@ -238,23 +418,43 @@ const API = {
     });
   },
 
+  // =======================================================
+  // ADMIN ORDER MANAGEMENT
+  // =======================================================
+
   adminOrders(params = {}) {
     const q = new URLSearchParams(params).toString();
 
-    return this.get('/admin/orders' + (q ? '?' + q : ''));
+    return this.get(
+      '/admin/orders' + (q ? '?' + q : '')
+    );
   },
 
   adminOrder(id) {
-    return this.get('/admin/orders/' + id);
+    return this.get(
+      '/admin/orders/' + encodeURIComponent(id)
+    );
   },
 
   adminUpdateOrder(id, body) {
-    return this.patch('/admin/orders/' + id, body);
+    return this.patch(
+      '/admin/orders/' + encodeURIComponent(id),
+      body
+    );
   },
 
   adminMarkPaid(id, body = {}) {
-    return this.post('/admin/orders/' + id + '/mark-paid', body);
+    return this.post(
+      '/admin/orders/' +
+      encodeURIComponent(id) +
+      '/mark-paid',
+      body
+    );
   },
+
+  // =======================================================
+  // ADMIN REPORTS
+  // =======================================================
 
   adminSalesReport(from, to) {
     return this.get(
@@ -272,12 +472,23 @@ const API = {
     );
   },
 
+  // =======================================================
+  // SUPPLIERS AND PURCHASE ORDERS
+  // =======================================================
+
   adminSuppliers() {
     return this.get('/admin/suppliers');
   },
 
   adminCreateSupplier(body) {
     return this.post('/admin/suppliers', body);
+  },
+
+  adminUpdateSupplier(id, body) {
+    return this.put(
+      '/admin/suppliers/' + encodeURIComponent(id),
+      body
+    );
   },
 
   adminPurchaseOrders() {
@@ -289,13 +500,24 @@ const API = {
   },
 
   adminReceivePO(id) {
-    return this.post('/admin/purchase-orders/' + id + '/receive');
+    return this.post(
+      '/admin/purchase-orders/' +
+      encodeURIComponent(id) +
+      '/receive',
+      {}
+    );
   },
+
+  // =======================================================
+  // EXPENSE MANAGEMENT
+  // =======================================================
 
   adminExpenses(params = {}) {
     const q = new URLSearchParams(params).toString();
 
-    return this.get('/admin/expenses' + (q ? '?' + q : ''));
+    return this.get(
+      '/admin/expenses' + (q ? '?' + q : '')
+    );
   },
 
   adminExpenseCategories() {
@@ -306,9 +528,22 @@ const API = {
     return this.post('/admin/expenses', body);
   },
 
-  adminDeleteExpense(id) {
-    return this.del('/admin/expenses/' + id);
+  adminUpdateExpense(id, body) {
+    return this.put(
+      '/admin/expenses/' + encodeURIComponent(id),
+      body
+    );
   },
+
+  adminDeleteExpense(id) {
+    return this.del(
+      '/admin/expenses/' + encodeURIComponent(id)
+    );
+  },
+
+  // =======================================================
+  // CUSTOMER LOYALTY POINTS
+  // =======================================================
 
   pointsBalance() {
     return this.get('/points/balance');
@@ -320,8 +555,24 @@ const API = {
 };
 
 
+// =========================================================
+// EXPOSE API GLOBALLY
+// =========================================================
+
+window.API = API;
+
+
+// =========================================================
+// MAWEGO BOOKSHOP — SHOPPING CART
+// =========================================================
+
 const Cart = {
+
   key: 'mb_cart',
+
+  // -------------------------------------------------------
+  // GET PRODUCT ID
+  // -------------------------------------------------------
 
   getProductId(product) {
     if (!product) return '';
@@ -337,6 +588,11 @@ const Cart = {
 
     return id == null ? '' : String(id);
   },
+
+  // -------------------------------------------------------
+  // GET CART
+  // -------------------------------------------------------
+
   get() {
     try {
       const stored = JSON.parse(
@@ -345,27 +601,46 @@ const Cart = {
 
       if (!Array.isArray(stored)) return [];
 
-      return stored.map(item => {
-        const productId = this.getProductId(item);
+      return stored
+        .map(item => {
+          const productId = this.getProductId(item);
 
-        return {
-          ...item,
-          product_id: productId,
-          name: item.name || item.product_name || item.title || 'Unnamed product',
-          price_kes: Number(item.price_kes ?? item.price ?? 0),
-          quantity: Math.max(
-            1,
-            Math.floor(Number(item.quantity) || 1)
-          ),
-          stock_qty: Number(item.stock_qty ?? item.stock ?? 99)
-        };
-      }).filter(item => item.product_id);
+          return {
+            ...item,
+
+            product_id: productId,
+
+            name:
+              item.name ||
+              item.product_name ||
+              item.title ||
+              'Unnamed product',
+
+            price_kes: Number(
+              item.price_kes ?? item.price ?? 0
+            ),
+
+            quantity: Math.max(
+              1,
+              Math.floor(Number(item.quantity) || 1)
+            ),
+
+            stock_qty: Number(
+              item.stock_qty ?? item.stock ?? 99
+            )
+          };
+        })
+        .filter(item => item.product_id);
 
     } catch (error) {
       console.error('Cart storage error:', error);
       return [];
     }
   },
+
+  // -------------------------------------------------------
+  // SAVE CART
+  // -------------------------------------------------------
 
   save(items) {
     try {
@@ -389,6 +664,10 @@ const Cart = {
       return false;
     }
   },
+
+  // -------------------------------------------------------
+  // ADD PRODUCT
+  // -------------------------------------------------------
 
   add(product, qty = 1) {
     if (!product || typeof product !== 'object') {
@@ -420,7 +699,9 @@ const Cart = {
     );
 
     if (stock < 1) {
-      throw new Error('This product is currently out of stock.');
+      throw new Error(
+        'This product is currently out of stock.'
+      );
     }
 
     const quantity = Math.max(
@@ -445,7 +726,12 @@ const Cart = {
     } else {
       items.push({
         product_id: productId,
-        name: product.name || product.product_name || product.title || 'Unnamed product',
+
+        name:
+          product.name ||
+          product.product_name ||
+          product.title ||
+          'Unnamed product',
 
         price_kes: price,
 
@@ -470,11 +756,17 @@ const Cart = {
     }
 
     if (!this.save(items)) {
-      throw new Error('Unable to save this product to your basket.');
+      throw new Error(
+        'Unable to save this product to your basket.'
+      );
     }
 
     return items;
   },
+
+  // -------------------------------------------------------
+  // UPDATE QUANTITY
+  // -------------------------------------------------------
 
   updateQty(productId, quantity) {
     const id = String(productId);
@@ -494,13 +786,20 @@ const Cart = {
         Number(item.stock_qty) || 99
       );
 
-      item.quantity = Math.min(requested, stock);
+      item.quantity = Math.min(
+        requested,
+        stock
+      );
 
       return item;
     });
 
     return this.save(items);
   },
+
+  // -------------------------------------------------------
+  // REMOVE PRODUCT
+  // -------------------------------------------------------
 
   remove(productId) {
     const id = String(productId);
@@ -512,16 +811,29 @@ const Cart = {
     );
   },
 
+  // -------------------------------------------------------
+  // CLEAR CART
+  // -------------------------------------------------------
+
   clear() {
     return this.save([]);
   },
 
+  // -------------------------------------------------------
+  // CART COUNT
+  // -------------------------------------------------------
+
   count() {
     return this.get().reduce(
-      (sum, item) => sum + Number(item.quantity || 0),
+      (sum, item) =>
+        sum + Number(item.quantity || 0),
       0
     );
   },
+
+  // -------------------------------------------------------
+  // CART SUBTOTAL
+  // -------------------------------------------------------
 
   subtotal() {
     return this.get().reduce(
@@ -532,6 +844,10 @@ const Cart = {
       0
     );
   },
+
+  // -------------------------------------------------------
+  // UPDATE CART BADGE
+  // -------------------------------------------------------
 
   updateBadge() {
     const count = this.count();
@@ -545,6 +861,18 @@ const Cart = {
     });
   }
 };
+
+
+// =========================================================
+// EXPOSE CART GLOBALLY
+// =========================================================
+
+window.Cart = Cart;
+
+
+// =========================================================
+// GLOBAL FORMATTING HELPERS
+// =========================================================
 
 function formatKes(amount) {
   return 'KES ' + Number(amount).toLocaleString(
@@ -566,6 +894,23 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+window.formatKes = formatKes;
+window.escapeHtml = escapeHtml;
+
+
+// =========================================================
+// INITIALIZE CART
+// =========================================================
+
+function initializeMawegoCart() {
   Cart.updateBadge();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener(
+    'DOMContentLoaded',
+    initializeMawegoCart
+  );
+} else {
+  initializeMawegoCart();
+}

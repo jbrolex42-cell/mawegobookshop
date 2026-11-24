@@ -1005,3 +1005,51 @@
 
 </body>
 </html>
+${['pending', 'confirmed'].includes(o.order_status) &&
+  o.payment_status !== 'paid'
+  ? `
+    <button
+      type="button"
+      class="btn btn-outline btn-sm"
+      data-cancel-order="${escapeHtml(o.id || o._id)}"
+    >
+      <i data-lucide="x-circle"></i>
+      Cancel order
+    </button>
+  `
+  : ''
+}
+panel.querySelectorAll('[data-cancel-order]').forEach(button => {
+  button.addEventListener('click', async () => {
+    const orderId = button.dataset.cancelOrder;
+
+    if (!orderId) return;
+
+    const confirmed = window.confirm(
+      'Are you sure you want to cancel this order?'
+    );
+
+    if (!confirmed) return;
+
+    button.disabled = true;
+    button.textContent = 'Cancelling...';
+
+    try {
+      const result = await API.cancelOrder(orderId);
+
+      window.alert(
+        result.message || 'Your order has been cancelled.'
+      );
+
+      await showAccount();
+    } catch (err) {
+      window.alert(
+        err.message || 'Unable to cancel this order.'
+      );
+
+      button.disabled = false;
+      button.innerHTML = '<i data-lucide="x-circle"></i> Cancel order';
+      refreshIcons();
+    }
+  });
+});

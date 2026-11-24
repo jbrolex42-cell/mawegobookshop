@@ -1,28 +1,703 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Privacy — Mawego Bookshop</title>
-  <link rel="stylesheet" href="/css/styles.css" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#126b45">
+  <meta name="description" content="Read the Mawego Bookshop privacy notice and learn how we handle your personal information, orders and payments.">
+
+  <title>Privacy Notice | Mawego Bookshop</title>
+
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <style>
+    :root {
+      --privacy-green: #126b45;
+      --privacy-dark: #0c4930;
+      --privacy-soft: #eaf6ef;
+      --privacy-ink: #1b2b22;
+      --privacy-muted: #68776e;
+      --privacy-border: #e4ebe6;
+      --privacy-background: #f5f8f6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--privacy-ink);
+      background: var(--privacy-background);
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--privacy-green);
+    }
+
+    .privacy-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--privacy-border);
+      backdrop-filter: blur(12px);
+    }
+
+    .privacy-header-inner {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .privacy-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--privacy-dark);
+      font-size: 19px;
+      font-weight: 850;
+      letter-spacing: -0.6px;
+      text-decoration: none;
+    }
+
+    .privacy-logo-mark {
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--privacy-green);
+      border-radius: 11px;
+    }
+
+    .privacy-logo-mark svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .privacy-logo span:last-child {
+      color: var(--privacy-green);
+    }
+
+    .privacy-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .privacy-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #425248;
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .privacy-nav a:hover {
+      color: var(--privacy-green);
+    }
+
+    .privacy-nav svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .privacy-main {
+      width: min(900px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 55px 0 75px;
+    }
+
+    .privacy-hero {
+      padding: 35px 38px;
+      background: linear-gradient(135deg, #0c4930, #168253);
+      border-radius: 18px;
+      color: #fff;
+      box-shadow: 0 15px 35px rgba(12, 73, 48, 0.12);
+    }
+
+    .privacy-hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      color: #d6f3e2;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .privacy-hero-label svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .privacy-hero h1 {
+      margin: 0;
+      font-size: clamp(29px, 5vw, 43px);
+      line-height: 1.15;
+      letter-spacing: -1.3px;
+    }
+
+    .privacy-hero p {
+      max-width: 610px;
+      margin: 14px 0 0;
+      color: #e0f2e7;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .privacy-content {
+      display: grid;
+      grid-template-columns: 215px minmax(0, 1fr);
+      gap: 25px;
+      align-items: start;
+      margin-top: 28px;
+    }
+
+    .privacy-sidebar {
+      position: sticky;
+      top: 95px;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--privacy-border);
+      border-radius: 13px;
+    }
+
+    .privacy-sidebar h2 {
+      margin: 0 0 13px;
+      color: var(--privacy-dark);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .privacy-sidebar a {
+      display: block;
+      padding: 8px 0;
+      color: var(--privacy-muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .privacy-sidebar a:hover {
+      color: var(--privacy-green);
+    }
+
+    .privacy-document {
+      min-width: 0;
+      padding: 32px;
+      background: #fff;
+      border: 1px solid var(--privacy-border);
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(25, 55, 36, 0.035);
+    }
+
+    .privacy-intro {
+      margin: 0 0 25px;
+      padding: 17px 19px;
+      background: var(--privacy-soft);
+      border-left: 3px solid var(--privacy-green);
+      border-radius: 7px;
+      color: #365444;
+      font-size: 13px;
+    }
+
+    .privacy-section {
+      padding: 23px 0;
+      border-bottom: 1px solid var(--privacy-border);
+      scroll-margin-top: 100px;
+    }
+
+    .privacy-section:first-of-type {
+      padding-top: 5px;
+    }
+
+    .privacy-section:last-of-type {
+      border-bottom: 0;
+    }
+
+    .privacy-section h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
+      color: var(--privacy-dark);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .privacy-section h2 svg {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+      color: var(--privacy-green);
+    }
+
+    .privacy-section p {
+      margin: 0 0 11px;
+      color: #59685f;
+      font-size: 13px;
+      line-height: 1.85;
+    }
+
+    .privacy-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .privacy-section ul {
+      margin: 10px 0 0;
+      padding-left: 21px;
+      color: #59685f;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .privacy-contact {
+      margin-top: 25px;
+      padding: 22px;
+      background: #f7faf8;
+      border: 1px solid var(--privacy-border);
+      border-radius: 12px;
+    }
+
+    .privacy-contact h2 {
+      margin: 0 0 8px;
+      color: var(--privacy-dark);
+      font-size: 16px;
+    }
+
+    .privacy-contact p {
+      margin: 0;
+      color: var(--privacy-muted);
+      font-size: 13px;
+    }
+
+    .privacy-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .privacy-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 10px 16px;
+      border: 1px solid var(--privacy-border);
+      border-radius: 9px;
+      color: var(--privacy-dark);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 750;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .privacy-actions a:hover {
+      background: var(--privacy-soft);
+      border-color: #b7d9c4;
+    }
+
+    .privacy-actions a.primary {
+      color: #fff;
+      background: var(--privacy-green);
+      border-color: var(--privacy-green);
+    }
+
+    .privacy-actions a.primary:hover {
+      background: var(--privacy-dark);
+    }
+
+    .privacy-actions svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .privacy-footer {
+      padding: 23px 16px;
+      border-top: 1px solid var(--privacy-border);
+      background: #fff;
+      text-align: center;
+    }
+
+    .privacy-footer p {
+      margin: 0;
+      color: var(--privacy-muted);
+      font-size: 11px;
+    }
+
+    .privacy-footer a {
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    @media (max-width: 700px) {
+      .privacy-main {
+        padding: 30px 0 45px;
+      }
+
+      .privacy-hero {
+        padding: 27px 23px;
+      }
+
+      .privacy-content {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .privacy-sidebar {
+        position: static;
+      }
+
+      .privacy-sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 12px;
+      }
+
+      .privacy-document {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .privacy-header-inner {
+        min-height: 62px;
+      }
+
+      .privacy-logo {
+        font-size: 16px;
+      }
+
+      .privacy-nav a {
+        font-size: 12px;
+      }
+
+      .privacy-main {
+        width: calc(100% - 22px);
+      }
+
+      .privacy-sidebar nav {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-document {
+        padding: 21px 16px;
+      }
+
+      .privacy-actions {
+        flex-direction: column;
+      }
+
+      .privacy-actions a {
+        width: 100%;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .privacy-header,
+      .privacy-sidebar,
+      .privacy-actions,
+      .privacy-footer {
+        display: none !important;
+      }
+
+      .privacy-main {
+        width: 100%;
+        padding: 0;
+      }
+
+      .privacy-hero {
+        color: #000;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: none;
+      }
+
+      .privacy-hero p,
+      .privacy-hero-label {
+        color: #444;
+      }
+
+      .privacy-content {
+        display: block;
+      }
+
+      .privacy-document {
+        padding: 15px 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .privacy-section {
+        break-inside: avoid;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="/" class="logo">Mawego <span>Bookshop</span></a>
-      <nav class="nav"><a href="/">Shop</a></nav>
+
+  <header class="privacy-header">
+    <div class="container privacy-header-inner">
+      <a href="/" class="privacy-logo" aria-label="Mawego Bookshop home">
+        <span class="privacy-logo-mark" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 7v14"></path>
+            <path d="M3 18V5a2 2 0 0 1 2-2h3a4 4 0 0 1 4 4 4 4 0 0 1 4-4h3a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1h-4a4 4 0 0 0-4 2 4 4 0 0 0-4-2H4a1 1 0 0 1-1-1z"></path>
+          </svg>
+        </span>
+        Mawego <span>Bookshop</span>
+      </a>
+
+      <nav class="privacy-nav" aria-label="Main navigation">
+        <a href="/">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m3 10 9-7 9 7"></path>
+            <path d="M5 9v12h14V9"></path>
+          </svg>
+          Shop
+        </a>
+      </nav>
     </div>
   </header>
-  <main class="container page-pad" style="max-width:640px">
-    <h1 style="font-family:var(--font-display)">Privacy notice</h1>
-    <div class="card">
-      <p>We collect your name, phone and optional email to fulfil orders and contact you about delivery or collection.</p>
-      <p>Payment details are processed by M-Pesa or your card provider; we do not store full card numbers on this site.</p>
-      <p>Order history is kept so you can track purchases. Reward points are linked to your account when you register.</p>
-      <p>Contact the shop if you need an order or account corrected.</p>
-      <p style="margin-bottom:0"><a href="/" class="btn btn-outline btn-sm">Back to shop</a></p>
+
+  <main class="privacy-main">
+
+    <section class="privacy-hero">
+      <div class="privacy-hero-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"></path>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+        Your privacy matters
+      </div>
+
+      <h1>Privacy Notice</h1>
+
+      <p>
+        We respect your privacy and are committed to handling your personal
+        information responsibly when you browse, shop or create an account
+        with Mawego Bookshop.
+      </p>
+    </section>
+
+    <div class="privacy-content">
+
+      <aside class="privacy-sidebar">
+        <h2>On this page</h2>
+        <nav aria-label="Privacy notice sections">
+          <a href="#information">Information we collect</a>
+          <a href="#usage">How we use information</a>
+          <a href="#payments">Payments and security</a>
+          <a href="#orders">Orders and accounts</a>
+          <a href="#sharing">Information sharing</a>
+          <a href="#retention">Data retention</a>
+          <a href="#your-rights">Your choices and rights</a>
+          <a href="#contact">Contact us</a>
+        </nav>
+      </aside>
+
+      <article class="privacy-document">
+
+        <p class="privacy-intro">
+          This notice explains what information may be collected through our
+          website, why it is used and how you can contact us about your
+          personal information.
+        </p>
+
+        <section class="privacy-section" id="information">
+          <h2>Information we collect</h2>
+          <p>
+            When you place an order or use our services, we may collect
+            information such as:
+          </p>
+          <ul>
+            <li>Your name and contact telephone number.</li>
+            <li>Your email address, where provided.</li>
+            <li>Delivery address or collection information.</li>
+            <li>Order details, purchased products and transaction references.</li>
+            <li>Account information when you register or sign in.</li>
+          </ul>
+          <p>
+            We may also receive basic technical information needed to operate
+            and protect the website.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="usage">
+          <h2>How we use your information</h2>
+          <p>We use the information collected for legitimate shop operations, including:</p>
+          <ul>
+            <li>Processing and managing customer orders.</li>
+            <li>Arranging delivery or shop collection.</li>
+            <li>Sending order confirmations and important updates.</li>
+            <li>Providing customer support and resolving order issues.</li>
+            <li>Managing customer accounts and reward points.</li>
+            <li>Protecting the website against fraud and misuse.</li>
+            <li>Improving our products and shopping experience.</li>
+          </ul>
+        </section>
+
+        <section class="privacy-section" id="payments">
+          <h2>Payments and security</h2>
+          <p>
+            Payments may be processed through supported payment providers,
+            including M-Pesa and card payment services.
+          </p>
+          <p>
+            Payment providers handle payment information according to their
+            own security and privacy practices. We do not intend to store
+            complete card numbers or card security codes on our website.
+          </p>
+          <p>
+            We use reasonable technical and organisational measures to help
+            protect customer information. However, no online system can
+            guarantee absolute security.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="orders">
+          <h2>Orders and customer accounts</h2>
+          <p>
+            We retain relevant order information so that we can process
+            purchases, provide receipts, handle customer enquiries and
+            support order tracking.
+          </p>
+          <p>
+            If you register an account, information such as your order history
+            and reward points may be associated with that account.
+          </p>
+          <p>
+            Please keep your account login details secure and contact us if
+            you believe your account has been accessed without permission.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="sharing">
+          <h2>When information may be shared</h2>
+          <p>
+            We do not sell customer personal information. We may share
+            relevant information with service providers when necessary to
+            operate the shop.
+          </p>
+          <ul>
+            <li>Payment providers to process transactions.</li>
+            <li>Delivery providers to fulfil delivery requests.</li>
+            <li>Email or technology providers to deliver essential services.</li>
+            <li>Authorities where disclosure is required by applicable law.</li>
+          </ul>
+          <p>
+            Information shared with service providers should be limited to
+            what is reasonably necessary for the service being provided.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="retention">
+          <h2>How long we keep information</h2>
+          <p>
+            We keep personal and order information for as long as reasonably
+            necessary to fulfil orders, maintain business records, provide
+            support, resolve disputes and meet applicable legal obligations.
+          </p>
+          <p>
+            Retention periods may vary depending on the type of information
+            and the reason it was collected.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="your-rights">
+          <h2>Your choices and rights</h2>
+          <p>
+            You may contact us to request access to, correction of or
+            clarification about personal information associated with your
+            account or orders.
+          </p>
+          <p>
+            You may also ask us to review information that is inaccurate or
+            no longer necessary, subject to applicable record-keeping and
+            legal requirements.
+          </p>
+          <p>
+            We may need to verify your identity before responding to a
+            request involving personal information.
+          </p>
+        </section>
+
+        <section class="privacy-section" id="contact">
+          <h2>Contact Mawego Bookshop</h2>
+          <p>
+            If you have a privacy question, need an order corrected or want
+            to make a request about your personal information, please contact
+            the shop through the available customer support channels.
+          </p>
+        </section>
+
+        <div class="privacy-contact">
+          <h2>Need assistance?</h2>
+          <p>
+            Our team can help with questions about your orders, account
+            information and privacy-related concerns.
+          </p>
+
+          <div class="privacy-actions">
+            <a href="/" class="primary">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
+              Back to shop
+            </a>
+
+            <a href="/pages/account.html">
+              My account
+            </a>
+          </div>
+        </div>
+
+      </article>
     </div>
   </main>
+
+  <footer class="privacy-footer">
+    <p>
+      © <span id="currentYear"></span> Mawego Bookshop.
+      All rights reserved.
+      <a href="/">Visit our shop</a>
+    </p>
+  </footer>
+
+  <script>
+    "use strict";
+
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+  </script>
+
 </body>
 </html>

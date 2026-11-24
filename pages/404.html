@@ -1,37 +1,624 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Page not found — Mawego Bookshop</title>
-  <link rel="stylesheet" href="/css/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#126b45">
+  <meta name="description" content="The page you are looking for could not be found. Return to Mawego Bookshop and continue shopping.">
+  <meta name="robots" content="noindex, follow">
+
+  <title>404 — Page Not Found | Mawego Bookshop</title>
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
   <script src="https://unpkg.com/lucide@0.469.0"></script>
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <style>
+    :root {
+      --error-green: #126b45;
+      --error-dark: #0b4930;
+      --error-light: #eaf5ef;
+      --error-gold: #e8b85c;
+      --error-text: #17251e;
+      --error-muted: #718078;
+      --error-border: #e6eee9;
+      --error-white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(
+          circle at 50% 38%,
+          rgba(18, 107, 69, 0.055),
+          transparent 48%
+        ),
+        #f7faf8;
+      color: var(--error-text);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .error-header {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--error-border);
+      position: relative;
+      z-index: 10;
+    }
+
+    .error-header-inner {
+      width: min(1160px, calc(100% - 40px));
+      min-height: 76px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .error-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--error-dark);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .error-logo-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: var(--error-green);
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(18, 107, 69, 0.18);
+    }
+
+    .error-logo-mark svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .error-logo span:last-child {
+      color: var(--error-green);
+    }
+
+    .error-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .error-nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 15px;
+      color: #45544b;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .error-nav-link:hover {
+      background: var(--error-light);
+      color: var(--error-green);
+    }
+
+    .error-nav-link svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .error-main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 65px 20px 75px;
+    }
+
+    .error-content {
+      width: min(100%, 690px);
+      text-align: center;
+      animation: appear 0.65s ease both;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error-illustration {
+      width: 210px;
+      height: 190px;
+      margin: 0 auto 25px;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .error-circle {
+      position: absolute;
+      width: 175px;
+      height: 175px;
+      border-radius: 50%;
+      background: linear-gradient(
+        145deg,
+        #e9f5ee,
+        #d8ecdf
+      );
+    }
+
+    .error-book {
+      position: relative;
+      z-index: 2;
+      width: 115px;
+      height: 115px;
+      display: grid;
+      place-items: center;
+      color: var(--error-green);
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(20, 75, 48, 0.12);
+      transform: rotate(-8deg);
+    }
+
+    .error-book svg {
+      width: 66px;
+      height: 66px;
+      stroke-width: 1.5;
+    }
+
+    .error-number {
+      position: absolute;
+      z-index: 3;
+      right: 1px;
+      bottom: 7px;
+      padding: 8px 14px;
+      color: white;
+      background: var(--error-green);
+      border: 4px solid #f7faf8;
+      border-radius: 30px;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .error-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 13px;
+      color: var(--error-green);
+      background: var(--error-light);
+      border: 1px solid #d9ebdf;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .error-label svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .error-title {
+      margin: 19px 0 12px;
+      color: var(--error-dark);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(34px, 6vw, 53px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.3px;
+    }
+
+    .error-description {
+      max-width: 475px;
+      margin: 0 auto;
+      color: var(--error-muted);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .error-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .error-btn {
+      min-height: 48px;
+      padding: 0 21px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .error-btn svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .error-btn-primary {
+      color: white;
+      background: var(--error-green);
+      box-shadow: 0 7px 16px rgba(18, 107, 69, 0.16);
+    }
+
+    .error-btn-primary:hover {
+      background: var(--error-dark);
+      transform: translateY(-2px);
+    }
+
+    .error-btn-secondary {
+      color: var(--error-green);
+      background: white;
+      border-color: #dce9e0;
+    }
+
+    .error-btn-secondary:hover {
+      background: var(--error-light);
+      border-color: var(--error-green);
+    }
+
+    .error-help {
+      width: min(100%, 510px);
+      margin: 48px auto 0;
+      padding: 19px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      background: white;
+      border: 1px solid var(--error-border);
+      border-radius: 13px;
+      box-shadow: 0 5px 20px rgba(25, 60, 40, 0.035);
+    }
+
+    .error-help-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      color: var(--error-green);
+      background: var(--error-light);
+      border-radius: 11px;
+    }
+
+    .error-help-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .error-help-text strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--error-text);
+      font-size: 13px;
+    }
+
+    .error-help-text p {
+      margin: 0;
+      color: var(--error-muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .error-footer {
+      padding: 23px 20px;
+      background: white;
+      border-top: 1px solid var(--error-border);
+    }
+
+    .error-footer-inner {
+      width: min(1160px, 100%);
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .error-footer p {
+      margin: 0;
+      color: var(--error-muted);
+      font-size: 12px;
+    }
+
+    .error-footer-brand {
+      color: var(--error-green);
+      font-weight: 800;
+    }
+
+    .error-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 17px;
+    }
+
+    .error-footer-links a {
+      color: #66746c;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .error-footer-links a:hover {
+      color: var(--error-green);
+    }
+
+    @media (max-width: 600px) {
+      .error-header-inner {
+        width: calc(100% - 28px);
+        min-height: 66px;
+      }
+
+      .error-logo {
+        font-size: 18px;
+      }
+
+      .error-logo-mark {
+        width: 37px;
+        height: 37px;
+      }
+
+      .error-nav {
+        gap: 2px;
+      }
+
+      .error-nav-link {
+        padding: 9px;
+        font-size: 12px;
+      }
+
+      .error-nav-link svg {
+        width: 16px;
+      }
+
+      .error-main {
+        padding: 48px 18px 55px;
+      }
+
+      .error-illustration {
+        transform: scale(0.9);
+        margin-bottom: 15px;
+      }
+
+      .error-description {
+        font-size: 14px;
+      }
+
+      .error-actions {
+        flex-direction: column;
+      }
+
+      .error-btn {
+        width: 100%;
+        max-width: 310px;
+      }
+
+      .error-help {
+        margin-top: 35px;
+        padding: 16px;
+      }
+
+      .error-footer-inner {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .error-footer-links {
+        justify-content: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="/" class="logo">
-        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+
+  <!-- HEADER -->
+  <header class="error-header">
+    <div class="error-header-inner">
+
+      <a href="/" class="error-logo" aria-label="Mawego Bookshop home">
+        <span class="error-logo-mark">
+          <i data-lucide="book-open"></i>
+        </span>
         Mawego <span>Bookshop</span>
       </a>
-      <nav class="nav">
-        <a href="/"><i data-lucide="store"></i> Shop</a>
-        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket</a>
+
+      <nav class="error-nav" aria-label="Main navigation">
+        <a href="/" class="error-nav-link">
+          <i data-lucide="store"></i>
+          <span>Shop</span>
+        </a>
+
+        <a href="/pages/cart.html" class="error-nav-link">
+          <i data-lucide="shopping-bag"></i>
+          <span>Basket</span>
+        </a>
       </nav>
+
     </div>
   </header>
-  <main class="container page-pad">
-    <div class="empty-state card" style="max-width:480px;margin:3rem auto">
-      <div class="empty-icon"><i data-lucide="file-question"></i></div>
-      <h1 style="font-family:var(--font-display);margin:0.5rem 0">Page not found</h1>
-      <p class="text-muted">That link may be outdated or the page was moved.</p>
-      <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.25rem">
-        <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Back to shop</a>
-        <a href="/pages/track.html" class="btn btn-outline"><i data-lucide="map-pin"></i> Track order</a>
+
+  <!-- MAIN ERROR CONTENT -->
+  <main class="error-main">
+
+    <section class="error-content" aria-labelledby="error-heading">
+
+      <div class="error-illustration" aria-hidden="true">
+        <div class="error-circle"></div>
+
+        <div class="error-book">
+          <i data-lucide="book-open"></i>
+        </div>
+
+        <span class="error-number">404</span>
       </div>
-    </div>
+
+      <div class="error-label">
+        <i data-lucide="alert-circle"></i>
+        Error 404
+      </div>
+
+      <h1 class="error-title" id="error-heading">
+        Oops! This page is missing.
+      </h1>
+
+      <p class="error-description">
+        It looks like the page you're searching for has moved,
+        been removed, or the address may be incorrect.
+
+        Don't worry — your next great read is just a click away.
+      </p>
+
+      <div class="error-actions">
+
+        <a href="/" class="error-btn error-btn-primary">
+          <i data-lucide="store"></i>
+          Back to Bookshop
+        </a>
+
+        <a href="/pages/track.html" class="error-btn error-btn-secondary">
+          <i data-lucide="package-search"></i>
+          Track My Order
+        </a>
+
+        <button
+          type="button"
+          class="error-btn error-btn-secondary"
+          onclick="window.history.back()"
+        >
+          <i data-lucide="arrow-left"></i>
+          Go Back
+        </button>
+
+      </div>
+
+      <!-- HELP SECTION -->
+      <div class="error-help">
+
+        <div class="error-help-icon">
+          <i data-lucide="headset"></i>
+        </div>
+
+        <div class="error-help-text">
+          <strong>Need a little help?</strong>
+          <p>
+            If you believe this page should exist, please contact
+            Mawego Bookshop support for assistance.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
-  <script>lucide.createIcons();</script>
+
+  <!-- FOOTER -->
+  <footer class="error-footer">
+    <div class="error-footer-inner">
+
+      <p>
+        © <span id="currentYear"></span>
+        <span class="error-footer-brand">Mawego Bookshop.</span>
+        All rights reserved.
+      </p>
+
+      <div class="error-footer-links">
+        <a href="/">Home</a>
+        <a href="/pages/cart.html">Basket</a>
+        <a href="/pages/track.html">Track Order</a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // Initialize Lucide icons
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      // Dynamic copyright year
+      const yearElement = document.getElementById('currentYear');
+
+      if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+      }
+
+    });
+  </script>
+
 </body>
 </html>

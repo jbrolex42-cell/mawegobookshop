@@ -1,73 +1,747 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contact — Mawego Bookshop</title>
-  <meta name="description" content="Contact Mawego Bookshop for orders, school supplies and collection." />
-  <link rel="stylesheet" href="/css/styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#126b45">
+
+  <title>Contact Us | Mawego Bookshop</title>
+  <meta name="description" content="Contact Mawego Bookshop for orders, school supplies, delivery, collection and customer support.">
+
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
   <script src="https://unpkg.com/lucide@0.469.0"></script>
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <style>
+    :root {
+      --contact-green: #126b45;
+      --contact-dark: #0c4930;
+      --contact-light: #eaf6ef;
+      --contact-ink: #1d2c23;
+      --contact-muted: #6b796f;
+      --contact-border: #e5ece7;
+      --contact-bg: #f5f8f6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--contact-bg);
+      color: var(--contact-ink);
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .contact-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid var(--contact-border);
+      backdrop-filter: blur(12px);
+    }
+
+    .contact-header .header-inner {
+      min-height: 70px;
+    }
+
+    .contact-header .logo {
+      font-weight: 850;
+      letter-spacing: -.5px;
+    }
+
+    .contact-header .logo-mark {
+      display: grid;
+      place-items: center;
+    }
+
+    .contact-header .nav {
+      gap: 18px;
+    }
+
+    .contact-header .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .contact-header .nav svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .contact-main {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 45px 0 65px;
+    }
+
+    .contact-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 40px;
+      color: #fff;
+      background: linear-gradient(135deg, #0c4930, #168253);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(12,73,48,.12);
+    }
+
+    .contact-hero::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -75px;
+      top: -100px;
+      border: 35px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      color: #d9f4e3;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .hero-label svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .contact-hero h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 650px;
+      margin: 0;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -1.4px;
+    }
+
+    .contact-hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 570px;
+      margin: 15px 0 0;
+      color: #e0f2e7;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .section-heading {
+      margin: 35px 0 17px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      color: var(--contact-dark);
+      font-size: 21px;
+      letter-spacing: -.5px;
+    }
+
+    .section-heading p {
+      margin: 6px 0 0;
+      color: var(--contact-muted);
+      font-size: 13px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .contact-card {
+      min-width: 0;
+      padding: 23px;
+      background: #fff;
+      border: 1px solid var(--contact-border);
+      border-radius: 14px;
+      box-shadow: 0 5px 18px rgba(25,55,36,.035);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(25,55,36,.07);
+    }
+
+    .contact-icon {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 17px;
+      color: var(--contact-green);
+      background: var(--contact-light);
+      border-radius: 12px;
+    }
+
+    .contact-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .contact-card h3 {
+      margin: 0 0 9px;
+      color: var(--contact-dark);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .contact-card p {
+      margin: 0;
+      color: var(--contact-muted);
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-value {
+      color: var(--contact-ink) !important;
+      font-weight: 650;
+    }
+
+    .contact-value a {
+      color: var(--contact-green);
+      font-weight: 750;
+    }
+
+    .contact-value a:hover {
+      text-decoration: underline;
+    }
+
+    .loading-value {
+      display: inline-block;
+      width: 75%;
+      height: 12px;
+      background: #edf1ee;
+      border-radius: 20px;
+      animation: pulse 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: .45; }
+      to { opacity: 1; }
+    }
+
+    .contact-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 25px;
+      margin-top: 24px;
+      padding: 29px;
+      background: #fff;
+      border: 1px solid var(--contact-border);
+      border-radius: 15px;
+    }
+
+    .panel-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .panel-icon {
+      width: 45px;
+      height: 45px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      color: var(--contact-green);
+      background: var(--contact-light);
+      border-radius: 12px;
+    }
+
+    .panel-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .panel-content h2 {
+      margin: 0 0 7px;
+      color: var(--contact-dark);
+      font-size: 17px;
+    }
+
+    .panel-content p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--contact-muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .panel-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .contact-action {
+      min-height: 43px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 15px;
+      border: 1px solid var(--contact-border);
+      border-radius: 9px;
+      color: var(--contact-dark);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+      transition: .2s ease;
+    }
+
+    .contact-action:hover {
+      background: var(--contact-light);
+      border-color: #b8d9c5;
+    }
+
+    .contact-action.primary {
+      color: #fff;
+      background: var(--contact-green);
+      border-color: var(--contact-green);
+    }
+
+    .contact-action.primary:hover {
+      background: var(--contact-dark);
+    }
+
+    .contact-action svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .contact-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 16px 18px;
+      color: #52685a;
+      background: var(--contact-light);
+      border-radius: 11px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .contact-note svg {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+      margin-top: 2px;
+      color: var(--contact-green);
+    }
+
+    .contact-footer {
+      padding: 22px 16px;
+      background: #fff;
+      border-top: 1px solid var(--contact-border);
+    }
+
+    .contact-footer .footer-bottom {
+      color: var(--contact-muted);
+      font-size: 12px;
+    }
+
+    .contact-footer a {
+      color: var(--contact-green);
+      font-weight: 750;
+    }
+
+    @media (max-width: 760px) {
+      .contact-main {
+        padding: 30px 0 45px;
+      }
+
+      .contact-hero {
+        padding: 30px 24px;
+      }
+
+      .contact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contact-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .contact-header .header-inner {
+        min-height: 62px;
+      }
+
+      .contact-header .nav {
+        gap: 11px;
+      }
+
+      .contact-header .nav a {
+        font-size: 12px;
+      }
+
+      .contact-header .nav a svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .contact-main {
+        width: calc(100% - 22px);
+      }
+
+      .contact-hero {
+        padding: 26px 20px;
+        border-radius: 15px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .contact-card {
+        padding: 19px;
+      }
+
+      .contact-icon {
+        margin-bottom: 12px;
+      }
+
+      .contact-panel {
+        padding: 21px;
+      }
+
+      .panel-actions {
+        flex-direction: column;
+      }
+
+      .contact-action {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
+
+  <!-- Header -->
+  <header class="site-header contact-header">
     <div class="container header-inner">
-      <a href="/" class="logo">
-        <span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span>
+
+      <a href="/" class="logo" aria-label="Mawego Bookshop home">
+        <span class="logo-mark" aria-hidden="true">
+          <i data-lucide="book-open"></i>
+        </span>
         Mawego <span>Bookshop</span>
       </a>
-      <nav class="nav">
-        <a href="/"><i data-lucide="store"></i> Shop</a>
-        <a href="/pages/contact.html" class="active"><i data-lucide="phone"></i> Contact</a>
-        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/">
+          <i data-lucide="store"></i>
+          <span>Shop</span>
+        </a>
+
+        <a href="/pages/contact.html" class="active" aria-current="page">
+          <i data-lucide="phone"></i>
+          <span>Contact</span>
+        </a>
+
+        <a href="/pages/cart.html" class="cart-btn">
+          <i data-lucide="shopping-bag"></i>
+          <span>Basket</span>
+          <span class="cart-count" aria-label="Basket item count">0</span>
+        </a>
       </nav>
+
     </div>
   </header>
-  <main class="container page-pad" style="max-width:720px">
-    <h1 style="font-family:var(--font-display);display:flex;align-items:center;gap:0.5rem"><i data-lucide="map-pin"></i> Visit &amp; contact</h1>
-    <div class="features-grid" style="margin-top:1.5rem">
-      <div class="feature-card">
-        <div class="ficon"><i data-lucide="store"></i></div>
-        <h3>Shop location</h3>
-        <p id="shop-address">Mawego, Kenya</p>
+
+  <!-- Main content -->
+  <main class="contact-main">
+
+    <!-- Hero -->
+    <section class="contact-hero">
+      <div class="hero-label">
+        <i data-lucide="message-circle"></i>
+        We're here to help
       </div>
-      <div class="feature-card">
-        <div class="ficon"><i data-lucide="phone"></i></div>
-        <h3>Phone / WhatsApp</h3>
-        <p id="shop-phone">See shop for number</p>
+
+      <h1>Visit us or get in touch</h1>
+
+      <p>
+        Have a question about books, school supplies, an existing order
+        or collection? Find our shop information and use our online
+        services to get started.
+      </p>
+    </section>
+
+    <!-- Contact information -->
+    <section aria-labelledby="contact-information-heading">
+
+      <div class="section-heading">
+        <h2 id="contact-information-heading">Shop information</h2>
+        <p>Everything you need to know before visiting or contacting us.</p>
       </div>
-      <div class="feature-card">
-        <div class="ficon"><i data-lucide="clock"></i></div>
-        <h3>Hours</h3>
-        <p>Monday – Friday<br />Closed Saturdays &amp; public holidays</p>
+
+      <div class="contact-grid">
+
+        <!-- Location -->
+        <article class="contact-card">
+          <div class="contact-icon">
+            <i data-lucide="map-pin"></i>
+          </div>
+
+          <h3>Shop location</h3>
+
+          <p class="contact-value" id="shop-address" aria-live="polite">
+            <span class="loading-value" aria-label="Loading shop address"></span>
+          </p>
+        </article>
+
+        <!-- Phone -->
+        <article class="contact-card">
+          <div class="contact-icon">
+            <i data-lucide="phone"></i>
+          </div>
+
+          <h3>Phone / WhatsApp</h3>
+
+          <p class="contact-value" id="shop-phone" aria-live="polite">
+            <span class="loading-value" aria-label="Loading phone number"></span>
+          </p>
+        </article>
+
+        <!-- Hours -->
+        <article class="contact-card">
+          <div class="contact-icon">
+            <i data-lucide="clock"></i>
+          </div>
+
+          <h3>Opening hours</h3>
+
+          <p class="contact-value">
+            Monday – Friday<br>
+            Closed Saturdays and public holidays
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Orders and collection -->
+    <section class="contact-panel" aria-labelledby="orders-heading">
+
+      <div class="panel-content">
+        <div class="panel-icon">
+          <i data-lucide="package-check"></i>
+        </div>
+
+        <div>
+          <h2 id="orders-heading">Orders and collection</h2>
+
+          <p>
+            Shop online and choose the available delivery or collection
+            option at checkout. You can also track an existing order
+            using your order number and phone number.
+          </p>
+        </div>
+      </div>
+
+      <div class="panel-actions">
+        <a href="/" class="contact-action primary">
+          <i data-lucide="store"></i>
+          Browse shop
+        </a>
+
+        <a href="/pages/track.html" class="contact-action">
+          <i data-lucide="package-search"></i>
+          Track order
+        </a>
+      </div>
+
+    </section>
+
+    <!-- Payment information -->
+    <div class="contact-note">
+      <i data-lucide="shield-check"></i>
+
+      <div>
+        <strong>Convenient payment options</strong><br>
+        Pay using the payment methods displayed at checkout, which may
+        include M-Pesa, card or cash on delivery where available.
       </div>
     </div>
-    <div class="card" style="margin-top:1.5rem">
-      <h2 style="margin-top:0;font-size:1.1rem">Orders &amp; collection</h2>
-      <p class="text-muted" style="margin:0;line-height:1.6">
-        Place orders online for delivery or collection. Track any order with your order number and phone number.
-        Pay with M-Pesa, card, or cash when you receive or collect your books.
-      </p>
-      <p style="margin-top:1rem">
-        <a href="/" class="btn btn-primary"><i data-lucide="store"></i> Browse shop</a>
-        <a href="/pages/track.html" class="btn btn-outline"><i data-lucide="package-search"></i> Track order</a>
-      </p>
-    </div>
+
   </main>
-  <footer class="site-footer">
-    <div class="container footer-bottom" style="border:none;padding:0">
-      <span>© Mawego Bookshop </span>
-      <a href="/">Home</a>
+
+  <!-- Footer -->
+  <footer class="site-footer contact-footer">
+    <div class="container footer-bottom">
+      <span>
+        © <span id="current-year"></span> Mawego Bookshop. All rights reserved.
+      </span>
+
+      <a href="/">
+        <i data-lucide="arrow-left"></i>
+        Back to shop
+      </a>
     </div>
   </footer>
+
+  <!-- Existing application scripts -->
   <script src="/js/api.js"></script>
   <script src="/js/notifications.js"></script>
+
   <script>
-    lucide.createIcons();
-    API.settings().then(({ settings }) => {
-      if (settings.shop_address) document.getElementById('shop-address').textContent = settings.shop_address;
-      if (settings.shop_phone) document.getElementById('shop-phone').textContent = settings.shop_phone;
-    }).catch(() => {});
+    "use strict";
+
+    // ------------------------------------------
+    // ICON INITIALIZATION
+    // ------------------------------------------
+
+    function refreshIcons() {
+      if (window.lucide && typeof window.lucide.createIcons === "function") {
+        window.lucide.createIcons();
+      }
+    }
+
+    refreshIcons();
+
+    // ------------------------------------------
+    // FOOTER YEAR
+    // ------------------------------------------
+
+    document.getElementById("current-year").textContent =
+      new Date().getFullYear();
+
+    // ------------------------------------------
+    // SAFE TEXT HELPERS
+    // ------------------------------------------
+
+    function setText(element, value, fallback) {
+      if (!element) return;
+
+      const text = String(value ?? "").trim();
+
+      element.textContent = text || fallback;
+    }
+
+    // ------------------------------------------
+    // PHONE NUMBER DISPLAY
+    // ------------------------------------------
+
+    function normalizePhone(value) {
+      return String(value || "").trim();
+    }
+
+    function renderShopPhone(value) {
+      const element = document.getElementById("shop-phone");
+      if (!element) return;
+
+      const phone = normalizePhone(value);
+
+      element.replaceChildren();
+
+      if (!phone) {
+        element.textContent = "Contact the shop for assistance";
+        return;
+      }
+
+      const display = document.createElement("a");
+      display.textContent = phone;
+
+      const dialNumber = phone.replace(/[^\d+]/g, "");
+
+      if (/^\+?\d{7,15}$/.test(dialNumber)) {
+        display.href = "tel:" + dialNumber;
+      } else {
+        element.textContent = phone;
+        return;
+      }
+
+      element.appendChild(display);
+    }
+
+    // ------------------------------------------
+    // LOAD SHOP SETTINGS
+    // ------------------------------------------
+
+    async function loadShopInformation() {
+      const addressElement = document.getElementById("shop-address");
+
+      try {
+        if (
+          !window.API ||
+          typeof window.API.settings !== "function"
+        ) {
+          throw new Error("Shop settings service is unavailable.");
+        }
+
+        const response = await window.API.settings();
+        const settings = response?.settings || {};
+
+        setText(
+          addressElement,
+          settings.shop_address,
+          "Mawego, Kenya"
+        );
+
+        renderShopPhone(settings.shop_phone);
+
+      } catch (error) {
+        console.warn("Unable to load shop information:", error);
+
+        setText(
+          addressElement,
+          "Mawego, Kenya",
+          "Mawego, Kenya"
+        );
+
+        renderShopPhone("");
+      }
+    }
+
+    // ------------------------------------------
+    // START PAGE
+    // ------------------------------------------
+
+    loadShopInformation();
   </script>
+
 </body>
 </html>

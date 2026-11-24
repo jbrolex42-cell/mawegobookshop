@@ -1,309 +1,2042 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Checkout — Mawego Bookshop</title>
-  <link rel="stylesheet" href="/css/styles.css" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#126b45">
+
+  <title>Checkout | Mawego Bookshop</title>
+  <meta name="description" content="Complete your Mawego Bookshop order securely. Choose delivery or collection, apply promotional discounts and redeem reward points.">
+
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
   <script src="https://unpkg.com/lucide@0.469.0"></script>
+
+  <style>
+    :root {
+      --checkout-green: #126b45;
+      --checkout-dark: #0c4930;
+      --checkout-light: #eaf6ef;
+      --checkout-bg: #f5f8f6;
+      --checkout-border: #e3ebe5;
+      --checkout-muted: #718076;
+      --checkout-text: #1c2b21;
+      --checkout-danger: #b42318;
+      --checkout-gold: #9a6b12;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--checkout-bg);
+      color: var(--checkout-text);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .checkout-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--checkout-border);
+    }
+
+    .checkout-header .header-inner {
+      min-height: 68px;
+    }
+
+    .checkout-header .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .checkout-header .nav svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .checkout-main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 65px;
+    }
+
+    .checkout-heading {
+      margin-bottom: 25px;
+    }
+
+    .checkout-heading h1 {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin: 0;
+      color: var(--checkout-dark);
+      font-family: var(--font-display, inherit);
+      font-size: clamp(26px, 4vw, 34px);
+      letter-spacing: -.8px;
+    }
+
+    .checkout-heading h1 svg {
+      width: 29px;
+      height: 29px;
+      color: var(--checkout-green);
+    }
+
+    .checkout-heading p {
+      margin: 9px 0 0;
+      color: var(--checkout-muted);
+      font-size: 13px;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      align-items: start;
+      gap: 22px;
+    }
+
+    .checkout-card {
+      min-width: 0;
+      padding: 25px;
+      background: #fff;
+      border: 1px solid var(--checkout-border);
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(20,55,32,.035);
+    }
+
+    .checkout-section {
+      margin-bottom: 27px;
+    }
+
+    .checkout-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .checkout-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 19px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--checkout-border);
+      color: var(--checkout-dark);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .checkout-section-title svg {
+      width: 19px;
+      height: 19px;
+      color: var(--checkout-green);
+    }
+
+    .checkout-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .checkout-form-group {
+      min-width: 0;
+      margin-bottom: 15px;
+    }
+
+    .checkout-form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .checkout-form-group label {
+      display: block;
+      margin-bottom: 7px;
+      color: #34463a;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .checkout-form-group input,
+    .checkout-form-group textarea {
+      width: 100%;
+      min-height: 45px;
+      padding: 11px 13px;
+      color: var(--checkout-text);
+      background: #fff;
+      border: 1px solid #dce6df;
+      border-radius: 9px;
+      outline: none;
+      font-size: 13px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .checkout-form-group textarea {
+      min-height: 83px;
+      resize: vertical;
+    }
+
+    .checkout-form-group input:focus,
+    .checkout-form-group textarea:focus {
+      border-color: var(--checkout-green);
+      box-shadow: 0 0 0 3px rgba(18,107,69,.09);
+    }
+
+    .checkout-form-group input::placeholder,
+    .checkout-form-group textarea::placeholder {
+      color: #a0aaa3;
+    }
+
+    .checkout-options {
+      display: grid;
+      gap: 11px;
+    }
+
+    .checkout-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid var(--checkout-border);
+      border-radius: 11px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+
+    .checkout-option:has(input:checked) {
+      background: #f1f8f3;
+      border-color: var(--checkout-green);
+    }
+
+    .checkout-option input {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      margin: 2px 0 0;
+      accent-color: var(--checkout-green);
+    }
+
+    .checkout-option-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .checkout-option-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--checkout-dark);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .checkout-option-title svg {
+      width: 17px;
+      height: 17px;
+      color: var(--checkout-green);
+    }
+
+    .checkout-option-description {
+      margin-top: 5px;
+      color: var(--checkout-muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .checkout-summary {
+      position: sticky;
+      top: 90px;
+    }
+
+    .checkout-summary-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 20px;
+      color: var(--checkout-dark);
+      font-size: 17px;
+    }
+
+    .checkout-summary-title svg {
+      width: 20px;
+      height: 20px;
+      color: var(--checkout-green);
+    }
+
+    .summary-items {
+      display: grid;
+      gap: 13px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .summary-item-name {
+      min-width: 0;
+      color: #46574b;
+      overflow-wrap: anywhere;
+    }
+
+    .summary-item-price {
+      flex: 0 0 auto;
+      color: var(--checkout-text);
+      font-weight: 750;
+    }
+
+    .summary-divider {
+      height: 1px;
+      margin: 17px 0;
+      background: var(--checkout-border);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 12px 0;
+      color: #5c6a60;
+      font-size: 13px;
+    }
+
+    .summary-row strong {
+      color: var(--checkout-text);
+      font-weight: 750;
+    }
+
+    .summary-discount {
+      color: var(--checkout-green) !important;
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 17px;
+      padding-top: 16px;
+      border-top: 1px solid var(--checkout-border);
+      color: var(--checkout-dark);
+      font-size: 17px;
+      font-weight: 850;
+    }
+
+    .summary-total span:last-child {
+      white-space: nowrap;
+    }
+
+    .summary-delivery-note {
+      margin-top: 16px;
+      padding: 11px 12px;
+      color: #526b59;
+      background: var(--checkout-light);
+      border-radius: 9px;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .checkout-extra-card {
+      margin-top: 20px;
+      padding: 17px;
+      background: #fff;
+      border: 1px solid var(--checkout-border);
+      border-radius: 12px;
+    }
+
+    .extra-card-heading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 13px;
+      color: var(--checkout-dark);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .extra-card-heading svg {
+      width: 18px;
+      height: 18px;
+      color: var(--checkout-green);
+    }
+
+    .coupon-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .coupon-controls input {
+      min-width: 0;
+      flex: 1;
+      height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #dce6df;
+      border-radius: 8px;
+      outline: none;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .coupon-controls input:focus {
+      border-color: var(--checkout-green);
+    }
+
+    .coupon-button {
+      flex: 0 0 auto;
+      padding: 0 13px;
+      border: 1px solid var(--checkout-green);
+      border-radius: 8px;
+      color: var(--checkout-green);
+      background: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .coupon-button:hover {
+      background: var(--checkout-light);
+    }
+
+    .coupon-button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .extra-message {
+      min-height: 17px;
+      margin: 9px 0 0;
+      color: var(--checkout-muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .extra-message.success {
+      color: var(--checkout-green);
+    }
+
+    .extra-message.error {
+      color: var(--checkout-danger);
+    }
+
+    .points-card {
+      display: none;
+      background: #fffaf0;
+      border-color: #eadcb8;
+    }
+
+    .points-description {
+      margin: 0 0 13px;
+      color: #78643a;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .points-card input {
+      width: 100%;
+      height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #e8d9b4;
+      border-radius: 8px;
+      outline: none;
+      font-size: 13px;
+    }
+
+    .checkout-submit {
+      width: 100%;
+      min-height: 49px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--checkout-green);
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .checkout-submit:hover {
+      background: var(--checkout-dark);
+    }
+
+    .checkout-submit:active {
+      transform: scale(.99);
+    }
+
+    .checkout-submit:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .checkout-submit svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .checkout-security {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      margin-top: 13px;
+      color: var(--checkout-muted);
+      font-size: 10px;
+    }
+
+    .checkout-security svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .checkout-message {
+      margin-bottom: 18px;
+    }
+
+    .checkout-message:empty {
+      display: none;
+    }
+
+    .checkout-message .alert {
+      padding: 13px 15px;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .checkout-success {
+      max-width: 650px;
+      margin: 25px auto;
+      padding: 35px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid var(--checkout-border);
+      border-radius: 17px;
+      box-shadow: 0 10px 35px rgba(20,55,32,.06);
+    }
+
+    .success-icon {
+      width: 65px;
+      height: 65px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      color: var(--checkout-green);
+      background: var(--checkout-light);
+      border-radius: 50%;
+    }
+
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .checkout-success h2 {
+      margin: 0;
+      color: var(--checkout-dark);
+      font-size: 25px;
+    }
+
+    .checkout-success > p {
+      color: var(--checkout-muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .success-order-number {
+      display: inline-block;
+      margin: 10px 0;
+      padding: 12px 18px;
+      color: var(--checkout-dark);
+      background: var(--checkout-light);
+      border-radius: 9px;
+      font-size: 16px;
+      font-weight: 850;
+      letter-spacing: .4px;
+    }
+
+    .success-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .success-actions a,
+    .success-actions button {
+      min-height: 43px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border: 1px solid var(--checkout-border);
+      border-radius: 8px;
+      color: var(--checkout-dark);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .success-actions .primary {
+      color: #fff;
+      background: var(--checkout-green);
+      border-color: var(--checkout-green);
+    }
+
+    .payment-area {
+      margin-top: 20px;
+      padding: 17px;
+      background: #f7faf8;
+      border: 1px solid var(--checkout-border);
+      border-radius: 11px;
+      text-align: left;
+    }
+
+    .payment-area h3 {
+      margin: 0 0 9px;
+      color: var(--checkout-dark);
+      font-size: 14px;
+    }
+
+    .payment-area p {
+      color: var(--checkout-muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .payment-area input {
+      width: 100%;
+      min-height: 43px;
+      padding: 10px;
+      border: 1px solid #dce6df;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .payment-area button {
+      min-height: 42px;
+      margin-top: 10px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--checkout-green);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .payment-area button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .payment-result {
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .empty-checkout {
+      padding: 40px 25px;
+      text-align: center;
+    }
+
+    .empty-checkout svg {
+      width: 42px;
+      height: 42px;
+      color: var(--checkout-green);
+    }
+
+    .empty-checkout h2 {
+      color: var(--checkout-dark);
+    }
+
+    .empty-checkout a {
+      color: var(--checkout-green);
+      font-weight: 800;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 850px) {
+      .checkout-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .checkout-summary {
+        position: static;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .checkout-main {
+        width: calc(100% - 22px);
+        padding-top: 25px;
+      }
+
+      .checkout-card {
+        padding: 18px;
+      }
+
+      .checkout-form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .checkout-form-group.full {
+        grid-column: auto;
+      }
+
+      .checkout-heading h1 {
+        font-size: 27px;
+      }
+
+      .checkout-option {
+        padding: 13px;
+      }
+
+      .checkout-success {
+        padding: 25px 18px;
+      }
+
+      .coupon-controls {
+        flex-wrap: wrap;
+      }
+
+      .coupon-controls input {
+        flex-basis: 100%;
+      }
+
+      .coupon-button {
+        min-height: 40px;
+        flex: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
+
+  <!-- HEADER -->
+  <header class="site-header checkout-header">
     <div class="container header-inner">
-      <a href="/" class="logo"><span class="logo-mark" aria-hidden="true"><i data-lucide="book-open"></i></span> Mawego <span>Bookshop</span></a>
-      <nav class="nav">
-        <a href="/"><i data-lucide="store"></i> Shop</a>
-        <a href="/pages/cart.html" class="cart-btn"><i data-lucide="shopping-bag"></i> Basket <span class="cart-count">0</span></a>
+
+      <a href="/" class="logo" aria-label="Mawego Bookshop home">
+        <span class="logo-mark" aria-hidden="true">
+          <i data-lucide="book-open"></i>
+        </span>
+        Mawego <span>Bookshop</span>
+      </a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/">
+          <i data-lucide="store"></i>
+          Shop
+        </a>
+
+        <a href="/pages/cart.html" class="cart-btn">
+          <i data-lucide="shopping-bag"></i>
+          Basket
+          <span class="cart-count">0</span>
+        </a>
       </nav>
+
     </div>
   </header>
 
-  <main class="container page-pad">
-    <h1 style="font-family:var(--font-display);letter-spacing:-0.02em;display:flex;align-items:center;gap:0.5rem"><i data-lucide="credit-card"></i> Checkout</h1>
-    <div id="msg"></div>
+  <!-- MAIN -->
+  <main class="checkout-main">
+
+    <div class="checkout-heading">
+      <h1>
+        <i data-lucide="credit-card"></i>
+        Secure checkout
+      </h1>
+
+      <p>Enter your details, choose how to receive your order and complete your purchase.</p>
+    </div>
+
+    <div id="msg" class="checkout-message" role="alert" aria-live="polite"></div>
+
+    <!-- CHECKOUT FORM -->
     <div class="checkout-grid" id="checkout">
-      <div class="card">
-        <h2 style="margin-top:0;font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="user"></i> Customer details</h2>
-        <form id="checkout-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="customer_name">Full name *</label>
-              <input id="customer_name" name="customer_name" required />
-            </div>
-            <div class="form-group">
-              <label for="customer_phone">Phone (M-Pesa) *</label>
-              <input id="customer_phone" name="customer_phone" placeholder="07XX XXX XXX" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="customer_email">Email (optional)</label>
-            <input id="customer_email" name="customer_email" type="email" />
-          </div>
 
-          <h2 style="font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="package"></i> Fulfilment</h2>
-          <label class="radio-card">
-            <input type="radio" name="fulfilment_type" value="delivery" checked />
-            <div>
-              <strong><i data-lucide="truck" class="icon-sm"></i> Home or business delivery</strong>
-              <div style="font-size:0.9rem;color:var(--muted)">We deliver within our zones. Fee shown in summary.</div>
-            </div>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="fulfilment_type" value="collection" />
-            <div>
-              <strong><i data-lucide="store" class="icon-sm"></i> Collect from shop</strong>
-              <div style="font-size:0.9rem;color:var(--muted)">Free · Pick up at Mawego Bookshop when ready.</div>
-            </div>
-          </label>
-          <div class="form-group" id="address-group">
-            <label for="delivery_address">Delivery address *</label>
-            <textarea id="delivery_address" name="delivery_address" rows="2" placeholder="Estate, road, landmark…"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="delivery_notes">Notes (optional)</label>
-            <input id="delivery_notes" name="delivery_notes" placeholder="Gate code, preferred time…" />
-          </div>
+      <section class="checkout-card">
 
-          <h2 style="font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="wallet"></i> Payment</h2>
-          <label class="radio-card">
-            <input type="radio" name="payment_method" value="mpesa" checked />
-            <div>
-              <strong><i data-lucide="smartphone" class="icon-sm"></i> M-Pesa STK Push</strong>
-              <div style="font-size:0.9rem;color:var(--muted)">Pay on your phone after placing the order.</div>
-            </div>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="payment_method" value="card" />
-            <div>
-              <strong><i data-lucide="credit-card" class="icon-sm"></i> Card</strong>
-              <div style="font-size:0.9rem;color:var(--muted)">Visa / Mastercard via payment gateway.</div>
-            </div>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="payment_method" value="cash_on_delivery" />
-            <div>
-              <strong><i data-lucide="banknote" class="icon-sm"></i> Cash on delivery / collection</strong>
-              <div style="font-size:0.9rem;color:var(--muted)">Pay when you receive or pick up the order.</div>
-            </div>
-          </label>
+        <form id="checkout-form" novalidate>
 
-          <div id="points-box" class="card" style="margin:1rem 0;padding:1rem;background:var(--gold-soft);border-color:#e5d6a8;display:none">
-            <strong style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.5rem"><i data-lucide="star"></i> Reward points</strong>
-            <p style="margin:0 0 0.5rem;font-size:0.9rem;color:var(--muted)">You have <strong id="pts-balance">0</strong> points (worth <span id="pts-value">KES 0</span>). Earn 1 point per KES 50 spent. Redeem from 100 points (100 pts = KES 50).</p>
-            <div class="form-group" style="margin:0">
+          <!-- CUSTOMER DETAILS -->
+          <section class="checkout-section">
+
+            <h2 class="checkout-section-title">
+              <i data-lucide="user-round"></i>
+              Customer details
+            </h2>
+
+            <div class="checkout-form-grid">
+
+              <div class="checkout-form-group">
+                <label for="customer_name">Full name *</label>
+                <input
+                  type="text"
+                  id="customer_name"
+                  name="customer_name"
+                  placeholder="Enter your full name"
+                  autocomplete="name"
+                  maxlength="120"
+                  required
+                >
+              </div>
+
+              <div class="checkout-form-group">
+                <label for="customer_phone">Phone number *</label>
+                <input
+                  type="tel"
+                  id="customer_phone"
+                  name="customer_phone"
+                  placeholder="07XX XXX XXX"
+                  autocomplete="tel"
+                  maxlength="20"
+                  required
+                >
+              </div>
+
+              <div class="checkout-form-group full">
+                <label for="customer_email">Email address (optional)</label>
+                <input
+                  type="email"
+                  id="customer_email"
+                  name="customer_email"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  maxlength="160"
+                >
+              </div>
+
+            </div>
+          </section>
+
+          <!-- FULFILMENT -->
+          <section class="checkout-section">
+
+            <h2 class="checkout-section-title">
+              <i data-lucide="package"></i>
+              Delivery or collection
+            </h2>
+
+            <div class="checkout-options">
+
+              <label class="checkout-option">
+                <input
+                  type="radio"
+                  name="fulfilment_type"
+                  value="delivery"
+                  checked
+                >
+
+                <div class="checkout-option-content">
+                  <div class="checkout-option-title">
+                    <i data-lucide="truck"></i>
+                    Home or business delivery
+                  </div>
+
+                  <div class="checkout-option-description">
+                    Receive your order at your preferred delivery address.
+                    Delivery charges are shown in the summary.
+                  </div>
+                </div>
+              </label>
+
+              <label class="checkout-option">
+                <input
+                  type="radio"
+                  name="fulfilment_type"
+                  value="collection"
+                >
+
+                <div class="checkout-option-content">
+                  <div class="checkout-option-title">
+                    <i data-lucide="store"></i>
+                    Collect from Mawego Bookshop
+                  </div>
+
+                  <div class="checkout-option-description">
+                    Free collection from the shop when your order is ready.
+                  </div>
+                </div>
+              </label>
+
+            </div>
+
+            <div class="checkout-form-group" id="address-group" style="margin-top:17px">
+              <label for="delivery_address">Delivery address *</label>
+
+              <textarea
+                id="delivery_address"
+                name="delivery_address"
+                placeholder="Estate, road, town, building or nearby landmark..."
+                maxlength="500"
+              ></textarea>
+            </div>
+
+            <div class="checkout-form-group">
+              <label for="delivery_notes">Additional delivery notes (optional)</label>
+
+              <input
+                type="text"
+                id="delivery_notes"
+                name="delivery_notes"
+                placeholder="Gate instructions or other useful details..."
+                maxlength="300"
+              >
+            </div>
+
+          </section>
+
+          <!-- PAYMENT -->
+          <section class="checkout-section">
+
+            <h2 class="checkout-section-title">
+              <i data-lucide="wallet"></i>
+              Payment method
+            </h2>
+
+            <div class="checkout-options">
+
+              <label class="checkout-option">
+                <input
+                  type="radio"
+                  name="payment_method"
+                  value="mpesa"
+                  checked
+                >
+
+                <div class="checkout-option-content">
+                  <div class="checkout-option-title">
+                    <i data-lucide="smartphone"></i>
+                    M-Pesa STK Push
+                  </div>
+
+                  <div class="checkout-option-description">
+                    Receive a payment request on your phone and enter your M-Pesa PIN.
+                  </div>
+                </div>
+              </label>
+
+              <label class="checkout-option">
+                <input
+                  type="radio"
+                  name="payment_method"
+                  value="card"
+                >
+
+                <div class="checkout-option-content">
+                  <div class="checkout-option-title">
+                    <i data-lucide="credit-card"></i>
+                    Debit or credit card
+                  </div>
+
+                  <div class="checkout-option-description">
+                    Pay through the configured card payment gateway, where available.
+                  </div>
+                </div>
+              </label>
+
+              <label class="checkout-option">
+                <input
+                  type="radio"
+                  name="payment_method"
+                  value="cash_on_delivery"
+                >
+
+                <div class="checkout-option-content">
+                  <div class="checkout-option-title">
+                    <i data-lucide="banknote"></i>
+                    Cash on delivery or collection
+                  </div>
+
+                  <div class="checkout-option-description">
+                    Pay when your order is delivered or when you collect it.
+                  </div>
+                </div>
+              </label>
+
+            </div>
+
+          </section>
+
+          <!-- REWARD POINTS -->
+          <section
+            class="checkout-extra-card points-card"
+            id="points-box"
+            aria-label="Reward points"
+          >
+
+            <div class="extra-card-heading">
+              <i data-lucide="star"></i>
+              Mawego reward points
+            </div>
+
+            <p class="points-description">
+              Available balance:
+              <strong id="pts-balance">0</strong> points.
+
+              Estimated value:
+              <strong id="pts-value">KES 0</strong>.
+
+              Earn 1 point for every KES 50 spent.
+              Redeem from 100 points. 100 points = KES 50.
+            </p>
+
+            <div class="checkout-form-group" style="margin:0">
               <label for="points_redeemed">Points to redeem</label>
-              <input type="number" id="points_redeemed" name="points_redeemed" min="0" step="100" value="0" />
+
+              <input
+                type="number"
+                id="points_redeemed"
+                name="points_redeemed"
+                min="0"
+                step="100"
+                value="0"
+                inputmode="numeric"
+              >
             </div>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem" id="submit-btn">
-            <i data-lucide="check"></i> Place order
+
+            <p class="extra-message" id="points-message"></p>
+
+          </section>
+
+          <!-- PLACE ORDER -->
+          <button
+            type="submit"
+            class="checkout-submit"
+            id="submit-btn"
+          >
+            <i data-lucide="lock"></i>
+            Place order
           </button>
+
+          <div class="checkout-security">
+            <i data-lucide="shield-check"></i>
+            Your order details are submitted securely.
+          </div>
+
         </form>
+
+      </section>
+
+      <!-- ORDER SUMMARY -->
+      <aside class="checkout-card checkout-summary" id="summary">
+
+        <h2 class="checkout-summary-title">
+          <i data-lucide="clipboard-list"></i>
+          Order summary
+        </h2>
+
+        <div class="summary-items" id="summary-items"></div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <strong id="summary-subtotal">KES 0</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Promotional discount</span>
+          <strong class="summary-discount" id="summary-coupon">-KES 0</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Reward points</span>
+          <strong class="summary-discount" id="summary-points">-KES 0</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Delivery</span>
+          <strong id="summary-delivery">Free</strong>
+        </div>
+
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="summary-total">KES 0</span>
+        </div>
+
+        <div class="summary-delivery-note" id="delivery-note">
+          Delivery charges are calculated according to your order and fulfilment option.
+        </div>
+
+        <!-- PROMOTIONAL COUPON -->
+        <section class="checkout-extra-card">
+
+          <div class="extra-card-heading">
+            <i data-lucide="ticket-percent"></i>
+            Promotional discount
+          </div>
+
+          <div class="coupon-controls">
+            <input
+              type="text"
+              id="coupon-code"
+              placeholder="Enter coupon code"
+              autocomplete="off"
+              maxlength="50"
+              aria-label="Promotional coupon code"
+            >
+
+            <button
+              type="button"
+              class="coupon-button"
+              id="apply-coupon"
+            >
+              Apply code
+            </button>
+          </div>
+
+          <p class="extra-message" id="coupon-message" aria-live="polite"></p>
+
+        </section>
+
+      </aside>
+
+    </div>
+
+    <!-- SUCCESS -->
+    <section id="success" class="checkout-success hidden">
+
+      <div class="success-icon">
+        <i data-lucide="check-check"></i>
       </div>
 
-      <aside class="card checkout-summary-sticky" id="summary">
-        <h2 style="margin-top:0;font-size:1.15rem;display:flex;align-items:center;gap:0.4rem"><i data-lucide="clipboard-list"></i> Order summary</h2>
-        <div id="summary-lines"></div>
-      </aside>
-    </div>
+      <h2>Order successfully placed!</h2>
 
-    <div id="success" class="hidden card" style="max-width:560px;margin:0 auto;text-align:center">
-      <h2>Order placed</h2>
-      <p id="success-msg"></p>
-      <p><strong>Order number:</strong> <span id="success-number"></span></p>
-      <div id="payment-actions"></div>
-      <p style="margin-top:1.5rem">
-        <a href="/pages/track.html" class="btn btn-outline">Track order</a>
-        <a href="/" class="btn btn-primary" style="margin-left:0.5rem">Back to shop</a>
+      <p id="success-msg">
+        Thank you for shopping with Mawego Bookshop.
       </p>
-    </div>
+
+      <p style="margin-bottom:5px">
+        Your order number:
+      </p>
+
+      <div class="success-order-number" id="success-number"></div>
+
+      <div id="payment-actions"></div>
+
+      <div class="success-actions">
+        <a href="/pages/track.html" class="primary">
+          <i data-lucide="package-search"></i>
+          Track order
+        </a>
+
+        <a href="/">
+          <i data-lucide="store"></i>
+          Continue shopping
+        </a>
+      </div>
+
+    </section>
+
   </main>
 
+  <!-- APPLICATION SCRIPTS -->
   <script src="/js/api.js"></script>
   <script src="/js/notifications.js"></script>
+
   <script>
-    lucide.createIcons();
-    async function loadPoints() {
-      const u = API.getUser();
-      const box = document.getElementById('points-box');
-      if (!u || !box) return;
-      try {
-        const data = await API.pointsBalance();
-        if ((data.reward_points || 0) > 0) {
-          box.style.display = 'block';
-          document.getElementById('pts-balance').textContent = data.reward_points;
-          document.getElementById('pts-value').textContent = formatKes(data.value_kes || 0);
-          document.getElementById('points_redeemed').max = data.reward_points;
-        }
-        lucide.createIcons({ nodes: [box] });
-      } catch (_) {}
-    }
-    loadPoints();
+    "use strict";
+
+    // =====================================================
+    // CONFIGURATION
+    // =====================================================
 
     const FREE_THRESHOLD = 2000;
     const DELIVERY_FEE = 200;
 
-    function calcDelivery(sub, fulfilment) {
-      if (fulfilment === 'collection') return 0;
-      if (sub >= FREE_THRESHOLD) return 0;
-      return DELIVERY_FEE;
+    const PAYMENT_POLL_INTERVAL = 5000;
+    const MAX_PAYMENT_ATTEMPTS = 60;
+
+    // =====================================================
+    // HELPERS
+    // =====================================================
+
+    const $ = id => document.getElementById(id);
+
+    let appliedCoupon = null;
+    let rewardBalance = 0;
+    let activeOrder = null;
+    let paymentPollTimer = null;
+    let paymentAttempts = 0;
+    let submitting = false;
+
+    function refreshIcons() {
+      if (window.lucide?.createIcons) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function formatKes(value) {
+      const amount = Number(value || 0);
+
+      return "KES " + amount.toLocaleString("en-KE", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function selectedValue(name, fallback) {
+      return document.querySelector(
+        `input[name="${name}"]:checked`
+      )?.value || fallback;
+    }
+
+    function showMessage(message, type = "info") {
+      $("msg").innerHTML = `
+        <div class="alert alert-${escapeHtml(type)}">
+          ${escapeHtml(message)}
+        </div>
+      `;
+    }
+
+    function clearMessage() {
+      $("msg").innerHTML = "";
+    }
+
+    // =====================================================
+    // BASKET
+    // =====================================================
+
+    function getCartItems() {
+      return Cart.get() || [];
+    }
+
+    function getSubtotal() {
+      return Number(Cart.subtotal() || 0);
+    }
+
+    function calculateDelivery(subtotal, fulfilment) {
+      if (fulfilment === "collection") {
+        return 0;
+      }
+
+      return subtotal >= FREE_THRESHOLD ? 0 : DELIVERY_FEE;
+    }
+
+    // =====================================================
+    // REWARD POINTS
+    // =====================================================
+
+    function getRequestedPoints() {
+      const input = $("points_redeemed");
+
+      const points = Math.max(
+        0,
+        Math.floor(Number(input?.value || 0))
+      );
+
+      return points;
+    }
+
+    function calculatePointsDiscount() {
+      const requested = getRequestedPoints();
+
+      return Math.min(
+        requested * 0.5,
+        Math.max(0, getSubtotal() - getCouponDiscount())
+      );
+    }
+
+    function getCouponDiscount() {
+      return Math.min(
+        getSubtotal(),
+        Number(appliedCoupon?.discount_kes || 0)
+      );
+    }
+
+    async function loadPoints() {
+      const user = API.getUser();
+
+      if (!user) {
+        return;
+      }
+
+      try {
+        const data = await API.pointsBalance();
+
+        rewardBalance = Number(data.reward_points || 0);
+
+        if (rewardBalance <= 0) {
+          return;
+        }
+
+        $("points-box").style.display = "block";
+
+        $("pts-balance").textContent =
+          rewardBalance.toLocaleString("en-KE");
+
+        $("pts-value").textContent =
+          formatKes(data.value_kes || rewardBalance * 0.5);
+
+        $("points_redeemed").max = rewardBalance;
+
+        $("points-message").textContent =
+          "Enter a multiple of 100 points to redeem.";
+
+        refreshIcons();
+
+        renderSummary();
+
+      } catch (error) {
+        console.warn("Reward points unavailable:", error);
+      }
+    }
+
+    function validatePoints() {
+      const input = $("points_redeemed");
+
+      if (!input) return true;
+
+      let points = getRequestedPoints();
+
+      if (points > rewardBalance) {
+        points = rewardBalance;
+      }
+
+      if (points % 100 !== 0) {
+        points = Math.floor(points / 100) * 100;
+      }
+
+      input.value = points;
+
+      return true;
+    }
+
+    // =====================================================
+    // COUPONS
+    // =====================================================
+
+    async function applyCoupon() {
+      const input = $("coupon-code");
+      const button = $("apply-coupon");
+      const message = $("coupon-message");
+
+      const code = input.value.trim().toUpperCase();
+
+      if (!code) {
+        message.textContent = "Please enter a promotional code.";
+        message.className = "extra-message error";
+        return;
+      }
+
+      if (typeof API.validatePromo !== "function") {
+        message.textContent =
+          "Promotional code validation is not available. Please try again later.";
+        message.className = "extra-message error";
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Checking...";
+
+      message.textContent = "";
+      message.className = "extra-message";
+
+      try {
+        const result = await API.validatePromo(
+          code,
+          getSubtotal()
+        );
+
+        const discount = Number(result.discount_kes || 0);
+
+        if (!Number.isFinite(discount) || discount <= 0) {
+          throw new Error("This promotional code does not provide a valid discount.");
+        }
+
+        appliedCoupon = {
+          code: result.code || code,
+          discount_kes: discount
+        };
+
+        input.value = appliedCoupon.code;
+        input.readOnly = true;
+
+        button.textContent = "Remove code";
+
+        message.textContent =
+          `Coupon applied successfully. You save ${formatKes(discount)}.`;
+
+        message.className = "extra-message success";
+
+        renderSummary();
+
+      } catch (error) {
+        appliedCoupon = null;
+
+        message.textContent =
+          error.message || "This coupon could not be applied.";
+
+        message.className = "extra-message error";
+
+        button.textContent = "Apply code";
+
+        renderSummary();
+
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function removeCoupon() {
+      appliedCoupon = null;
+
+      $("coupon-code").value = "";
+      $("coupon-code").readOnly = false;
+
+      $("coupon-message").textContent = "Promotional code removed.";
+      $("coupon-message").className = "extra-message";
+
+      $("apply-coupon").textContent = "Apply code";
+
+      renderSummary();
+    }
+
+    // =====================================================
+    // ORDER SUMMARY
+    // =====================================================
+
+    function calculateTotals() {
+      const subtotal = getSubtotal();
+      const fulfilment = selectedValue("fulfilment_type", "delivery");
+
+      const delivery = calculateDelivery(subtotal, fulfilment);
+
+      const couponDiscount = getCouponDiscount();
+
+      const pointsDiscount = Math.min(
+        getRequestedPoints() * 0.5,
+        Math.max(0, subtotal - couponDiscount)
+      );
+
+      const total = Math.max(
+        0,
+        subtotal - couponDiscount - pointsDiscount + delivery
+      );
+
+      return {
+        subtotal,
+        delivery,
+        couponDiscount,
+        pointsDiscount,
+        total
+      };
     }
 
     function renderSummary() {
-      const items = Cart.get();
-      const fulfilment = document.querySelector('input[name="fulfilment_type"]:checked')?.value || 'delivery';
-      const sub = Cart.subtotal();
-      const fee = calcDelivery(sub, fulfilment);
-      const total = sub + fee;
-      document.getElementById('summary-lines').innerHTML = `
-        ${items
-          .map(
-            (i) =>
-              `<div style="display:flex;justify-content:space-between;margin:0.35rem 0;font-size:0.95rem">
-                <span>${escapeHtml(i.name)} × ${i.quantity}</span>
-                <span>${formatKes(i.price_kes * i.quantity)}</span>
-              </div>`
-          )
-          .join('')}
-        <hr style="border:none;border-top:1px solid var(--border);margin:0.75rem 0" />
-        <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${formatKes(sub)}</span></div>
-        <div style="display:flex;justify-content:space-between"><span>Delivery</span><span>${fee ? formatKes(fee) : 'Free'}</span></div>
-        <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-top:0.5rem;color:var(--green-dark)">
-          <span>Total</span><span>${formatKes(total)}</span>
-        </div>`;
+      const items = getCartItems();
+      const totals = calculateTotals();
+
+      $("summary-items").innerHTML = items.map(item => {
+        const quantity = Math.max(0, Number(item.quantity || 0));
+        const price = Number(item.price_kes || 0);
+        const lineTotal = quantity * price;
+
+        return `
+          <div class="summary-item">
+            <span class="summary-item-name">
+              ${escapeHtml(item.name)} × ${quantity}
+            </span>
+
+            <span class="summary-item-price">
+              ${formatKes(lineTotal)}
+            </span>
+          </div>
+        `;
+      }).join("");
+
+      $("summary-subtotal").textContent =
+        formatKes(totals.subtotal);
+
+      $("summary-coupon").textContent =
+        "-" + formatKes(totals.couponDiscount);
+
+      $("summary-points").textContent =
+        "-" + formatKes(totals.pointsDiscount);
+
+      $("summary-delivery").textContent =
+        totals.delivery ? formatKes(totals.delivery) : "Free";
+
+      $("summary-total").textContent =
+        formatKes(totals.total);
+
+      if (selectedValue("fulfilment_type", "delivery") === "collection") {
+        $("delivery-note").textContent =
+          "Shop collection selected. No delivery fee will be charged.";
+      } else if (totals.subtotal >= FREE_THRESHOLD) {
+        $("delivery-note").textContent =
+          "Congratulations! Your order qualifies for free delivery under the current checkout policy.";
+      } else {
+        $("delivery-note").textContent =
+          `Spend ${formatKes(FREE_THRESHOLD - totals.subtotal)} more to qualify for free delivery under the current checkout policy.`;
+      }
     }
+
+    // =====================================================
+    // FULFILMENT
+    // =====================================================
 
     function toggleAddress() {
-      const f = document.querySelector('input[name="fulfilment_type"]:checked')?.value;
-      const group = document.getElementById('address-group');
-      const input = document.getElementById('delivery_address');
-      if (f === 'collection') {
-        group.style.display = 'none';
-        input.required = false;
-      } else {
-        group.style.display = 'block';
-        input.required = true;
+      const fulfilment = selectedValue(
+        "fulfilment_type",
+        "delivery"
+      );
+
+      const collection = fulfilment === "collection";
+
+      $("address-group").style.display =
+        collection ? "none" : "block";
+
+      $("delivery_address").required = !collection;
+
+      renderSummary();
+    }
+
+    // =====================================================
+    // FORM VALIDATION
+    // =====================================================
+
+    function validateCheckout() {
+      const name = $("customer_name").value.trim();
+      const phone = $("customer_phone").value.trim();
+      const email = $("customer_email").value.trim();
+
+      const fulfilment = selectedValue(
+        "fulfilment_type",
+        "delivery"
+      );
+
+      const address = $("delivery_address").value.trim();
+
+      if (name.length < 2) {
+        throw new Error("Please enter your full name.");
       }
-      renderSummary();
+
+      if (!/^[0-9+\s()-]{7,20}$/.test(phone)) {
+        throw new Error("Please enter a valid phone number.");
+      }
+
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        throw new Error("Please enter a valid email address.");
+      }
+
+      if (fulfilment === "delivery" && address.length < 5) {
+        throw new Error("Please enter a complete delivery address.");
+      }
+
+      if (!getCartItems().length) {
+        throw new Error("Your basket is empty.");
+      }
+
+      validatePoints();
+
+      if (getRequestedPoints() > rewardBalance) {
+        throw new Error("You do not have enough reward points.");
+      }
     }
 
-    document.querySelectorAll('input[name="fulfilment_type"]').forEach((r) =>
-      r.addEventListener('change', toggleAddress)
-    );
+    // =====================================================
+    // PAYMENT STATUS
+    // =====================================================
 
-    if (!Cart.get().length) {
-      document.getElementById('checkout').innerHTML =
-        '<div class="empty-state card">Your basket is empty. <a href="/">Go shopping</a></div>';
-    } else {
-      renderSummary();
-      toggleAddress();
-      lucide.createIcons();
-    async function loadPoints() {
-      const u = API.getUser();
-      const box = document.getElementById('points-box');
-      if (!u || !box) return;
+    function stopPaymentPolling() {
+      if (paymentPollTimer) {
+        clearInterval(paymentPollTimer);
+        paymentPollTimer = null;
+      }
+    }
+
+    async function checkPaymentStatus(order) {
+      if (!order?.id) {
+        return false;
+      }
+
       try {
-        const data = await API.pointsBalance();
-        if ((data.reward_points || 0) > 0) {
-          box.style.display = 'block';
-          document.getElementById('pts-balance').textContent = data.reward_points;
-          document.getElementById('pts-value').textContent = formatKes(data.value_kes || 0);
-          document.getElementById('points_redeemed').max = data.reward_points;
+        let response;
+
+        if (API.getUser()) {
+          response = await API.orderStatus(order.id);
+        } else {
+          response = await API.trackOrder(
+            order.order_number,
+            order.customer_phone
+          );
         }
-        lucide.createIcons({ nodes: [box] });
-      } catch (_) {}
-    }
-    loadPoints();
+
+        const currentOrder = response.order;
+
+        if (!currentOrder) {
+          return false;
+        }
+
+        if (currentOrder.payment_status === "paid") {
+          stopPaymentPolling();
+
+          Cart.clear();
+
+          showPaymentStatus(
+            "Payment confirmed successfully. Thank you for shopping with Mawego Bookshop.",
+            "success"
+          );
+
+          return true;
+        }
+
+        if (
+          currentOrder.payment_status === "failed" ||
+          currentOrder.order_status === "cancelled"
+        ) {
+          stopPaymentPolling();
+
+          showPaymentStatus(
+            "Payment was not completed. Please contact the shop or try again.",
+            "warning"
+          );
+
+          return true;
+        }
+
+        return false;
+
+      } catch (error) {
+        console.warn("Payment status check failed:", error);
+        return false;
+      }
     }
 
-    document.getElementById('checkout-form')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      const msg = document.getElementById('msg');
-      msg.innerHTML = '';
-      btn.disabled = true;
-      btn.textContent = 'Placing order…';
+    function showPaymentStatus(message, type = "info") {
+      const result = $("payment-result");
 
-      const fd = new FormData(e.target);
-      const payload = {
-        customer_name: fd.get('customer_name'),
-        customer_phone: fd.get('customer_phone'),
-        customer_email: fd.get('customer_email') || undefined,
-        fulfilment_type: fd.get('fulfilment_type'),
-        delivery_address: fd.get('delivery_address') || undefined,
-        delivery_notes: fd.get('delivery_notes') || undefined,
-        payment_method: fd.get('payment_method'),
-        items: Cart.get().map((i) => ({ product_id: i.product_id, quantity: i.quantity })),
-        points_redeemed: parseInt(document.getElementById('points_redeemed')?.value || '0', 10) || 0
+      if (!result) return;
+
+      result.textContent = message;
+      result.className = "payment-result";
+
+      if (type === "success") {
+        result.style.color = "var(--checkout-green)";
+      } else if (type === "warning") {
+        result.style.color = "#9a6b12";
+      } else {
+        result.style.color = "var(--checkout-muted)";
+      }
+    }
+
+    function startPaymentPolling(order) {
+      stopPaymentPolling();
+
+      paymentAttempts = 0;
+
+      showPaymentStatus(
+        "Waiting for payment confirmation. Please complete the M-Pesa prompt on your phone."
+      );
+
+      paymentPollTimer = setInterval(async () => {
+        paymentAttempts += 1;
+
+        const finished = await checkPaymentStatus(order);
+
+        if (finished) {
+          stopPaymentPolling();
+          return;
+        }
+
+        if (paymentAttempts >= MAX_PAYMENT_ATTEMPTS) {
+          stopPaymentPolling();
+
+          showPaymentStatus(
+            "Payment confirmation is taking longer than expected. Your order has been created. Use Track order to check its status.",
+            "warning"
+          );
+        }
+
+      }, PAYMENT_POLL_INTERVAL);
+    }
+
+    // =====================================================
+    // M-PESA
+    // =====================================================
+
+    async function sendMpesaPrompt() {
+      const button = $("stk-btn");
+      const phone = $("stk-phone").value.trim();
+
+      if (!phone) {
+        showPaymentStatus("Please enter the M-Pesa phone number.", "warning");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Sending prompt...";
+
+      try {
+        const response = await API.mpesaStk(
+          activeOrder.id,
+          phone
+        );
+
+        showPaymentStatus(
+          response.message || "M-Pesa prompt requested. Check your phone."
+        );
+
+        startPaymentPolling(activeOrder);
+
+      } catch (error) {
+        showPaymentStatus(
+          error.message || "Unable to send the M-Pesa prompt.",
+          "warning"
+        );
+
+      } finally {
+        button.disabled = false;
+        button.textContent = "Send M-Pesa prompt";
+      }
+    }
+
+    // =====================================================
+    // CARD PAYMENT
+    // =====================================================
+
+    async function initiateCardPayment() {
+      const button = $("card-btn");
+
+      button.disabled = true;
+      button.textContent = "Connecting...";
+
+      try {
+        const response = await API.cardInitiate(activeOrder.id);
+
+        if (response.url) {
+          window.location.href = response.url;
+          return;
+        }
+
+        showPaymentStatus(
+          response.message || "Card payment request initiated. Follow the instructions provided."
+        );
+
+      } catch (error) {
+        showPaymentStatus(
+          error.message || "Unable to initiate card payment.",
+          "warning"
+        );
+
+      } finally {
+        button.disabled = false;
+        button.textContent = "Pay with card";
+      }
+    }
+
+    // =====================================================
+    // ORDER SUCCESS
+    // =====================================================
+
+    function renderOrderSuccess(order, response) {
+      activeOrder = {
+        ...order,
+        customer_phone: order.customer_phone || $("customer_phone").value.trim()
       };
 
-      try {
-        const data = await API.createOrder(payload);
-        Cart.clear();
-        document.getElementById('checkout').classList.add('hidden');
-        document.getElementById('success').classList.remove('hidden');
-        lucide.createIcons();
-    async function loadPoints() {
-      const u = API.getUser();
-      const box = document.getElementById('points-box');
-      if (!u || !box) return;
-      try {
-        const data = await API.pointsBalance();
-        if ((data.reward_points || 0) > 0) {
-          box.style.display = 'block';
-          document.getElementById('pts-balance').textContent = data.reward_points;
-          document.getElementById('pts-value').textContent = formatKes(data.value_kes || 0);
-          document.getElementById('points_redeemed').max = data.reward_points;
-        }
-        lucide.createIcons({ nodes: [box] });
-      } catch (_) {}
-    }
-    loadPoints();
-        document.getElementById('success-number').textContent = data.order.order_number;
-        document.getElementById('success-msg').textContent = data.message;
+      $("checkout").classList.add("hidden");
+      $("success").classList.remove("hidden");
 
-        const actions = document.getElementById('payment-actions');
-        if (data.order.payment_method === 'mpesa') {
-          actions.innerHTML = `
-            <p class="alert alert-info">Enter the phone that will receive the M-Pesa prompt:</p>
-            <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
-              <input id="stk-phone" value="${escapeHtml(data.order.customer_phone)}" style="padding:0.5rem;border-radius:8px;border:1px solid var(--border)" />
-              <button class="btn btn-primary" id="stk-btn">Send M-Pesa prompt</button>
-            </div>
-            <p id="stk-result" style="margin-top:0.75rem;font-size:0.9rem"></p>`;
-          document.getElementById('stk-btn').addEventListener('click', async () => {
-            const phone = document.getElementById('stk-phone').value;
-            const resultEl = document.getElementById('stk-result');
-            try {
-              const r = await API.mpesaStk(data.order.id, phone);
-              resultEl.innerHTML = `<span class="alert alert-info" style="display:inline-block">${escapeHtml(r.message)}</span>`;
-            } catch (err) {
-              resultEl.innerHTML = `<span class="alert alert-warning" style="display:inline-block">${escapeHtml(err.message || err.data?.message || 'STK not available yet')}</span>`;
-            }
-          });
-        } else if (data.order.payment_method === 'card') {
-          actions.innerHTML = `<button class="btn btn-primary" id="card-btn">Pay with card</button>
-            <p id="card-result" style="margin-top:0.75rem"></p>`;
-          document.getElementById('card-btn').addEventListener('click', async () => {
-            try {
-              const r = await API.cardInitiate(data.order.id);
-              document.getElementById('card-result').innerHTML =
-                `<span class="alert alert-info" style="display:inline-block">${escapeHtml(r.message)}</span>`;
-            } catch (err) {
-              document.getElementById('card-result').innerHTML =
-                `<span class="alert alert-warning" style="display:inline-block">${escapeHtml(err.message || err.data?.message || '')}</span>`;
-            }
-          });
-        } else {
-          actions.innerHTML = `<p class="alert alert-success">Pay cash when your order is delivered or collected.</p>`;
+      $("success-number").textContent =
+        order.order_number || "Order received";
+
+      $("success-msg").textContent =
+        response.message || "Your order has been successfully created.";
+
+      const actions = $("payment-actions");
+
+      if (order.payment_method === "mpesa") {
+        actions.innerHTML = `
+          <div class="payment-area">
+            <h3>M-Pesa payment</h3>
+
+            <p>
+              Enter the phone number that should receive the M-Pesa payment prompt.
+              Complete the payment on your phone.
+            </p>
+
+            <label for="stk-phone">M-Pesa phone number</label>
+
+            <input
+              type="tel"
+              id="stk-phone"
+              value="${escapeHtml(activeOrder.customer_phone)}"
+              autocomplete="tel"
+            >
+
+            <button type="button" id="stk-btn">
+              Send M-Pesa prompt
+            </button>
+
+            <p id="payment-result" class="payment-result" aria-live="polite"></p>
+          </div>
+        `;
+
+        $("stk-btn").addEventListener(
+          "click",
+          sendMpesaPrompt
+        );
+
+      } else if (order.payment_method === "card") {
+        actions.innerHTML = `
+          <div class="payment-area">
+            <h3>Card payment</h3>
+
+            <p>
+              Continue to the configured payment provider to complete your card payment.
+            </p>
+
+            <button type="button" id="card-btn">
+              Pay with card
+            </button>
+
+            <p id="payment-result" class="payment-result" aria-live="polite"></p>
+          </div>
+        `;
+
+        $("card-btn").addEventListener(
+          "click",
+          initiateCardPayment
+        );
+
+      } else {
+        actions.innerHTML = `
+          <div class="payment-area">
+            <h3>Cash payment</h3>
+
+            <p>
+              Your order has been placed. Pay when your order is delivered
+              or when you collect it from the shop.
+            </p>
+          </div>
+        `;
+      }
+
+      refreshIcons();
+
+      $("success").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    // =====================================================
+    // PLACE ORDER
+    // =====================================================
+
+    async function placeOrder(event) {
+      event.preventDefault();
+
+      if (submitting) return;
+
+      const button = $("submit-btn");
+      const originalHTML = button.innerHTML;
+
+      clearMessage();
+
+      try {
+        validateCheckout();
+
+        submitting = true;
+
+        button.disabled = true;
+        button.textContent = "Placing your order...";
+
+        const formData = new FormData(event.currentTarget);
+
+        const payload = {
+          customer_name: formData.get("customer_name").trim(),
+
+          customer_phone: formData.get("customer_phone").trim(),
+
+          customer_email:
+            formData.get("customer_email").trim() || undefined,
+
+          fulfilment_type:
+            formData.get("fulfilment_type"),
+
+          delivery_address:
+            formData.get("delivery_address").trim() || undefined,
+
+          delivery_notes:
+            formData.get("delivery_notes").trim() || undefined,
+
+          payment_method:
+            formData.get("payment_method"),
+
+          items: getCartItems().map(item => ({
+            product_id: item.product_id,
+            quantity: Number(item.quantity)
+          })),
+
+          points_redeemed: getRequestedPoints(),
+
+          coupon_code: appliedCoupon?.code || undefined
+        };
+
+        const response = await API.createOrder(payload);
+
+        if (!response?.order) {
+          throw new Error(
+            response?.message || "The server did not return a valid order."
+          );
         }
-      } catch (err) {
-        msg.innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
-        btn.disabled = false;
-        btn.textContent = 'Place order';
+
+        renderOrderSuccess(response.order, response);
+
+        // Cash-on-delivery is an accepted order.
+        // For electronic payments, keep the basket until the server
+        // confirms that payment has actually succeeded.
+        if (response.order.payment_method === "cash_on_delivery") {
+          Cart.clear();
+        }
+
+      } catch (error) {
+        showMessage(
+          error.message || "Unable to place your order. Please try again.",
+          "error"
+        );
+
+      } finally {
+        submitting = false;
+
+        if (button.isConnected) {
+          button.disabled = false;
+          button.innerHTML = originalHTML;
+          refreshIcons();
+        }
+      }
+    }
+
+    // =====================================================
+    // EVENT LISTENERS
+    // =====================================================
+
+    $("apply-coupon").addEventListener("click", () => {
+      if (appliedCoupon) {
+        removeCoupon();
+      } else {
+        applyCoupon();
       }
     });
+
+    $("coupon-code").addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+
+        if (!appliedCoupon) {
+          applyCoupon();
+        }
+      }
+    });
+
+    $("points_redeemed").addEventListener("input", () => {
+      renderSummary();
+    });
+
+    document.querySelectorAll(
+      'input[name="fulfilment_type"]'
+    ).forEach(input => {
+      input.addEventListener("change", toggleAddress);
+    });
+
+    $("checkout-form").addEventListener(
+      "submit",
+      placeOrder
+    );
+
+    // =====================================================
+    // INITIALIZE CHECKOUT
+    // =====================================================
+
+    async function initializeCheckout() {
+      refreshIcons();
+
+      const items = getCartItems();
+
+      if (!items.length) {
+        $("checkout").innerHTML = `
+          <div class="checkout-card empty-checkout">
+            <i data-lucide="shopping-basket"></i>
+
+            <h2>Your basket is empty</h2>
+
+            <p>
+              Add books and school supplies to your basket before checkout.
+            </p>
+
+            <a href="/">Browse Mawego Bookshop</a>
+          </div>
+        `;
+
+        refreshIcons();
+        return;
+      }
+
+      renderSummary();
+      toggleAddress();
+
+      await loadPoints();
+
+      renderSummary();
+    }
+
+    initializeCheckout();
+
   </script>
+
 </body>
 </html>
