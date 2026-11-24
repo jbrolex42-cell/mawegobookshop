@@ -11,41 +11,30 @@
 
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-
   <script src="https://unpkg.com/lucide@0.469.0"></script>
 
   <style>
     :root {
-      --checkout-green: #126b45;
-      --checkout-dark: #0c4930;
-      --checkout-light: #eaf6ef;
-      --checkout-bg: #f5f8f6;
-      --checkout-border: #e3ebe5;
-      --checkout-muted: #718076;
-      --checkout-text: #1c2b21;
-      --checkout-danger: #b42318;
-      --checkout-gold: #9a6b12;
+      --green: #126b45;
+      --dark: #0c4930;
+      --light: #eaf6ef;
+      --bg: #f5f8f6;
+      --border: #e3ebe5;
+      --muted: #718076;
+      --text: #1c2b21;
+      --danger: #b42318;
+      --gold: #9a6b12;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
-      background: var(--checkout-bg);
-      color: var(--checkout-text);
+      background: var(--bg);
+      color: var(--text);
     }
 
-    button,
-    input,
-    textarea {
-      font: inherit;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
 
     .checkout-header {
       position: sticky;
@@ -53,12 +42,10 @@
       z-index: 50;
       background: rgba(255,255,255,.96);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--checkout-border);
+      border-bottom: 1px solid var(--border);
     }
 
-    .checkout-header .header-inner {
-      min-height: 68px;
-    }
+    .checkout-header .header-inner { min-height: 68px; }
 
     .checkout-header .nav a {
       display: inline-flex;
@@ -77,16 +64,14 @@
       padding: 34px 0 65px;
     }
 
-    .checkout-heading {
-      margin-bottom: 25px;
-    }
+    .checkout-heading { margin-bottom: 25px; }
 
     .checkout-heading h1 {
       display: flex;
       align-items: center;
       gap: 11px;
       margin: 0;
-      color: var(--checkout-dark);
+      color: var(--dark);
       font-family: var(--font-display, inherit);
       font-size: clamp(26px, 4vw, 34px);
       letter-spacing: -.8px;
@@ -95,12 +80,12 @@
     .checkout-heading h1 svg {
       width: 29px;
       height: 29px;
-      color: var(--checkout-green);
+      color: var(--green);
     }
 
     .checkout-heading p {
       margin: 9px 0 0;
-      color: var(--checkout-muted);
+      color: var(--muted);
       font-size: 13px;
     }
 
@@ -115,18 +100,13 @@
       min-width: 0;
       padding: 25px;
       background: #fff;
-      border: 1px solid var(--checkout-border);
+      border: 1px solid var(--border);
       border-radius: 15px;
       box-shadow: 0 5px 20px rgba(20,55,32,.035);
     }
 
-    .checkout-section {
-      margin-bottom: 27px;
-    }
-
-    .checkout-section:last-child {
-      margin-bottom: 0;
-    }
+    .checkout-section { margin-bottom: 27px; }
+    .checkout-section:last-child { margin-bottom: 0; }
 
     .checkout-section-title {
       display: flex;
@@ -134,8 +114,8 @@
       gap: 10px;
       margin: 0 0 19px;
       padding-bottom: 13px;
-      border-bottom: 1px solid var(--checkout-border);
-      color: var(--checkout-dark);
+      border-bottom: 1px solid var(--border);
+      color: var(--dark);
       font-size: 16px;
       font-weight: 800;
     }
@@ -143,7 +123,7 @@
     .checkout-section-title svg {
       width: 19px;
       height: 19px;
-      color: var(--checkout-green);
+      color: var(--green);
     }
 
     .checkout-form-grid {
@@ -157,9 +137,7 @@
       margin-bottom: 15px;
     }
 
-    .checkout-form-group.full {
-      grid-column: 1 / -1;
-    }
+    .checkout-form-group.full { grid-column: 1 / -1; }
 
     .checkout-form-group label {
       display: block;
@@ -174,7 +152,7 @@
       width: 100%;
       min-height: 45px;
       padding: 11px 13px;
-      color: var(--checkout-text);
+      color: var(--text);
       background: #fff;
       border: 1px solid #dce6df;
       border-radius: 9px;
@@ -189,8 +167,9 @@
     }
 
     .checkout-form-group input:focus,
-    .checkout-form-group textarea:focus {
-      border-color: var(--checkout-green);
+    .checkout-form-group textarea:focus,
+    .payment-area input:focus {
+      border-color: var(--green);
       box-shadow: 0 0 0 3px rgba(18,107,69,.09);
     }
 
@@ -199,10 +178,7 @@
       color: #a0aaa3;
     }
 
-    .checkout-options {
-      display: grid;
-      gap: 11px;
-    }
+    .checkout-options { display: grid; gap: 11px; }
 
     .checkout-option {
       display: flex;
@@ -210,7 +186,7 @@
       gap: 12px;
       padding: 15px;
       background: #fff;
-      border: 1px solid var(--checkout-border);
+      border: 1px solid var(--border);
       border-radius: 11px;
       cursor: pointer;
       transition: border-color .2s, background .2s;
@@ -218,7 +194,7 @@
 
     .checkout-option:has(input:checked) {
       background: #f1f8f3;
-      border-color: var(--checkout-green);
+      border-color: var(--green);
     }
 
     .checkout-option input {
@@ -226,19 +202,16 @@
       height: 17px;
       flex: 0 0 auto;
       margin: 2px 0 0;
-      accent-color: var(--checkout-green);
+      accent-color: var(--green);
     }
 
-    .checkout-option-content {
-      flex: 1;
-      min-width: 0;
-    }
+    .checkout-option-content { flex: 1; min-width: 0; }
 
     .checkout-option-title {
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--checkout-dark);
+      color: var(--dark);
       font-size: 13px;
       font-weight: 800;
     }
@@ -246,12 +219,12 @@
     .checkout-option-title svg {
       width: 17px;
       height: 17px;
-      color: var(--checkout-green);
+      color: var(--green);
     }
 
     .checkout-option-description {
       margin-top: 5px;
-      color: var(--checkout-muted);
+      color: var(--muted);
       font-size: 12px;
       line-height: 1.6;
     }
@@ -266,20 +239,17 @@
       align-items: center;
       gap: 9px;
       margin: 0 0 20px;
-      color: var(--checkout-dark);
+      color: var(--dark);
       font-size: 17px;
     }
 
     .checkout-summary-title svg {
       width: 20px;
       height: 20px;
-      color: var(--checkout-green);
+      color: var(--green);
     }
 
-    .summary-items {
-      display: grid;
-      gap: 13px;
-    }
+    .summary-items { display: grid; gap: 13px; }
 
     .summary-item {
       display: flex;
@@ -298,14 +268,14 @@
 
     .summary-item-price {
       flex: 0 0 auto;
-      color: var(--checkout-text);
+      color: var(--text);
       font-weight: 750;
     }
 
     .summary-divider {
       height: 1px;
       margin: 17px 0;
-      background: var(--checkout-border);
+      background: var(--border);
     }
 
     .summary-row {
@@ -318,13 +288,11 @@
     }
 
     .summary-row strong {
-      color: var(--checkout-text);
+      color: var(--text);
       font-weight: 750;
     }
 
-    .summary-discount {
-      color: var(--checkout-green) !important;
-    }
+    .summary-discount { color: var(--green) !important; }
 
     .summary-total {
       display: flex;
@@ -332,21 +300,19 @@
       gap: 12px;
       margin-top: 17px;
       padding-top: 16px;
-      border-top: 1px solid var(--checkout-border);
-      color: var(--checkout-dark);
+      border-top: 1px solid var(--border);
+      color: var(--dark);
       font-size: 17px;
       font-weight: 850;
     }
 
-    .summary-total span:last-child {
-      white-space: nowrap;
-    }
+    .summary-total span:last-child { white-space: nowrap; }
 
     .summary-delivery-note {
       margin-top: 16px;
       padding: 11px 12px;
       color: #526b59;
-      background: var(--checkout-light);
+      background: var(--light);
       border-radius: 9px;
       font-size: 11px;
       line-height: 1.7;
@@ -356,7 +322,7 @@
       margin-top: 20px;
       padding: 17px;
       background: #fff;
-      border: 1px solid var(--checkout-border);
+      border: 1px solid var(--border);
       border-radius: 12px;
     }
 
@@ -365,7 +331,7 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 13px;
-      color: var(--checkout-dark);
+      color: var(--dark);
       font-size: 13px;
       font-weight: 850;
     }
@@ -373,13 +339,10 @@
     .extra-card-heading svg {
       width: 18px;
       height: 18px;
-      color: var(--checkout-green);
+      color: var(--green);
     }
 
-    .coupon-controls {
-      display: flex;
-      gap: 8px;
-    }
+    .coupon-controls { display: flex; gap: 8px; }
 
     .coupon-controls input {
       min-width: 0;
@@ -393,25 +356,21 @@
       font-size: 12px;
     }
 
-    .coupon-controls input:focus {
-      border-color: var(--checkout-green);
-    }
+    .coupon-controls input:focus { border-color: var(--green); }
 
     .coupon-button {
       flex: 0 0 auto;
       padding: 0 13px;
-      border: 1px solid var(--checkout-green);
+      border: 1px solid var(--green);
       border-radius: 8px;
-      color: var(--checkout-green);
+      color: var(--green);
       background: #fff;
       font-size: 11px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    .coupon-button:hover {
-      background: var(--checkout-light);
-    }
+    .coupon-button:hover { background: var(--light); }
 
     .coupon-button:disabled {
       opacity: .6;
@@ -421,18 +380,13 @@
     .extra-message {
       min-height: 17px;
       margin: 9px 0 0;
-      color: var(--checkout-muted);
+      color: var(--muted);
       font-size: 11px;
       line-height: 1.6;
     }
 
-    .extra-message.success {
-      color: var(--checkout-green);
-    }
-
-    .extra-message.error {
-      color: var(--checkout-danger);
-    }
+    .extra-message.success { color: var(--green); }
+    .extra-message.error { color: var(--danger); }
 
     .points-card {
       display: none;
@@ -468,30 +422,22 @@
       border: 0;
       border-radius: 10px;
       color: #fff;
-      background: var(--checkout-green);
+      background: var(--green);
       font-size: 13px;
       font-weight: 850;
       cursor: pointer;
       transition: background .2s, transform .2s;
     }
 
-    .checkout-submit:hover {
-      background: var(--checkout-dark);
-    }
-
-    .checkout-submit:active {
-      transform: scale(.99);
-    }
+    .checkout-submit:hover { background: var(--dark); }
+    .checkout-submit:active { transform: scale(.99); }
 
     .checkout-submit:disabled {
       opacity: .65;
       cursor: not-allowed;
     }
 
-    .checkout-submit svg {
-      width: 18px;
-      height: 18px;
-    }
+    .checkout-submit svg { width: 18px; height: 18px; }
 
     .checkout-security {
       display: flex;
@@ -499,22 +445,14 @@
       align-items: center;
       gap: 7px;
       margin-top: 13px;
-      color: var(--checkout-muted);
+      color: var(--muted);
       font-size: 10px;
     }
 
-    .checkout-security svg {
-      width: 14px;
-      height: 14px;
-    }
+    .checkout-security svg { width: 14px; height: 14px; }
 
-    .checkout-message {
-      margin-bottom: 18px;
-    }
-
-    .checkout-message:empty {
-      display: none;
-    }
+    .checkout-message { margin-bottom: 18px; }
+    .checkout-message:empty { display: none; }
 
     .checkout-message .alert {
       padding: 13px 15px;
@@ -529,7 +467,7 @@
       padding: 35px;
       text-align: center;
       background: #fff;
-      border: 1px solid var(--checkout-border);
+      border: 1px solid var(--border);
       border-radius: 17px;
       box-shadow: 0 10px 35px rgba(20,55,32,.06);
     }
@@ -540,24 +478,21 @@
       display: grid;
       place-items: center;
       margin: 0 auto 18px;
-      color: var(--checkout-green);
-      background: var(--checkout-light);
+      color: var(--green);
+      background: var(--light);
       border-radius: 50%;
     }
 
-    .success-icon svg {
-      width: 32px;
-      height: 32px;
-    }
+    .success-icon svg { width: 32px; height: 32px; }
 
     .checkout-success h2 {
       margin: 0;
-      color: var(--checkout-dark);
+      color: var(--dark);
       font-size: 25px;
     }
 
     .checkout-success > p {
-      color: var(--checkout-muted);
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.8;
     }
@@ -566,8 +501,8 @@
       display: inline-block;
       margin: 10px 0;
       padding: 12px 18px;
-      color: var(--checkout-dark);
-      background: var(--checkout-light);
+      color: var(--dark);
+      background: var(--light);
       border-radius: 9px;
       font-size: 16px;
       font-weight: 850;
@@ -588,10 +523,11 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 7px;
       padding: 10px 16px;
-      border: 1px solid var(--checkout-border);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: var(--checkout-dark);
+      color: var(--dark);
       background: #fff;
       font-size: 12px;
       font-weight: 800;
@@ -600,29 +536,37 @@
 
     .success-actions .primary {
       color: #fff;
-      background: var(--checkout-green);
-      border-color: var(--checkout-green);
+      background: var(--green);
+      border-color: var(--green);
     }
 
     .payment-area {
       margin-top: 20px;
       padding: 17px;
       background: #f7faf8;
-      border: 1px solid var(--checkout-border);
+      border: 1px solid var(--border);
       border-radius: 11px;
       text-align: left;
     }
 
     .payment-area h3 {
       margin: 0 0 9px;
-      color: var(--checkout-dark);
+      color: var(--dark);
       font-size: 14px;
     }
 
     .payment-area p {
-      color: var(--checkout-muted);
+      color: var(--muted);
       font-size: 12px;
       line-height: 1.7;
+    }
+
+    .payment-area label {
+      display: block;
+      margin-bottom: 7px;
+      color: #34463a;
+      font-size: 12px;
+      font-weight: 750;
     }
 
     .payment-area input {
@@ -631,6 +575,7 @@
       padding: 10px;
       border: 1px solid #dce6df;
       border-radius: 8px;
+      outline: none;
       font-size: 13px;
     }
 
@@ -641,7 +586,7 @@
       border: 0;
       border-radius: 8px;
       color: #fff;
-      background: var(--checkout-green);
+      background: var(--green);
       font-size: 12px;
       font-weight: 800;
       cursor: pointer;
@@ -666,30 +611,21 @@
     .empty-checkout svg {
       width: 42px;
       height: 42px;
-      color: var(--checkout-green);
+      color: var(--green);
     }
 
-    .empty-checkout h2 {
-      color: var(--checkout-dark);
-    }
+    .empty-checkout h2 { color: var(--dark); }
 
     .empty-checkout a {
-      color: var(--checkout-green);
+      color: var(--green);
       font-weight: 800;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     @media (max-width: 850px) {
-      .checkout-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .checkout-summary {
-        position: static;
-      }
+      .checkout-grid { grid-template-columns: minmax(0, 1fr); }
+      .checkout-summary { position: static; }
     }
 
     @media (max-width: 520px) {
@@ -698,38 +634,20 @@
         padding-top: 25px;
       }
 
-      .checkout-card {
-        padding: 18px;
-      }
+      .checkout-card { padding: 18px; }
 
       .checkout-form-grid {
         grid-template-columns: 1fr;
         gap: 0;
       }
 
-      .checkout-form-group.full {
-        grid-column: auto;
-      }
+      .checkout-form-group.full { grid-column: auto; }
+      .checkout-heading h1 { font-size: 27px; }
+      .checkout-option { padding: 13px; }
+      .checkout-success { padding: 25px 18px; }
 
-      .checkout-heading h1 {
-        font-size: 27px;
-      }
-
-      .checkout-option {
-        padding: 13px;
-      }
-
-      .checkout-success {
-        padding: 25px 18px;
-      }
-
-      .coupon-controls {
-        flex-wrap: wrap;
-      }
-
-      .coupon-controls input {
-        flex-basis: 100%;
-      }
+      .coupon-controls { flex-wrap: wrap; }
+      .coupon-controls input { flex-basis: 100%; }
 
       .coupon-button {
         min-height: 40px;
@@ -738,9 +656,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         animation-duration: .01ms !important;
         transition-duration: .01ms !important;
       }
@@ -827,8 +743,9 @@
                   type="tel"
                   id="customer_phone"
                   name="customer_phone"
-                  placeholder="07XX XXX XXX"
+                  placeholder="Enter your phone number"
                   autocomplete="tel"
+                  inputmode="tel"
                   maxlength="20"
                   required
                 >
@@ -840,7 +757,7 @@
                   type="email"
                   id="customer_email"
                   name="customer_email"
-                  placeholder="you@example.com"
+                  placeholder="Enter your email address"
                   autocomplete="email"
                   maxlength="160"
                 >
@@ -995,7 +912,6 @@
               </label>
 
             </div>
-
           </section>
 
           <!-- REWARD POINTS -->
@@ -1055,7 +971,6 @@
           </div>
 
         </form>
-
       </section>
 
       <!-- ORDER SUMMARY -->
@@ -1131,7 +1046,6 @@
         </section>
 
       </aside>
-
     </div>
 
     <!-- SUCCESS -->
@@ -1147,15 +1061,14 @@
         Thank you for shopping with Mawego Bookshop.
       </p>
 
-      <p style="margin-bottom:5px">
-        Your order number:
-      </p>
+      <p style="margin-bottom:5px">Your order number:</p>
 
       <div class="success-order-number" id="success-number"></div>
 
       <div id="payment-actions"></div>
 
       <div class="success-actions">
+
         <a href="/pages/track.html" class="primary">
           <i data-lucide="package-search"></i>
           Track order
@@ -1165,8 +1078,8 @@
           <i data-lucide="store"></i>
           Continue shopping
         </a>
-      </div>
 
+      </div>
     </section>
 
   </main>
@@ -1232,6 +1145,44 @@
       )?.value || fallback;
     }
 
+    // =====================================================
+    // KENYAN PHONE NUMBER NORMALIZATION
+    // =====================================================
+
+    /**
+     * Accepts Kenyan mobile numbers beginning with 01 or 07.
+     * Supports local and international formats.
+     *
+     * Returns:
+     *   254XXXXXXXXX
+     *
+     * Returns null for invalid numbers.
+     */
+
+    function normalizeKenyanPhone(phone) {
+      let value = String(phone || "").trim();
+
+      // Remove spaces, hyphens and brackets.
+      value = value.replace(/[\s()-]/g, "");
+
+      // Convert international prefix to standard format.
+      if (value.startsWith("+")) {
+        value = value.slice(1);
+      }
+
+      // Local Kenyan format.
+      if (/^0[17]\d{8}$/.test(value)) {
+        return "254" + value.slice(1);
+      }
+
+      // International Kenyan format.
+      if (/^254[17]\d{8}$/.test(value)) {
+        return value;
+      }
+
+      return null;
+    }
+
     function showMessage(message, type = "info") {
       $("msg").innerHTML = `
         <div class="alert alert-${escapeHtml(type)}">
@@ -1271,12 +1222,10 @@
     function getRequestedPoints() {
       const input = $("points_redeemed");
 
-      const points = Math.max(
+      return Math.max(
         0,
         Math.floor(Number(input?.value || 0))
       );
-
-      return points;
     }
 
     function calculatePointsDiscount() {
@@ -1298,18 +1247,14 @@
     async function loadPoints() {
       const user = API.getUser();
 
-      if (!user) {
-        return;
-      }
+      if (!user) return;
 
       try {
         const data = await API.pointsBalance();
 
         rewardBalance = Number(data.reward_points || 0);
 
-        if (rewardBalance <= 0) {
-          return;
-        }
+        if (rewardBalance <= 0) return;
 
         $("points-box").style.display = "block";
 
@@ -1325,7 +1270,6 @@
           "Enter a multiple of 100 points to redeem.";
 
         refreshIcons();
-
         renderSummary();
 
       } catch (error) {
@@ -1373,6 +1317,7 @@
       if (typeof API.validatePromo !== "function") {
         message.textContent =
           "Promotional code validation is not available. Please try again later.";
+
         message.className = "extra-message error";
         return;
       }
@@ -1392,7 +1337,9 @@
         const discount = Number(result.discount_kes || 0);
 
         if (!Number.isFinite(discount) || discount <= 0) {
-          throw new Error("This promotional code does not provide a valid discount.");
+          throw new Error(
+            "This promotional code does not provide a valid discount."
+          );
         }
 
         appliedCoupon = {
@@ -1435,7 +1382,9 @@
       $("coupon-code").value = "";
       $("coupon-code").readOnly = false;
 
-      $("coupon-message").textContent = "Promotional code removed.";
+      $("coupon-message").textContent =
+        "Promotional code removed.";
+
       $("coupon-message").className = "extra-message";
 
       $("apply-coupon").textContent = "Apply code";
@@ -1449,9 +1398,16 @@
 
     function calculateTotals() {
       const subtotal = getSubtotal();
-      const fulfilment = selectedValue("fulfilment_type", "delivery");
 
-      const delivery = calculateDelivery(subtotal, fulfilment);
+      const fulfilment = selectedValue(
+        "fulfilment_type",
+        "delivery"
+      );
+
+      const delivery = calculateDelivery(
+        subtotal,
+        fulfilment
+      );
 
       const couponDiscount = getCouponDiscount();
 
@@ -1479,7 +1435,11 @@
       const totals = calculateTotals();
 
       $("summary-items").innerHTML = items.map(item => {
-        const quantity = Math.max(0, Number(item.quantity || 0));
+        const quantity = Math.max(
+          0,
+          Number(item.quantity || 0)
+        );
+
         const price = Number(item.price_kes || 0);
         const lineTotal = quantity * price;
 
@@ -1511,12 +1471,16 @@
       $("summary-total").textContent =
         formatKes(totals.total);
 
-      if (selectedValue("fulfilment_type", "delivery") === "collection") {
+      if (
+        selectedValue("fulfilment_type", "delivery") === "collection"
+      ) {
         $("delivery-note").textContent =
           "Shop collection selected. No delivery fee will be charged.";
+
       } else if (totals.subtotal >= FREE_THRESHOLD) {
         $("delivery-note").textContent =
           "Congratulations! Your order qualifies for free delivery under the current checkout policy.";
+
       } else {
         $("delivery-note").textContent =
           `Spend ${formatKes(FREE_THRESHOLD - totals.subtotal)} more to qualify for free delivery under the current checkout policy.`;
@@ -1563,15 +1527,23 @@
         throw new Error("Please enter your full name.");
       }
 
-      if (!/^[0-9+\s()-]{7,20}$/.test(phone)) {
-        throw new Error("Please enter a valid phone number.");
+      if (!normalizeKenyanPhone(phone)) {
+        throw new Error(
+          "Please enter a valid Kenyan mobile phone number."
+        );
       }
 
-      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (
+        email &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+      ) {
         throw new Error("Please enter a valid email address.");
       }
 
-      if (fulfilment === "delivery" && address.length < 5) {
+      if (
+        fulfilment === "delivery" &&
+        address.length < 5
+      ) {
         throw new Error("Please enter a complete delivery address.");
       }
 
@@ -1584,6 +1556,8 @@
       if (getRequestedPoints() > rewardBalance) {
         throw new Error("You do not have enough reward points.");
       }
+
+      return true;
     }
 
     // =====================================================
@@ -1598,15 +1572,14 @@
     }
 
     async function checkPaymentStatus(order) {
-      if (!order?.id) {
-        return false;
-      }
+      if (!order?.id) return false;
 
       try {
         let response;
 
         if (API.getUser()) {
           response = await API.orderStatus(order.id);
+
         } else {
           response = await API.trackOrder(
             order.order_number,
@@ -1616,9 +1589,7 @@
 
         const currentOrder = response.order;
 
-        if (!currentOrder) {
-          return false;
-        }
+        if (!currentOrder) return false;
 
         if (currentOrder.payment_status === "paid") {
           stopPaymentPolling();
@@ -1650,7 +1621,11 @@
         return false;
 
       } catch (error) {
-        console.warn("Payment status check failed:", error);
+        console.warn(
+          "Payment status check failed:",
+          error
+        );
+
         return false;
       }
     }
@@ -1664,11 +1639,13 @@
       result.className = "payment-result";
 
       if (type === "success") {
-        result.style.color = "var(--checkout-green)";
+        result.style.color = "var(--green)";
+
       } else if (type === "warning") {
-        result.style.color = "#9a6b12";
+        result.style.color = "var(--gold)";
+
       } else {
-        result.style.color = "var(--checkout-muted)";
+        result.style.color = "var(--muted)";
       }
     }
 
@@ -1704,15 +1681,33 @@
     }
 
     // =====================================================
-    // M-PESA
+    // M-PESA STK PUSH
     // =====================================================
 
     async function sendMpesaPrompt() {
       const button = $("stk-btn");
-      const phone = $("stk-phone").value.trim();
+      const phoneInput = $("stk-phone");
+
+      const phone = normalizeKenyanPhone(
+        phoneInput.value
+      );
 
       if (!phone) {
-        showPaymentStatus("Please enter the M-Pesa phone number.", "warning");
+        showPaymentStatus(
+          "Please enter a valid Kenyan mobile phone number.",
+          "warning"
+        );
+
+        phoneInput.focus();
+        return;
+      }
+
+      if (!activeOrder?.id) {
+        showPaymentStatus(
+          "Order information is unavailable. Please contact the shop.",
+          "warning"
+        );
+
         return;
       }
 
@@ -1720,20 +1715,26 @@
       button.textContent = "Sending prompt...";
 
       try {
+        // Always send the normalized international format.
         const response = await API.mpesaStk(
           activeOrder.id,
           phone
         );
 
+        // Keep the normalized phone for payment tracking.
+        activeOrder.customer_phone = phone;
+
         showPaymentStatus(
-          response.message || "M-Pesa prompt requested. Check your phone."
+          response.message ||
+          "M-Pesa prompt requested. Check your phone."
         );
 
         startPaymentPolling(activeOrder);
 
       } catch (error) {
         showPaymentStatus(
-          error.message || "Unable to send the M-Pesa prompt.",
+          error.message ||
+          "Unable to send the M-Pesa prompt.",
           "warning"
         );
 
@@ -1754,7 +1755,9 @@
       button.textContent = "Connecting...";
 
       try {
-        const response = await API.cardInitiate(activeOrder.id);
+        const response = await API.cardInitiate(
+          activeOrder.id
+        );
 
         if (response.url) {
           window.location.href = response.url;
@@ -1762,12 +1765,14 @@
         }
 
         showPaymentStatus(
-          response.message || "Card payment request initiated. Follow the instructions provided."
+          response.message ||
+          "Card payment request initiated. Follow the instructions provided."
         );
 
       } catch (error) {
         showPaymentStatus(
-          error.message || "Unable to initiate card payment.",
+          error.message ||
+          "Unable to initiate card payment.",
           "warning"
         );
 
@@ -1782,9 +1787,14 @@
     // =====================================================
 
     function renderOrderSuccess(order, response) {
+      const originalPhone = normalizeKenyanPhone(
+        order.customer_phone ||
+        $("customer_phone").value
+      );
+
       activeOrder = {
         ...order,
-        customer_phone: order.customer_phone || $("customer_phone").value.trim()
+        customer_phone: originalPhone
       };
 
       $("checkout").classList.add("hidden");
@@ -1794,7 +1804,8 @@
         order.order_number || "Order received";
 
       $("success-msg").textContent =
-        response.message || "Your order has been successfully created.";
+        response.message ||
+        "Your order has been successfully created.";
 
       const actions = $("payment-actions");
 
@@ -1804,24 +1815,35 @@
             <h3>M-Pesa payment</h3>
 
             <p>
-              Enter the phone number that should receive the M-Pesa payment prompt.
-              Complete the payment on your phone.
+              Enter the phone number that should receive
+              the M-Pesa payment prompt. Complete the payment
+              on your phone.
             </p>
 
-            <label for="stk-phone">M-Pesa phone number</label>
+            <label for="stk-phone">
+              M-Pesa phone number
+            </label>
 
             <input
               type="tel"
               id="stk-phone"
-              value="${escapeHtml(activeOrder.customer_phone)}"
+              value="${escapeHtml(originalPhone || "")}"
+              placeholder="Enter M-Pesa phone number"
               autocomplete="tel"
+              inputmode="tel"
+              maxlength="20"
+              required
             >
 
             <button type="button" id="stk-btn">
               Send M-Pesa prompt
             </button>
 
-            <p id="payment-result" class="payment-result" aria-live="polite"></p>
+            <p
+              id="payment-result"
+              class="payment-result"
+              aria-live="polite"
+            ></p>
           </div>
         `;
 
@@ -1830,20 +1852,32 @@
           sendMpesaPrompt
         );
 
+        $("stk-phone").addEventListener("keydown", event => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            sendMpesaPrompt();
+          }
+        });
+
       } else if (order.payment_method === "card") {
         actions.innerHTML = `
           <div class="payment-area">
             <h3>Card payment</h3>
 
             <p>
-              Continue to the configured payment provider to complete your card payment.
+              Continue to the configured payment provider
+              to complete your card payment.
             </p>
 
             <button type="button" id="card-btn">
               Pay with card
             </button>
 
-            <p id="payment-result" class="payment-result" aria-live="polite"></p>
+            <p
+              id="payment-result"
+              class="payment-result"
+              aria-live="polite"
+            ></p>
           </div>
         `;
 
@@ -1858,8 +1892,8 @@
             <h3>Cash payment</h3>
 
             <p>
-              Your order has been placed. Pay when your order is delivered
-              or when you collect it from the shop.
+              Your order has been placed. Pay when your order
+              is delivered or when you collect it from the shop.
             </p>
           </div>
         `;
@@ -1897,10 +1931,24 @@
 
         const formData = new FormData(event.currentTarget);
 
-        const payload = {
-          customer_name: formData.get("customer_name").trim(),
+        // Normalize the customer's phone number before
+        // sending the order to the backend.
+        const normalizedPhone = normalizeKenyanPhone(
+          formData.get("customer_phone")
+        );
 
-          customer_phone: formData.get("customer_phone").trim(),
+        if (!normalizedPhone) {
+          throw new Error(
+            "Please enter a valid Kenyan mobile phone number."
+          );
+        }
+
+        const payload = {
+          customer_name:
+            formData.get("customer_name").trim(),
+
+          customer_phone:
+            normalizedPhone,
 
           customer_email:
             formData.get("customer_email").trim() || undefined,
@@ -1922,31 +1970,37 @@
             quantity: Number(item.quantity)
           })),
 
-          points_redeemed: getRequestedPoints(),
+          points_redeemed:
+            getRequestedPoints(),
 
-          coupon_code: appliedCoupon?.code || undefined
+          coupon_code:
+            appliedCoupon?.code || undefined
         };
 
         const response = await API.createOrder(payload);
 
         if (!response?.order) {
           throw new Error(
-            response?.message || "The server did not return a valid order."
+            response?.message ||
+            "The server did not return a valid order."
           );
         }
 
         renderOrderSuccess(response.order, response);
 
-        // Cash-on-delivery is an accepted order.
-        // For electronic payments, keep the basket until the server
-        // confirms that payment has actually succeeded.
-        if (response.order.payment_method === "cash_on_delivery") {
+        // Cash-on-delivery orders are accepted immediately.
+        // Electronic payment baskets are retained until payment
+        // confirmation is received.
+        if (
+          response.order.payment_method === "cash_on_delivery"
+        ) {
           Cart.clear();
         }
 
       } catch (error) {
         showMessage(
-          error.message || "Unable to place your order. Please try again.",
+          error.message ||
+          "Unable to place your order. Please try again.",
           "error"
         );
 
@@ -2015,7 +2069,8 @@
             <h2>Your basket is empty</h2>
 
             <p>
-              Add books and school supplies to your basket before checkout.
+              Add books and school supplies to your basket
+              before checkout.
             </p>
 
             <a href="/">Browse Mawego Bookshop</a>
