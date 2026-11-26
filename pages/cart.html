@@ -194,15 +194,19 @@
       background: transparent;
     }
 
-    .cart-quantity input::-webkit-inner-spin-button,
-    .cart-quantity input::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+     
+  .cart-quantity input::-webkit-inner-spin-button,
+  .cart-quantity input::-webkit-outer-spin-button {
+   -webkit-appearance: none;
+   appearance: none;
+   margin: 0;
+  }
 
-    .cart-quantity input[type="number"] {
-      -moz-appearance: textfield;
-    }
+  .cart-quantity input[type="number"] {
+   -moz-appearance: textfield;
+   appearance: textfield;
+  }
+
 
     .cart-line-total {
       white-space: nowrap;
@@ -499,7 +503,7 @@
   <footer class="site-footer cart-footer">
     <div class="container footer-bottom">
       <span>© <span id="footer-year"></span> Mawego Bookshop</span>
-      <span>Prices displayed in KES</span>
+      <span>Affordable products for every one</span>
       <a href="/pages/contact.html">Contact us</a>
     </div>
   </footer>
