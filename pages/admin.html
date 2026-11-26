@@ -294,6 +294,7 @@
     { id: 'staff',      label: 'Staff',           icon: 'users' }
   ];
 
+  // null = full access (owner / manager, which includes promotions)
   const ACCESS = {
     owner: null,
     manager: null,
@@ -1132,25 +1133,23 @@
   }
 
   /* =====================================================================
-     Promotions & Coupons
+     Promotions & Coupons  (fields match promoController)
      ===================================================================== */
   async function renderPromotions(root) {
-    const data = await API.adminCoupons({ limit: 500 }).catch(() => ({ coupons: [] }));
-    const coupons = data.coupons || [];
+    const data = await API.adminPromos();
+    const coupons = data.promos || [];
     const now = new Date();
 
     const statusOf = (c) => {
       if (!c.is_active) return 'inactive';
       if (c.expires_at && new Date(c.expires_at) < now) return 'expired';
-      if (c.total_usage_limit != null && num(c.times_used) >= num(c.total_usage_limit)) return 'used_up';
+      if (c.starts_at && new Date(c.starts_at) > now) return 'scheduled';
+      if (c.usage_limit != null && num(c.used_count) >= num(c.usage_limit)) return 'used_up';
       return 'active';
     };
-    const typeLabel = (c) => {
-      if (c.type === 'percentage') return `${c.value}% off`;
-      if (c.type === 'fixed') return `${kes(c.value)} off`;
-      if (c.type === 'free_delivery') return 'Free delivery';
-      return c.type || '—';
-    };
+    const typeLabel = (c) => (c.discount_type === 'percent'
+      ? `${num(c.discount_value)}% off`
+      : `${kes(c.discount_value)} off`);
 
     root.innerHTML = `
       ${pageHead('Promotions & Coupons', 'Create and manage discount codes for the storefront',
@@ -1158,6 +1157,7 @@
       <div class="chips" id="c-chips">
         <button class="chip on" data-s="">All <b>${coupons.length}</b></button>
         <button class="chip" data-s="active">Active</button>
+        <button class="chip" data-s="scheduled">Scheduled</button>
         <button class="chip" data-s="inactive">Inactive</button>
         <button class="chip" data-s="expired">Expired</button>
         <button class="chip" data-s="used_up">Used up</button>
@@ -1166,25 +1166,28 @@
       <div class="table-wrap" id="c-table"></div>`;
 
     const cols = [
-      { key: 'code', label: 'Code', render: (c) => `<b style="letter-spacing:.04em">${esc(c.code)}</b>` },
-      { key: 'type', label: 'Discount', render: typeLabel },
-      { key: 'min_order_amount', label: 'Min order', render: (c) => (c.min_order_amount ? kes(c.min_order_amount) : '—') },
-      { key: 'times_used', label: 'Used', render: (c) => {
-          const used = num(c.times_used);
-          return c.total_usage_limit != null ? `${used} / ${num(c.total_usage_limit)}` : String(used);
+      { key: 'code', label: 'Code', render: (c) => `<b style="letter-spacing:.04em">${esc(c.code)}</b>${c.description ? `<div class="hint">${esc(c.description)}</div>` : ''}` },
+      { key: 'discount_value', label: 'Discount', value: (c) => num(c.discount_value), render: (c) => {
+          const cap = c.discount_type === 'percent' && c.max_discount_kes != null ? `<div class="hint">max ${kes(c.max_discount_kes)}</div>` : '';
+          return typeLabel(c) + cap;
       } },
+      { key: 'min_order_kes', label: 'Min order', value: (c) => num(c.min_order_kes), render: (c) => (num(c.min_order_kes) ? kes(c.min_order_kes) : '—') },
+      { key: 'used_count', label: 'Used', value: (c) => num(c.used_count), render: (c) => {
+          const used = num(c.used_count);
+          return c.usage_limit != null ? `${used} / ${num(c.usage_limit)}` : String(used);
+      } },
+      { key: 'per_user_limit', label: 'Per customer', render: (c) => (c.per_user_limit ? String(c.per_user_limit) : '—') },
       { key: 'expires_at', label: 'Expires', cls: 'nowrap', render: (c) => (c.expires_at ? esc(String(c.expires_at).slice(0, 10)) : 'Never') },
       { key: 'status', label: 'Status', value: statusOf, render: (c) => {
           const s = statusOf(c);
-          const tone = { active: 'ok', inactive: 'archived', expired: 'cancelled', used_up: 'low' };
+          const tone = { active: 'ok', scheduled: 'confirmed', inactive: 'archived', expired: 'cancelled', used_up: 'low' };
           return badge(tone[s] || 'default', s.replace('_', ' '));
       } },
       { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: (c) => `
         <div class="row-actions">
           <button class="btn btn-sm" data-act="edit" title="Edit"><i data-lucide="pencil"></i></button>
           <button class="btn btn-sm" data-act="toggle" title="${c.is_active ? 'Deactivate' : 'Activate'}"><i data-lucide="${c.is_active ? 'toggle-right' : 'toggle-left'}"></i></button>
-          <button class="btn btn-sm" data-act="usage" title="Usage"><i data-lucide="list"></i></button>
-          <button class="btn btn-sm btn-danger" data-act="del" title="Delete"><i data-lucide="trash-2"></i></button>
+          ${c.is_active ? '<button class="btn btn-sm btn-danger" data-act="del" title="Deactivate"><i data-lucide="trash-2"></i></button>' : ''}
         </div>` }
     ];
 
@@ -1194,7 +1197,6 @@
       onAction: (act, c) => ({
         edit: () => openCouponForm(c),
         toggle: () => toggleCoupon(c),
-        usage: () => openCouponUsage(c),
         del: () => deleteCoupon(c)
       })[act]()
     });
@@ -1203,7 +1205,7 @@
       const q = $('#c-q', root).value.trim().toLowerCase();
       t.setRows(coupons.filter((c) =>
         (!filter || statusOf(c) === filter) &&
-        (!q || c.code.toLowerCase().includes(q) || String(c.description || '').toLowerCase().includes(q))));
+        (!q || String(c.code || '').toLowerCase().includes(q) || String(c.description || '').toLowerCase().includes(q))));
       $$('#c-chips .chip', root).forEach((ch) => ch.classList.toggle('on', ch.dataset.s === filter));
     };
 
@@ -1221,46 +1223,43 @@
       <h2>${isEdit ? 'Edit coupon' : 'New coupon'}</h2>
       <form id="cpn-form">
         <div class="form-row">
-          <div class="form-group"><label>Code *</label>
-            <input name="code" required maxlength="40" style="text-transform:uppercase" value="${esc(c.code || '')}" placeholder="e.g. BACK2SCHOOL"></div>
+          <div class="form-group"><label>Code * <span class="hint">(3–40 letters, numbers, - or _)</span></label>
+            <input name="code" required minlength="3" maxlength="40" pattern="[A-Za-z0-9_\\-]{3,40}" style="text-transform:uppercase" value="${esc(c.code || '')}" placeholder="e.g. BACK2SCHOOL"></div>
           <div class="form-group"><label>Type *</label>
-            <select name="type" id="cpn-type">
-              <option value="percentage" ${c.type === 'percentage' ? 'selected' : ''}>Percentage (%)</option>
-              <option value="fixed" ${c.type === 'fixed' ? 'selected' : ''}>Fixed amount (KES)</option>
-              <option value="free_delivery" ${c.type === 'free_delivery' ? 'selected' : ''}>Free delivery</option>
+            <select name="discount_type" id="cpn-type">
+              <option value="percent" ${c.discount_type !== 'fixed' ? 'selected' : ''}>Percentage (%)</option>
+              <option value="fixed" ${c.discount_type === 'fixed' ? 'selected' : ''}>Fixed amount (KES)</option>
             </select></div>
         </div>
 
-        <div class="form-row" id="cpn-value-row">
+        <div class="form-row">
           <div class="form-group"><label id="cpn-value-label">Value *</label>
-            <input name="value" type="number" step="0.01" min="0" required value="${c.value ?? ''}"></div>
+            <input name="discount_value" type="number" step="0.01" min="0.01" required value="${c.discount_value ?? ''}"></div>
           <div class="form-group" id="cpn-max-wrap"><label>Max discount (KES)</label>
-            <input name="max_discount" type="number" step="0.01" min="0" value="${c.max_discount ?? ''}" placeholder="Optional ceiling for %"></div>
+            <input name="max_discount_kes" type="number" step="0.01" min="0" value="${c.max_discount_kes ?? ''}" placeholder="Optional ceiling for %"></div>
         </div>
 
         <div class="form-row">
           <div class="form-group"><label>Minimum order (KES)</label>
-            <input name="min_order_amount" type="number" step="0.01" min="0" value="${c.min_order_amount ?? ''}"></div>
+            <input name="min_order_kes" type="number" step="0.01" min="0" value="${c.min_order_kes ?? ''}"></div>
           <div class="form-group"><label>Total usage limit</label>
-            <input name="total_usage_limit" type="number" min="1" step="1" value="${c.total_usage_limit ?? ''}" placeholder="Leave empty = unlimited"></div>
+            <input name="usage_limit" type="number" min="1" step="1" value="${c.usage_limit ?? ''}" placeholder="Leave empty = unlimited"></div>
         </div>
 
         <div class="form-row">
           <div class="form-group"><label>Per-customer limit</label>
-            <input name="per_customer_limit" type="number" min="1" step="1" value="${c.per_customer_limit ?? ''}" placeholder="Leave empty = unlimited"></div>
-          <div class="form-group"><label>Starts at</label>
+            <input name="per_user_limit" type="number" min="1" step="1" value="${c.per_user_limit ?? 1}">
+            <div class="hint">Defaults to 1 use per customer.</div></div>
+          <div class="form-group"><label>Starts</label>
             <input name="starts_at" type="date" value="${dateVal(c.starts_at)}"></div>
         </div>
 
         <div class="form-row">
-          <div class="form-group"><label>Expires at</label>
+          <div class="form-group"><label>Expires (end of day)</label>
             <input name="expires_at" type="date" value="${dateVal(c.expires_at)}"></div>
-          <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:.35rem">
-            <label class="check" style="margin:0"><input type="checkbox" name="first_order_only" ${c.first_order_only ? 'checked' : ''}> First order only</label></div>
+          <div class="form-group"><label>Description</label>
+            <input name="description" value="${esc(c.description || '')}" placeholder="Optional note"></div>
         </div>
-
-        <div class="form-group"><label>Internal note / description</label>
-          <input name="description" value="${esc(c.description || '')}" placeholder="Optional"></div>
 
         <label class="check"><input type="checkbox" name="is_active" ${!isEdit || c.is_active ? 'checked' : ''}> Active — customers can use this code</label>
 
@@ -1270,19 +1269,12 @@
         </div>
       </form>`);
 
-    const typeEl = $('#cpn-type'), valueRow = $('#cpn-value-row');
-    const valueInput = valueRow.querySelector('[name=value]');
+    const typeEl = $('#cpn-type');
     const syncType = () => {
-      const t = typeEl.value;
-      if (t === 'free_delivery') {
-        valueRow.style.display = 'none';
-        valueInput.required = false;
-        return;
-      }
-      valueRow.style.display = '';
-      valueInput.required = true;
-      $('#cpn-value-label').textContent = t === 'percentage' ? 'Percentage (%) *' : 'Amount (KES) *';
-      $('#cpn-max-wrap').style.display = t === 'percentage' ? '' : 'none';
+      const pct = typeEl.value === 'percent';
+      $('#cpn-value-label').textContent = pct ? 'Percentage (%) *' : 'Amount (KES) *';
+      $('#cpn-max-wrap').style.display = pct ? '' : 'none';
+      $('#cpn-form [name=discount_value]').max = pct ? '100' : '';
     };
     typeEl.onchange = syncType;
     syncType();
@@ -1292,28 +1284,28 @@
       e.preventDefault();
       guarded(async () => {
         const fd = new FormData(e.target);
-        const optNum = (k) => (fd.get(k) ? num(fd.get(k)) : null);
+        const opt = (k) => (fd.get(k) ? num(fd.get(k)) : null);
+        const starts = fd.get('starts_at'), ends = fd.get('expires_at');
+        const pct = fd.get('discount_type') === 'percent';
         const payload = {
           code: String(fd.get('code') || '').trim().toUpperCase(),
-          type: fd.get('type'),
-          value: num(fd.get('value')),
-          max_discount: optNum('max_discount'),
-          min_order_amount: optNum('min_order_amount'),
-          total_usage_limit: optNum('total_usage_limit'),
-          per_customer_limit: optNum('per_customer_limit'),
-          starts_at: fd.get('starts_at') || null,
-          expires_at: fd.get('expires_at') || null,
-          first_order_only: !!fd.get('first_order_only'),
-          description: String(fd.get('description') || '').trim() || null,
+          discount_type: fd.get('discount_type'),
+          discount_value: num(fd.get('discount_value')),
+          max_discount_kes: pct ? opt('max_discount_kes') : null,
+          min_order_kes: num(fd.get('min_order_kes')),
+          usage_limit: opt('usage_limit'),
+          per_user_limit: opt('per_user_limit') || 1,
+          starts_at: starts ? new Date(`${starts}T00:00:00`).toISOString() : null,
+          expires_at: ends ? new Date(`${ends}T23:59:59`).toISOString() : null,
+          description: String(fd.get('description') || '').trim(),
           is_active: !!fd.get('is_active')
         };
-        if (payload.type === 'free_delivery') payload.value = 0;
 
         if (isEdit) {
-          await API.adminUpdateCoupon(coupon.id, payload);
+          await API.put('/admin/promos/' + encodeURIComponent(coupon.id), payload);
           toast('Coupon updated');
         } else {
-          await API.adminCreateCoupon(payload);
+          await API.adminCreatePromo(payload);
           toast('Coupon created');
         }
         closeModal();
@@ -1330,7 +1322,7 @@
       next ? 'Activate' : 'Deactivate');
     if (!ok) return;
     guarded(async () => {
-      await API.adminUpdateCoupon(c.id, { is_active: next });
+      await API.put('/admin/promos/' + encodeURIComponent(c.id), { is_active: next });
       toast(next ? 'Coupon activated' : 'Coupon deactivated');
       route();
     });
@@ -1338,45 +1330,14 @@
 
   async function deleteCoupon(c) {
     const ok = await confirmDialog(
-      'Delete coupon',
-      `${c.code} — this cannot be undone. Past orders that used it keep their discount history.`,
-      'Delete', true);
+      'Deactivate coupon',
+      `${c.code} will be disabled and customers can no longer use it. Past orders keep their discount history.`,
+      'Deactivate', true);
     if (!ok) return;
     guarded(async () => {
-      await API.adminDeleteCoupon(c.id);
-      toast('Coupon deleted');
+      await API.del('/admin/promos/' + encodeURIComponent(c.id));
+      toast('Coupon deactivated');
       route();
-    });
-  }
-
-  async function openCouponUsage(c) {
-    await guarded(async () => {
-      const data = await API.adminCoupon(c.id);
-      const usage = data.usage || data.orders || [];
-
-      openModal(`
-        <h2>Usage · ${esc(c.code)}</h2>
-        <p class="muted" style="margin-bottom:1rem">
-          ${num(c.times_used)} redemptions
-          ${c.total_usage_limit != null ? `· limit ${c.total_usage_limit}` : ''}
-          · total discount given ${kes(data.total_discount_given || 0)}
-        </p>
-        <div class="table-wrap" style="max-height:360px;overflow:auto">
-          <table>
-            <thead><tr><th>Order</th><th>Customer</th><th>Discount</th><th>Date</th></tr></thead>
-            <tbody>
-              ${usage.length ? usage.map((u) => `
-                <tr>
-                  <td><b>${esc(u.order_number)}</b></td>
-                  <td>${esc(u.customer_name || '—')}</td>
-                  <td>${kes(u.discount_kes || 0)}</td>
-                  <td class="nowrap hint">${esc(String(u.created_at || '').slice(0, 16))}</td>
-                </tr>`).join('') : '<tr><td class="empty" colspan="4">No usage yet</td></tr>'}
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-actions"><button class="btn" id="u-close">Close</button></div>`);
-      $('#u-close').onclick = closeModal;
     });
   }
 
@@ -1882,6 +1843,9 @@
     };
   }
 
+  /* =====================================================================
+     Command palette
+     ===================================================================== */
   function openPalette() {
     const base = [
       ...NAV.filter((n) => can(n.id)).map((n) => ({ t: `Go to ${n.label}`, icon: n.icon, run: () => go(n.id) })),
@@ -1928,6 +1892,9 @@
     draw();
   }
 
+  /* =====================================================================
+     Chrome: theme, menu, shortcuts
+     ===================================================================== */
   function applyTheme(t) {
     document.documentElement.dataset.theme = t;
     const b = $('#theme-btn');
@@ -1975,6 +1942,9 @@
     }
   });
 
+  /* =====================================================================
+     Start
+     ===================================================================== */
   icons();
   if (isStaffUser(API.getUser())) showApp(); else showLogin();
 })();
