@@ -7,157 +7,205 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <script src="https://unpkg.com/lucide@0.469.0"></script>
   <style>
+    /* ---------- Theme tokens ---------- */
     :root {
-      --bg:#f5f6f8; --surface:#fff; --surface-2:#f0f2f5; --text:#1b1f27; --muted:#6b7280; --border:#e3e6eb;
-      --brand:#1f7a4d; --brand-2:#155c3a; --brand-soft:#e3f4ea; --danger:#c0392b; --danger-soft:#fde8e6;
-      --warn:#b7791f; --warn-soft:#fff3d6; --info:#2b6cb0; --info-soft:#e6f0fb;
-      --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
-      --shadow-lg:0 12px 32px rgba(16,24,40,.18); --radius:12px; --sidebar:236px;
-      --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+      --bg: #f5f6f8; --surface: #fff; --surface-2: #f0f2f5;
+      --text: #1b1f27; --muted: #6b7280; --border: #e3e6eb;
+      --brand: #1f7a4d; --brand-2: #155c3a; --brand-soft: #e3f4ea;
+      --danger: #c0392b; --danger-soft: #fde8e6;
+      --warn: #b7791f; --warn-soft: #fff3d6;
+      --info: #2b6cb0; --info-soft: #e6f0fb;
+      --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+      --shadow-lg: 0 12px 32px rgba(16,24,40,.18);
+      --radius: 12px; --sidebar: 236px;
+      --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     }
     :root[data-theme="dark"] {
-      --bg:#0f1318; --surface:#171c23; --surface-2:#1f262f; --text:#e8ebf0; --muted:#8b95a5; --border:#2a323d;
-      --brand:#3ca873; --brand-2:#2f8c5f; --brand-soft:#16352a; --danger:#e5675a; --danger-soft:#3a1d1a;
-      --warn:#e0b04a; --warn-soft:#3a2f12; --info:#6ea8e8; --info-soft:#17283d;
-      --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 12px 32px rgba(0,0,0,.6);
+      --bg: #0f1318; --surface: #171c23; --surface-2: #1f262f;
+      --text: #e8ebf0; --muted: #8b95a5; --border: #2a323d;
+      --brand: #3ca873; --brand-2: #2f8c5f; --brand-soft: #16352a;
+      --danger: #e5675a; --danger-soft: #3a1d1a;
+      --warn: #e0b04a; --warn-soft: #3a2f12;
+      --info: #6ea8e8; --info-soft: #17283d;
+      --shadow: 0 1px 2px rgba(0,0,0,.4); --shadow-lg: 0 12px 32px rgba(0,0,0,.6);
     }
-    *{box-sizing:border-box} html,body{margin:0}
-    body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.45}
-    h1,h2,h3{margin:0} h1{font-size:1.45rem} h2{font-size:1.05rem}
-    a{color:inherit;text-decoration:none} .hidden{display:none!important} .muted{color:var(--muted)}
-    .hint{font-size:.78rem;color:var(--muted)} .right{text-align:right} .nowrap{white-space:nowrap}
-    i[data-lucide],svg.lucide{width:16px;height:16px;vertical-align:-3px;flex:none}
 
-    /* Buttons & forms */
-    .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .85rem;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;font-weight:600;cursor:pointer;transition:.15s}
-    .btn:hover{background:var(--surface-2)} .btn:disabled{opacity:.5;cursor:not-allowed}
-    .btn-primary{background:var(--brand);border-color:var(--brand);color:#fff} .btn-primary:hover{background:var(--brand-2)}
-    .btn-danger{color:var(--danger);border-color:transparent;background:var(--danger-soft)} .btn-danger:hover{background:var(--danger);color:#fff}
-    .btn-soft{background:var(--brand-soft);color:var(--brand);border-color:transparent}
-    .btn-sm{padding:.3rem .6rem;font-size:.8rem;border-radius:8px} .btn-icon{padding:.45rem}
-    input,select,textarea{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:.5rem .65rem;width:100%}
-    input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:-1px;border-color:transparent}
-    input[type=checkbox]{width:auto} label{font-size:.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:.25rem}
-    .form-group{margin-bottom:.85rem} .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-    .check{display:flex;align-items:center;gap:.5rem;color:var(--text);font-size:.9rem}
+    /* ---------- Base ---------- */
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.45; }
+    h1, h2, h3 { margin: 0; }
+    h1 { font-size: 1.45rem; }
+    h2 { font-size: 1.05rem; }
+    a { color: inherit; text-decoration: none; }
+    .hidden { display: none !important; }
+    .muted { color: var(--muted); }
+    .hint { font-size: .78rem; color: var(--muted); }
+    .right { text-align: right; }
+    .nowrap { white-space: nowrap; }
+    i[data-lucide], svg.lucide { width: 16px; height: 16px; vertical-align: -3px; flex: none; }
 
-    /* Login */
-    #login-view{min-height:100vh;display:grid;place-items:center;padding:1rem;background:linear-gradient(135deg,var(--brand-soft),var(--bg))}
-    .login-card{width:100%;max-width:400px;background:var(--surface);border-radius:16px;padding:2rem;box-shadow:var(--shadow-lg)}
-    .login-card .mark{width:48px;height:48px;border-radius:12px;background:var(--brand);color:#fff;display:grid;place-items:center;margin-bottom:1rem}
-    .alert{padding:.65rem .85rem;border-radius:9px;margin-bottom:.85rem;font-size:.88rem}
-    .alert-error{background:var(--danger-soft);color:var(--danger)}
+    /* ---------- Buttons & forms ---------- */
+    .btn { display: inline-flex; align-items: center; gap: .4rem; padding: .5rem .85rem; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; transition: .15s; }
+    .btn:hover { background: var(--surface-2); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .btn-primary:hover { background: var(--brand-2); }
+    .btn-danger { color: var(--danger); border-color: transparent; background: var(--danger-soft); }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-soft { background: var(--brand-soft); color: var(--brand); border-color: transparent; }
+    .btn-sm { padding: .3rem .6rem; font-size: .8rem; border-radius: 8px; }
+    .btn-icon { padding: .45rem; }
 
-    /* Shell */
-    .shell{display:grid;grid-template-columns:var(--sidebar) 1fr;min-height:100vh}
-    .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1rem .75rem;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:.15rem}
-    .brand{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.05rem;padding:.4rem .6rem 1rem}
-    .brand .mark{width:34px;height:34px;border-radius:9px;background:var(--brand);color:#fff;display:grid;place-items:center}
-    .nav-link{display:flex;align-items:center;gap:.65rem;padding:.55rem .7rem;border-radius:9px;color:var(--muted);font-weight:600;position:relative}
-    .nav-link:hover{background:var(--surface-2);color:var(--text)}
-    .nav-link.active{background:var(--brand-soft);color:var(--brand)}
-    .nav-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:.68rem;padding:.05rem .45rem;border-radius:99px}
-    .side-foot{margin-top:auto;padding:.75rem .6rem 0;border-top:1px solid var(--border);font-size:.8rem}
-    .main{min-width:0}
-    .topbar{display:flex;align-items:center;gap:.75rem;padding:.8rem 1.5rem;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
-    .topbar .spacer{flex:1}
-    .search-trigger{display:flex;align-items:center;gap:.6rem;min-width:260px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:.45rem .7rem;cursor:pointer;font:inherit}
-    kbd{font-family:inherit;font-size:.7rem;border:1px solid var(--border);background:var(--surface);border-radius:5px;padding:.05rem .35rem;margin-left:auto}
-    .menu-btn{display:none}
-    .content{padding:1.5rem;max-width:1400px}
-    .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
-    .page-head p{margin:.2rem 0 0;color:var(--muted)}
-    .actions{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+    input, select, textarea { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: .5rem .65rem; width: 100%; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--brand); outline-offset: -1px; border-color: transparent; }
+    input[type=checkbox] { width: auto; }
+    label { font-size: .8rem; font-weight: 600; color: var(--muted); display: block; margin-bottom: .25rem; }
+    .form-group { margin-bottom: .85rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .check { display: flex; align-items: center; gap: .5rem; color: var(--text); font-size: .9rem; }
 
-    /* Cards & stats */
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow)}
-    .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;gap:.5rem}
-    .grid-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.9rem;margin-bottom:1.25rem}
-    .stat{display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);position:relative;transition:.15s;cursor:pointer}
-    .stat:hover{transform:translateY(-2px);border-color:var(--brand);box-shadow:var(--shadow-lg)}
-    .stat .ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand);margin-bottom:.6rem}
-    .stat.warn .ico{background:var(--warn-soft);color:var(--warn)} .stat.bad .ico{background:var(--danger-soft);color:var(--danger)} .stat.info .ico{background:var(--info-soft);color:var(--info)}
-    .stat .label{font-size:.78rem;color:var(--muted);font-weight:600}
-    .stat .value{font-size:1.4rem;font-weight:800;margin:.1rem 0}
-    .stat .sub{font-size:.78rem;color:var(--muted)}
-    .stat .go{position:absolute;top:.9rem;right:.9rem;color:var(--muted);opacity:0;transition:.15s}
-    .stat:hover .go{opacity:1}
-    .cols{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.1rem}
-    .cols-3{display:grid;grid-template-columns:2fr 1fr;gap:1.1rem;margin-bottom:1.1rem}
-    .quick{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+    /* ---------- Login ---------- */
+    #login-view { min-height: 100vh; display: grid; place-items: center; padding: 1rem; background: linear-gradient(135deg, var(--brand-soft), var(--bg)); }
+    .login-card { width: 100%; max-width: 400px; background: var(--surface); border-radius: 16px; padding: 2rem; box-shadow: var(--shadow-lg); }
+    .login-card .mark { width: 48px; height: 48px; border-radius: 12px; background: var(--brand); color: #fff; display: grid; place-items: center; margin-bottom: 1rem; }
+    .alert { padding: .65rem .85rem; border-radius: 9px; margin-bottom: .85rem; font-size: .88rem; }
+    .alert-error { background: var(--danger-soft); color: var(--danger); }
 
-    /* Tables */
-    .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:auto;box-shadow:var(--shadow)}
-    table{width:100%;border-collapse:collapse}
-    th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:.65rem .85rem;background:var(--surface-2);border-bottom:1px solid var(--border);white-space:nowrap;user-select:none}
-    th.sortable{cursor:pointer} th.sortable:hover{color:var(--text)}
-    td{padding:.65rem .85rem;border-bottom:1px solid var(--border);vertical-align:middle}
-    tr:last-child td{border-bottom:0}
-    tbody tr.click{cursor:pointer} tbody tr:hover{background:var(--surface-2)}
-    tr.dim td{opacity:.55}
-    .empty{text-align:center;color:var(--muted);padding:2rem!important}
-    .pager{display:flex;justify-content:space-between;align-items:center;padding:.6rem .85rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--muted)}
-    .row-actions{display:flex;gap:.3rem;justify-content:flex-end;flex-wrap:wrap}
-    .thumb{width:34px;height:46px;object-fit:cover;border-radius:4px;background:var(--surface-2);display:block}
-    .toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem}
-    .toolbar input[type=search]{max-width:340px;flex:1;min-width:180px} .toolbar select{width:auto} .toolbar input[type=date]{width:auto}
-    .chips{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem}
-    .chip{border:1px solid var(--border);background:var(--surface);border-radius:99px;padding:.25rem .75rem;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer}
-    .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
-    .chip b{opacity:.8;margin-left:.25rem}
+    /* ---------- Shell ---------- */
+    .shell { display: grid; grid-template-columns: var(--sidebar) 1fr; min-height: 100vh; }
+    .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 1rem .75rem; position: sticky; top: 0; height: 100vh; overflow: auto; display: flex; flex-direction: column; gap: .15rem; }
+    .brand { display: flex; align-items: center; gap: .6rem; font-weight: 800; font-size: 1.05rem; padding: .4rem .6rem 1rem; }
+    .brand .mark { width: 34px; height: 34px; border-radius: 9px; background: var(--brand); color: #fff; display: grid; place-items: center; }
+    .nav-link { display: flex; align-items: center; gap: .65rem; padding: .55rem .7rem; border-radius: 9px; color: var(--muted); font-weight: 600; }
+    .nav-link:hover { background: var(--surface-2); color: var(--text); }
+    .nav-link.active { background: var(--brand-soft); color: var(--brand); }
+    .nav-badge { margin-left: auto; background: var(--danger); color: #fff; font-size: .68rem; padding: .05rem .45rem; border-radius: 99px; }
+    .side-foot { margin-top: auto; padding: .75rem .6rem 0; border-top: 1px solid var(--border); font-size: .8rem; }
+    .main { min-width: 0; }
+    .topbar { display: flex; align-items: center; gap: .75rem; padding: .8rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 20; }
+    .topbar .spacer { flex: 1; }
+    .search-trigger { display: flex; align-items: center; gap: .6rem; min-width: 260px; color: var(--muted); background: var(--surface-2); border: 1px solid var(--border); border-radius: 9px; padding: .45rem .7rem; cursor: pointer; font: inherit; }
+    kbd { font-family: inherit; font-size: .7rem; border: 1px solid var(--border); background: var(--surface); border-radius: 5px; padding: .05rem .35rem; margin-left: auto; }
+    .menu-btn { display: none; }
+    .content { padding: 1.5rem; max-width: 1400px; }
+    .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+    .page-head p { margin: .2rem 0 0; color: var(--muted); }
+    .actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
 
-    /* Badges */
-    .pill,.badge{display:inline-block;padding:.12rem .6rem;border-radius:99px;font-size:.74rem;font-weight:700;text-transform:capitalize;white-space:nowrap}
-    .t-ok,.t-paid,.t-completed,.t-received{background:var(--brand-soft);color:var(--brand)}
-    .t-low,.t-pending,.t-ordered,.t-unpaid{background:var(--warn-soft);color:var(--warn)}
-    .t-out,.t-cancelled,.t-failed{background:var(--danger-soft);color:var(--danger)}
-    .t-confirmed,.t-processing,.t-ready,.t-out_for_delivery{background:var(--info-soft);color:var(--info)}
-    .t-archived,.t-default{background:var(--surface-2);color:var(--muted)}
+    /* ---------- Cards & stats ---------- */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; box-shadow: var(--shadow); }
+    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .8rem; gap: .5rem; }
+    .grid-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .9rem; margin-bottom: 1.25rem; }
+    .stat { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; box-shadow: var(--shadow); position: relative; transition: .15s; cursor: pointer; }
+    .stat:hover { transform: translateY(-2px); border-color: var(--brand); box-shadow: var(--shadow-lg); }
+    .stat .ico { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); margin-bottom: .6rem; }
+    .stat.warn .ico { background: var(--warn-soft); color: var(--warn); }
+    .stat.bad .ico { background: var(--danger-soft); color: var(--danger); }
+    .stat.info .ico { background: var(--info-soft); color: var(--info); }
+    .stat .label { font-size: .78rem; color: var(--muted); font-weight: 600; }
+    .stat .value { font-size: 1.4rem; font-weight: 800; margin: .1rem 0; }
+    .stat .sub { font-size: .78rem; color: var(--muted); }
+    .stat .go { position: absolute; top: .9rem; right: .9rem; color: var(--muted); opacity: 0; transition: .15s; }
+    .stat:hover .go { opacity: 1; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-bottom: 1.1rem; }
+    .cols-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.1rem; margin-bottom: 1.1rem; }
+    .quick { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
 
-    /* Charts */
-    .bars .bar{margin:.55rem 0} .bar .top{display:flex;justify-content:space-between;font-size:.85rem;gap:.5rem}
-    .bar .track{height:8px;background:var(--surface-2);border-radius:99px;margin-top:.25rem;overflow:hidden}
-    .bar .fill{height:100%;background:var(--brand);border-radius:99px;transition:width .5s}
-    .donut-wrap{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
-    .legend div{display:flex;align-items:center;gap:.5rem;margin:.3rem 0;font-size:.85rem}
-    .legend i.dot{width:10px;height:10px;border-radius:3px;display:inline-block}
-    .pnl-line{display:flex;justify-content:space-between;padding:.5rem 0}
-    .pnl-line.total{border-top:2px solid var(--brand);margin-top:.4rem;padding-top:.8rem;font-size:1.15rem}
-    .pnl-line.sub{border-top:1px solid var(--border)}
-    .neg{color:var(--danger)} .pos{color:var(--brand)}
+    /* ---------- Tables ---------- */
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: auto; box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: .65rem .85rem; background: var(--surface-2); border-bottom: 1px solid var(--border); white-space: nowrap; user-select: none; }
+    th.sortable { cursor: pointer; }
+    th.sortable:hover { color: var(--text); }
+    td { padding: .65rem .85rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: 0; }
+    tbody tr.click { cursor: pointer; }
+    tbody tr:hover { background: var(--surface-2); }
+    tr.dim td { opacity: .55; }
+    .empty { text-align: center; color: var(--muted); padding: 2rem !important; }
+    .pager { display: flex; justify-content: space-between; align-items: center; padding: .6rem .85rem; border-top: 1px solid var(--border); font-size: .82rem; color: var(--muted); }
+    .row-actions { display: flex; gap: .3rem; justify-content: flex-end; flex-wrap: wrap; }
+    .thumb { width: 34px; height: 46px; object-fit: cover; border-radius: 4px; background: var(--surface-2); display: block; }
+    .toolbar { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-bottom: .9rem; }
+    .toolbar input[type=search] { max-width: 340px; flex: 1; min-width: 180px; }
+    .toolbar select, .toolbar input[type=date] { width: auto; }
+    .chips { display: flex; gap: .35rem; flex-wrap: wrap; margin-bottom: .9rem; }
+    .chip { border: 1px solid var(--border); background: var(--surface); border-radius: 99px; padding: .25rem .75rem; font-size: .8rem; font-weight: 600; color: var(--muted); cursor: pointer; }
+    .chip.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .chip b { opacity: .8; margin-left: .25rem; }
 
-    /* Modal, toast, palette */
-    .overlay{position:fixed;inset:0;background:rgba(10,14,20,.55);display:grid;place-items:start center;padding:6vh 1rem;z-index:100;overflow:auto;animation:fade .15s}
-    .modal{background:var(--surface);border-radius:16px;box-shadow:var(--shadow-lg);width:100%;max-width:600px;padding:1.4rem;animation:pop .18s}
-    .modal h2{margin-bottom:.9rem;font-size:1.2rem} .modal-actions{display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap;margin-top:1.1rem}
-    .modal details{margin:.5rem 0 1rem} .modal summary{cursor:pointer;font-weight:700;margin-bottom:.6rem}
-    .img-preview{max-width:90px;max-height:120px;border-radius:6px;margin-top:.5rem}
-    .kv{display:grid;grid-template-columns:130px 1fr;gap:.35rem .75rem;margin-bottom:1rem;font-size:.9rem} .kv dt{color:var(--muted)} .kv dd{margin:0}
-    .stepper{display:flex;gap:.25rem;margin:.5rem 0 1rem;flex-wrap:wrap}
-    .step{flex:1;min-width:80px;text-align:center;padding:.4rem .3rem;border-radius:8px;background:var(--surface-2);font-size:.72rem;font-weight:700;color:var(--muted);cursor:pointer;text-transform:capitalize;border:1px solid transparent}
-    .step.done{background:var(--brand-soft);color:var(--brand)} .step.cur{background:var(--brand);color:#fff}
-    .step.cancel.cur{background:var(--danger)}
-    #toasts{position:fixed;right:1rem;bottom:1rem;display:flex;flex-direction:column;gap:.5rem;z-index:200}
-    .toast{background:var(--text);color:var(--bg);padding:.7rem 1rem;border-radius:10px;box-shadow:var(--shadow-lg);display:flex;gap:.6rem;align-items:center;max-width:360px;animation:pop .2s}
-    .toast.error{background:var(--danger);color:#fff}
-    .palette{max-width:560px;padding:0;overflow:hidden}
-    .palette input{border:0;border-bottom:1px solid var(--border);border-radius:0;padding:1rem 1.2rem;font-size:1rem}
-    .palette input:focus{outline:none}
-    .palette ul{list-style:none;margin:0;padding:.4rem;max-height:340px;overflow:auto}
-    .palette li{display:flex;align-items:center;gap:.7rem;padding:.55rem .75rem;border-radius:8px;cursor:pointer}
-    .palette li.sel{background:var(--brand-soft);color:var(--brand)} .palette li .hint{margin-left:auto}
-    .loading{display:grid;place-items:center;padding:4rem;color:var(--muted)}
-    .spin{animation:spin 1s linear infinite}
-    @keyframes fade{from{opacity:0}} @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}} @keyframes spin{to{transform:rotate(360deg)}}
+    /* ---------- Badges ---------- */
+    .pill, .badge { display: inline-block; padding: .12rem .6rem; border-radius: 99px; font-size: .74rem; font-weight: 700; text-transform: capitalize; white-space: nowrap; }
+    .t-ok, .t-paid, .t-completed, .t-received { background: var(--brand-soft); color: var(--brand); }
+    .t-low, .t-pending, .t-ordered, .t-unpaid { background: var(--warn-soft); color: var(--warn); }
+    .t-out, .t-cancelled, .t-failed { background: var(--danger-soft); color: var(--danger); }
+    .t-confirmed, .t-processing, .t-ready, .t-out_for_delivery { background: var(--info-soft); color: var(--info); }
+    .t-archived, .t-default { background: var(--surface-2); color: var(--muted); }
 
-    @media (max-width:900px){
-      .shell{grid-template-columns:1fr}
-      .sidebar{position:fixed;left:0;top:0;z-index:60;width:250px;transform:translateX(-100%);transition:.2s;box-shadow:var(--shadow-lg)}
-      .sidebar.open{transform:none} .menu-btn{display:inline-flex}
-      .cols,.cols-3{grid-template-columns:1fr} .search-trigger{min-width:0;flex:1} .search-trigger span,.search-trigger kbd{display:none}
-      .content{padding:1rem} .form-row{grid-template-columns:1fr}
+    /* ---------- Charts ---------- */
+    .bars .bar { margin: .55rem 0; }
+    .bar .top { display: flex; justify-content: space-between; font-size: .85rem; gap: .5rem; }
+    .bar .track { height: 8px; background: var(--surface-2); border-radius: 99px; margin-top: .25rem; overflow: hidden; }
+    .bar .fill { height: 100%; background: var(--brand); border-radius: 99px; transition: width .5s; }
+    .donut-wrap { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+    .legend div { display: flex; align-items: center; gap: .5rem; margin: .3rem 0; font-size: .85rem; }
+    .legend i.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    .pnl-line { display: flex; justify-content: space-between; padding: .5rem 0; }
+    .pnl-line.sub { border-top: 1px solid var(--border); }
+    .pnl-line.total { border-top: 2px solid var(--brand); margin-top: .4rem; padding-top: .8rem; font-size: 1.15rem; }
+    .neg { color: var(--danger); }
+    .pos { color: var(--brand); }
+
+    /* ---------- Modal, toast, palette ---------- */
+    .overlay { position: fixed; inset: 0; background: rgba(10,14,20,.55); display: grid; place-items: start center; padding: 6vh 1rem; z-index: 100; overflow: auto; animation: fade .15s; }
+    .modal { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-lg); width: 100%; max-width: 600px; padding: 1.4rem; animation: pop .18s; }
+    .modal h2 { margin-bottom: .9rem; font-size: 1.2rem; }
+    .modal-actions { display: flex; gap: .5rem; justify-content: flex-end; flex-wrap: wrap; margin-top: 1.1rem; }
+    .modal details { margin: .5rem 0 1rem; }
+    .modal summary { cursor: pointer; font-weight: 700; margin-bottom: .6rem; }
+    .img-preview { max-width: 90px; max-height: 120px; border-radius: 6px; margin-top: .5rem; }
+    .kv { display: grid; grid-template-columns: 130px 1fr; gap: .35rem .75rem; margin-bottom: 1rem; font-size: .9rem; }
+    .kv dt { color: var(--muted); }
+    .kv dd { margin: 0; }
+    .stepper { display: flex; gap: .25rem; margin: .5rem 0 1rem; flex-wrap: wrap; }
+    .step { flex: 1; min-width: 80px; text-align: center; padding: .4rem .3rem; border-radius: 8px; background: var(--surface-2); font-size: .72rem; font-weight: 700; color: var(--muted); cursor: pointer; text-transform: capitalize; border: 1px solid transparent; }
+    .step.done { background: var(--brand-soft); color: var(--brand); }
+    .step.cur { background: var(--brand); color: #fff; }
+    .step.cancel.cur { background: var(--danger); }
+    #toasts { position: fixed; right: 1rem; bottom: 1rem; display: flex; flex-direction: column; gap: .5rem; z-index: 200; }
+    .toast { background: var(--text); color: var(--bg); padding: .7rem 1rem; border-radius: 10px; box-shadow: var(--shadow-lg); display: flex; gap: .6rem; align-items: center; max-width: 360px; animation: pop .2s; }
+    .toast.error { background: var(--danger); color: #fff; }
+    .palette { max-width: 560px; padding: 0; overflow: hidden; }
+    .palette input { border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 1rem 1.2rem; font-size: 1rem; }
+    .palette input:focus { outline: none; }
+    .palette ul { list-style: none; margin: 0; padding: .4rem; max-height: 340px; overflow: auto; }
+    .palette li { display: flex; align-items: center; gap: .7rem; padding: .55rem .75rem; border-radius: 8px; cursor: pointer; }
+    .palette li.sel { background: var(--brand-soft); color: var(--brand); }
+    .palette li .hint { margin-left: auto; }
+    .loading { display: grid; place-items: center; padding: 4rem; color: var(--muted); }
+    .spin { animation: spin 1s linear infinite; }
+    @keyframes fade { from { opacity: 0; } }
+    @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- Responsive & print ---------- */
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { position: fixed; left: 0; top: 0; z-index: 60; width: 250px; transform: translateX(-100%); transition: .2s; box-shadow: var(--shadow-lg); }
+      .sidebar.open { transform: none; }
+      .menu-btn { display: inline-flex; }
+      .cols, .cols-3 { grid-template-columns: 1fr; }
+      .search-trigger { min-width: 0; flex: 1; }
+      .search-trigger span, .search-trigger kbd { display: none; }
+      .content { padding: 1rem; }
+      .form-row { grid-template-columns: 1fr; }
     }
-    @media print{.sidebar,.topbar,.actions,.toolbar,.quick,#toasts{display:none!important} .shell{display:block} .card,.table-wrap{box-shadow:none}}
+    @media print {
+      .sidebar, .topbar, .actions, .toolbar, .quick, #toasts { display: none !important; }
+      .shell { display: block; }
+      .card, .table-wrap { box-shadow: none; }
+    }
   </style>
 </head>
 <body>
@@ -212,64 +260,82 @@
 (() => {
   'use strict';
 
-  /* ======================= Utilities ======================= */
+  /* =====================================================================
+     Utilities
+     ===================================================================== */
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
   const esc = (v) => escapeHtml(String(v ?? ''));
   const kes = (v) => formatKes(Number(v) || 0);
   const num = (v) => Number(v) || 0;
   const label = (s) => String(s || '').replace(/_/g, ' ');
-  const debounce = (fn, ms = 200) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
   const ymd = (d) => d.toLocaleDateString('en-CA');
   const icons = (el) => { try { lucide.createIcons(el ? { nodes: [el] } : undefined); } catch {} };
   const badge = (status, text) => `<span class="badge t-${esc(status || 'default')}">${esc(label(text ?? status))}</span>`;
+  const debounce = (fn, ms = 200) => {
+    let t;
+    return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+  };
 
   const STAFF_ROLES = ['staff', 'cashier', 'inventory', 'manager', 'owner'];
   const ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'ready', 'out_for_delivery', 'completed', 'cancelled'];
   const isStaffUser = (u) => !!u && STAFF_ROLES.includes(u.role);
 
   const NAV = [
-    { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
-    { id: 'orders', label: 'Orders', icon: 'shopping-cart' },
-    { id: 'products', label: 'Products', icon: 'book-open' },
-    { id: 'inventory', label: 'Inventory', icon: 'warehouse' },
-    { id: 'suppliers', label: 'Suppliers & POs', icon: 'truck' },
-    { id: 'expenses', label: 'Expenses', icon: 'receipt' },
-    { id: 'sales', label: 'Sales report', icon: 'bar-chart-3' },
-    { id: 'pnl', label: 'Profit & loss', icon: 'line-chart' },
-    { id: 'staff', label: 'Staff', icon: 'users' }
+    { id: 'dashboard',  label: 'Dashboard',       icon: 'layout-dashboard' },
+    { id: 'orders',     label: 'Orders',          icon: 'shopping-cart' },
+    { id: 'products',   label: 'Products',        icon: 'book-open' },
+    { id: 'promotions', label: 'Promotions',      icon: 'ticket-percent' },
+    { id: 'inventory',  label: 'Inventory',       icon: 'warehouse' },
+    { id: 'suppliers',  label: 'Suppliers & POs', icon: 'truck' },
+    { id: 'expenses',   label: 'Expenses',        icon: 'receipt' },
+    { id: 'sales',      label: 'Sales report',    icon: 'bar-chart-3' },
+    { id: 'pnl',        label: 'Profit & loss',   icon: 'line-chart' },
+    { id: 'staff',      label: 'Staff',           icon: 'users' }
   ];
+
   const ACCESS = {
-    owner: null, manager: null,
+    owner: null,
+    manager: null,
     cashier: ['dashboard', 'orders', 'products'],
     inventory: ['dashboard', 'products', 'inventory', 'suppliers'],
     staff: ['dashboard', 'orders', 'products', 'inventory']
   };
-  const can = (view) => { const u = API.getUser(); const a = u ? ACCESS[u.role] : []; return a === null || (a || []).includes(view); };
+  const can = (view) => {
+    const u = API.getUser();
+    const a = u ? ACCESS[u.role] : [];
+    return a === null || (a || []).includes(view);
+  };
 
+  /* ---------- Toasts & error guard ---------- */
   function toast(message, type = 'success') {
     const el = document.createElement('div');
     el.className = `toast ${type === 'error' ? 'error' : ''}`;
     el.innerHTML = `<i data-lucide="${type === 'error' ? 'alert-circle' : 'check-circle-2'}"></i><span>${esc(message)}</span>`;
-    $('#toasts').appendChild(el); icons(el);
+    $('#toasts').appendChild(el);
+    icons(el);
     setTimeout(() => el.remove(), 4500);
   }
 
   async function guarded(fn) {
-    try { return await fn(); }
-    catch (err) {
+    try {
+      return await fn();
+    } catch (err) {
       toast(err.message || 'Something went wrong', 'error');
       if (err.status === 401) { API.clearAuth(); showLogin(); }
     }
   }
 
-  /* Modals */
+  /* ---------- Modals ---------- */
   function openModal(html, cls = '') {
     const root = $('#modal-root');
     root.innerHTML = `<div class="overlay"><div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div></div>`;
-    $('.overlay', root).addEventListener('mousedown', (e) => { if (e.target.classList.contains('overlay')) closeModal(); });
+    $('.overlay', root).addEventListener('mousedown', (e) => {
+      if (e.target.classList.contains('overlay')) closeModal();
+    });
     icons(root);
-    const first = $('input:not([type=hidden]):not([type=file]),select', root); if (first && !cls.includes('palette')) first.focus();
+    const first = $('input:not([type=hidden]):not([type=file]),select', root);
+    if (first && !cls.includes('palette')) first.focus();
     return root;
   }
   const closeModal = () => { $('#modal-root').innerHTML = ''; };
@@ -278,71 +344,106 @@
   function confirmDialog(title, message, okText = 'Confirm', danger = false) {
     return new Promise((resolve) => {
       openModal(`<h2>${esc(title)}</h2><p class="muted">${esc(message)}</p>
-        <div class="modal-actions"><button class="btn" id="cf-no">Cancel</button>
-        <button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" id="cf-yes">${esc(okText)}</button></div>`);
+        <div class="modal-actions">
+          <button class="btn" id="cf-no">Cancel</button>
+          <button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" id="cf-yes">${esc(okText)}</button>
+        </div>`);
       $('#cf-no').onclick = () => { closeModal(); resolve(false); };
       $('#cf-yes').onclick = () => { closeModal(); resolve(true); };
     });
   }
 
-  /* CSV export */
+  /* ---------- CSV export ---------- */
   function exportCSV(name, columns, rows) {
     const cols = columns.filter((c) => c.csv !== false && c.label);
     const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
     const csv = [cols.map((c) => cell(c.label)).join(',')]
-      .concat(rows.map((r) => cols.map((c) => cell(c.value ? c.value(r) : r[c.key])).join(','))).join('\n');
+      .concat(rows.map((r) => cols.map((c) => cell(c.value ? c.value(r) : r[c.key])).join(',')))
+      .join('\n');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' }));
-    a.download = `${name}-${ymd(new Date())}.csv`; a.click(); URL.revokeObjectURL(a.href);
+    a.download = `${name}-${ymd(new Date())}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
     toast(`Exported ${rows.length} rows`);
   }
 
-  /* Sortable, paginated table (event-delegated) */
+  /* ---------- Sortable, paginated table (event-delegated) ---------- */
   function mountTable(el, o) {
     let rows = o.rows || [], sort = o.sort || null, dir = o.dir || 'asc', page = 1;
     const size = o.pageSize || 15;
     const val = (c, r) => (c.value ? c.value(r) : r[c.key]);
+
     const sorted = () => {
       if (!sort) return rows;
-      const c = o.columns.find((x) => x.key === sort); if (!c) return rows;
+      const c = o.columns.find((x) => x.key === sort);
+      if (!c) return rows;
       const s = [...rows].sort((a, b) => {
         const x = val(c, a) ?? '', y = val(c, b) ?? '';
-        return typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y), undefined, { numeric: true, sensitivity: 'base' });
+        return typeof x === 'number' && typeof y === 'number'
+          ? x - y
+          : String(x).localeCompare(String(y), undefined, { numeric: true, sensitivity: 'base' });
       });
       return dir === 'desc' ? s.reverse() : s;
     };
+
     function draw() {
-      const all = sorted(), pages = Math.max(1, Math.ceil(all.length / size));
+      const all = sorted();
+      const pages = Math.max(1, Math.ceil(all.length / size));
       page = Math.min(page, pages);
       const slice = all.slice((page - 1) * size, page * size);
-      el.innerHTML = `<table><thead><tr>${o.columns.map((c) => {
+
+      const head = o.columns.map((c) => {
         const s = c.sortable !== false && c.label;
-        return `<th class="${s ? 'sortable' : ''} ${c.cls || ''}" ${s ? `data-sort="${c.key}"` : ''}>${esc(c.label)}${sort === c.key ? (dir === 'asc' ? ' ▲' : ' ▼') : ''}</th>`;
-      }).join('')}</tr></thead><tbody>${slice.length ? slice.map((r) =>
-        `<tr data-id="${esc(r.id)}" class="${o.onRow ? 'click' : ''} ${o.rowClass ? o.rowClass(r) : ''}">${o.columns.map((c) =>
-          `<td class="${c.cls || ''}">${c.render ? c.render(r) : esc(r[c.key])}</td>`).join('')}</tr>`).join('')
-        : `<tr><td class="empty" colspan="${o.columns.length}">${o.empty || 'Nothing to show'}</td></tr>`}</tbody></table>
-        <div class="pager"><span>${all.length} ${all.length === 1 ? 'row' : 'rows'}</span>${pages > 1 ? `<span class="actions">
-          <button class="btn btn-sm" data-pg="-1" ${page <= 1 ? 'disabled' : ''}>Prev</button> Page ${page} / ${pages}
-          <button class="btn btn-sm" data-pg="1" ${page >= pages ? 'disabled' : ''}>Next</button></span>` : ''}</div>`;
+        const arrow = sort === c.key ? (dir === 'asc' ? ' ▲' : ' ▼') : '';
+        return `<th class="${s ? 'sortable' : ''} ${c.cls || ''}" ${s ? `data-sort="${c.key}"` : ''}>${esc(c.label)}${arrow}</th>`;
+      }).join('');
+
+      const body = slice.length
+        ? slice.map((r) => `<tr data-id="${esc(r.id)}" class="${o.onRow ? 'click' : ''} ${o.rowClass ? o.rowClass(r) : ''}">${
+            o.columns.map((c) => `<td class="${c.cls || ''}">${c.render ? c.render(r) : esc(r[c.key])}</td>`).join('')
+          }</tr>`).join('')
+        : `<tr><td class="empty" colspan="${o.columns.length}">${o.empty || 'Nothing to show'}</td></tr>`;
+
+      const pager = pages > 1
+        ? `<span class="actions">
+             <button class="btn btn-sm" data-pg="-1" ${page <= 1 ? 'disabled' : ''}>Prev</button>
+             Page ${page} / ${pages}
+             <button class="btn btn-sm" data-pg="1" ${page >= pages ? 'disabled' : ''}>Next</button>
+           </span>`
+        : '';
+
+      el.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>
+        <div class="pager"><span>${all.length} ${all.length === 1 ? 'row' : 'rows'}</span>${pager}</div>`;
       icons(el);
     }
+
     el.onclick = (e) => {
       const th = e.target.closest('[data-sort]');
-      if (th) { dir = sort === th.dataset.sort && dir === 'asc' ? 'desc' : 'asc'; sort = th.dataset.sort; return draw(); }
-      const pg = e.target.closest('[data-pg]'); if (pg) { page += Number(pg.dataset.pg); return draw(); }
-      const btn = e.target.closest('[data-act]'), tr = e.target.closest('tbody tr[data-id]');
+      if (th) {
+        dir = sort === th.dataset.sort && dir === 'asc' ? 'desc' : 'asc';
+        sort = th.dataset.sort;
+        return draw();
+      }
+      const pg = e.target.closest('[data-pg]');
+      if (pg) { page += Number(pg.dataset.pg); return draw(); }
+
+      const btn = e.target.closest('[data-act]');
+      const tr = e.target.closest('tbody tr[data-id]');
       if (!tr) return;
-      const row = rows.find((r) => String(r.id) === tr.dataset.id); if (!row) return;
+      const row = rows.find((r) => String(r.id) === tr.dataset.id);
+      if (!row) return;
       if (btn && o.onAction) { e.stopPropagation(); return o.onAction(btn.dataset.act, row); }
       if (o.onRow && !e.target.closest('a,button,input')) o.onRow(row);
     };
+
     draw();
     return { setRows(r) { rows = r; page = 1; draw(); }, rows: sorted };
   }
 
-  /* Charts */
+  /* ---------- Charts ---------- */
   const COLORS = ['#1f7a4d', '#2b6cb0', '#b7791f', '#8e44ad', '#c0392b', '#16a085', '#7f8c8d'];
+
   function donut(items) {
     const total = items.reduce((s, i) => s + i.value, 0);
     if (!total) return '<p class="muted">No data for this period</p>';
@@ -350,47 +451,71 @@
     const segs = items.map((it, i) => {
       const pct = (it.value / total) * 100;
       const s = `<circle r="15.915" cx="21" cy="21" fill="none" stroke="${COLORS[i % COLORS.length]}" stroke-width="6" stroke-dasharray="${pct} ${100 - pct}" stroke-dashoffset="${25 - acc}"/>`;
-      acc += pct; return s;
+      acc += pct;
+      return s;
     }).join('');
-    return `<div class="donut-wrap"><svg width="150" height="150" viewBox="0 0 42 42">${segs}
-      <text x="21" y="22.5" text-anchor="middle" font-size="4.2" font-weight="800" fill="currentColor">${esc(kes(total))}</text></svg>
-      <div class="legend">${items.map((it, i) => `<div><i class="dot" style="background:${COLORS[i % COLORS.length]}"></i>
-        <span>${esc(label(it.label))}</span><b>${esc(it.display)}</b><span class="hint">${Math.round(it.value / total * 100)}%</span></div>`).join('')}</div></div>`;
-  }
-  function hbars(items) {
-    const max = Math.max(...items.map((i) => i.value), 1);
-    return items.length ? `<div class="bars">${items.map((i) => `<div class="bar"><div class="top"><span>${esc(i.label)}</span><b>${esc(i.display)}</b></div>
-      <div class="track"><div class="fill" style="width:${(i.value / max * 100).toFixed(1)}%"></div></div>${i.sub ? `<div class="hint">${esc(i.sub)}</div>` : ''}</div>`).join('')}</div>`
-      : '<p class="muted">No data for this period</p>';
+    const legend = items.map((it, i) => `<div>
+        <i class="dot" style="background:${COLORS[i % COLORS.length]}"></i>
+        <span>${esc(label(it.label))}</span><b>${esc(it.display)}</b>
+        <span class="hint">${Math.round(it.value / total * 100)}%</span></div>`).join('');
+    return `<div class="donut-wrap">
+      <svg width="150" height="150" viewBox="0 0 42 42">${segs}
+        <text x="21" y="22.5" text-anchor="middle" font-size="4.2" font-weight="800" fill="currentColor">${esc(kes(total))}</text>
+      </svg><div class="legend">${legend}</div></div>`;
   }
 
-  /* Date range toolbar with presets */
+  function hbars(items) {
+    if (!items.length) return '<p class="muted">No data for this period</p>';
+    const max = Math.max(...items.map((i) => i.value), 1);
+    return `<div class="bars">${items.map((i) => `
+      <div class="bar">
+        <div class="top"><span>${esc(i.label)}</span><b>${esc(i.display)}</b></div>
+        <div class="track"><div class="fill" style="width:${(i.value / max * 100).toFixed(1)}%"></div></div>
+        ${i.sub ? `<div class="hint">${esc(i.sub)}</div>` : ''}
+      </div>`).join('')}</div>`;
+  }
+
+  /* ---------- Date range toolbar with presets ---------- */
   function rangeToolbar(root, run, pre = 'month') {
     const now = new Date();
     const presets = {
-      today: () => [now, now],
-      '7d': () => [new Date(now - 6 * 864e5), now],
-      '30d': () => [new Date(now - 29 * 864e5), now],
-      month: () => [new Date(now.getFullYear(), now.getMonth(), 1), now],
+      today:     () => [now, now],
+      '7d':      () => [new Date(now - 6 * 864e5), now],
+      '30d':     () => [new Date(now - 29 * 864e5), now],
+      month:     () => [new Date(now.getFullYear(), now.getMonth(), 1), now],
       lastmonth: () => [new Date(now.getFullYear(), now.getMonth() - 1, 1), new Date(now.getFullYear(), now.getMonth(), 0)],
-      year: () => [new Date(now.getFullYear(), 0, 1), now]
+      year:      () => [new Date(now.getFullYear(), 0, 1), now]
     };
     const names = { today: 'Today', '7d': '7 days', '30d': '30 days', month: 'This month', lastmonth: 'Last month', year: 'This year' };
     const [f, t] = presets[pre]();
-    root.innerHTML = `<div class="chips">${Object.keys(presets).map((k) => `<button class="chip ${k === pre ? 'on' : ''}" data-preset="${k}">${names[k]}</button>`).join('')}</div>
-      <div class="toolbar"><div><label>From</label><input type="date" id="r-from" value="${ymd(f)}"></div>
-      <div><label>To</label><input type="date" id="r-to" value="${ymd(t)}"></div>
-      <button class="btn btn-primary btn-sm" id="r-run" style="align-self:end"><i data-lucide="play"></i> Run</button></div>`;
+
+    root.innerHTML = `
+      <div class="chips">${Object.keys(presets).map((k) => `<button class="chip ${k === pre ? 'on' : ''}" data-preset="${k}">${names[k]}</button>`).join('')}</div>
+      <div class="toolbar">
+        <div><label>From</label><input type="date" id="r-from" value="${ymd(f)}"></div>
+        <div><label>To</label><input type="date" id="r-to" value="${ymd(t)}"></div>
+        <button class="btn btn-primary btn-sm" id="r-run" style="align-self:end"><i data-lucide="play"></i> Run</button>
+      </div>`;
     icons(root);
-    const go = () => run($('#r-from').value, $('#r-to').value);
-    $$('[data-preset]', root).forEach((b) => b.onclick = () => {
-      $$('[data-preset]', root).forEach((x) => x.classList.toggle('on', x === b));
-      const [a, z] = presets[b.dataset.preset](); $('#r-from').value = ymd(a); $('#r-to').value = ymd(z); go();
+
+    const runNow = () => run($('#r-from').value, $('#r-to').value);
+    $$('[data-preset]', root).forEach((b) => {
+      b.onclick = () => {
+        $$('[data-preset]', root).forEach((x) => x.classList.toggle('on', x === b));
+        const [a, z] = presets[b.dataset.preset]();
+        $('#r-from').value = ymd(a);
+        $('#r-to').value = ymd(z);
+        runNow();
+      };
     });
-    $('#r-run').onclick = go; go();
+    $('#r-run').onclick = runNow;
+    runNow();
   }
 
-  const pageHead = (title, sub, actions = '') => `<div class="page-head"><div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div class="actions">${actions}</div></div>`;
+  /* ---------- Shared view helpers ---------- */
+  const pageHead = (title, sub, actions = '') =>
+    `<div class="page-head"><div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div class="actions">${actions}</div></div>`;
+
   const stateOf = (p) => {
     const q = num(p.stock_qty);
     if (p.is_active === 0 || p.is_active === false) return 'archived';
@@ -399,27 +524,36 @@
   };
   const STATE_LABEL = { ok: 'In stock', low: 'Low stock', out: 'Out of stock', archived: 'Archived' };
   const statePill = (p) => { const s = stateOf(p); return `<span class="pill t-${s}">${STATE_LABEL[s]}</span>`; };
-  const matches = (p, q) => !q || [p.name, p.sku, p.barcode, p.category_name].some((v) => String(v || '').toLowerCase().includes(q.trim().toLowerCase()));
+  const matches = (p, q) => !q || [p.name, p.sku, p.barcode, p.category_name]
+    .some((v) => String(v || '').toLowerCase().includes(q.trim().toLowerCase()));
 
-  /* ======================= Router ======================= */
+  /* =====================================================================
+     Router
+     ===================================================================== */
   function parseHash() {
     const raw = location.hash.replace(/^#\/?/, '') || 'dashboard';
     const [view, qs] = raw.split('?');
     return { view, params: Object.fromEntries(new URLSearchParams(qs || '')) };
   }
-  const link = (view, params = {}) => { const qs = new URLSearchParams(params).toString(); return `#/${view}${qs ? '?' + qs : ''}`; };
+  const link = (view, params = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return `#/${view}${qs ? '?' + qs : ''}`;
+  };
   const go = (view, params) => { location.hash = link(view, params); };
 
   const VIEWS = {
-    dashboard: renderDashboard, orders: renderOrders, products: renderProducts, inventory: renderInventory,
-    suppliers: renderSuppliers, expenses: renderExpenses, sales: renderSales, pnl: renderPnL, staff: renderStaff
+    dashboard: renderDashboard, orders: renderOrders, products: renderProducts,
+    promotions: renderPromotions, inventory: renderInventory, suppliers: renderSuppliers,
+    expenses: renderExpenses, sales: renderSales, pnl: renderPnL, staff: renderStaff
   };
   let currentView = '', navToken = 0, badges = {};
 
   function renderNav() {
     $('#nav').innerHTML = NAV.filter((n) => can(n.id)).map((n) =>
-      `<a class="nav-link ${n.id === currentView ? 'active' : ''}" href="${link(n.id)}"><i data-lucide="${n.icon}"></i> ${n.label}
-      ${badges[n.id] ? `<span class="nav-badge">${badges[n.id]}</span>` : ''}</a>`).join('');
+      `<a class="nav-link ${n.id === currentView ? 'active' : ''}" href="${link(n.id)}">
+         <i data-lucide="${n.icon}"></i> ${n.label}
+         ${badges[n.id] ? `<span class="nav-badge">${badges[n.id]}</span>` : ''}
+       </a>`).join('');
     icons($('#nav'));
   }
 
@@ -427,10 +561,14 @@
     if (!isStaffUser(API.getUser())) return showLogin();
     let { view, params } = parseHash();
     if (!VIEWS[view] || !can(view)) { view = 'dashboard'; params = {}; }
-    currentView = view; renderNav();
+    currentView = view;
+    renderNav();
     $('#sidebar').classList.remove('open');
+
     const root = $('#view-root'), token = ++navToken;
-    root.innerHTML = '<div class="loading"><i data-lucide="loader-2" class="spin"></i></div>'; icons(root);
+    root.innerHTML = '<div class="loading"><i data-lucide="loader-2" class="spin"></i></div>';
+    icons(root);
+
     try {
       const html = document.createElement('div');
       await VIEWS[view](html, params);
@@ -447,52 +585,81 @@
   }
   window.addEventListener('hashchange', route);
 
-  /* ======================= Auth ======================= */
-  function showLogin() { $('#login-view').classList.remove('hidden'); $('#admin-app').classList.add('hidden'); }
+  /* =====================================================================
+     Auth
+     ===================================================================== */
+  function showLogin() {
+    $('#login-view').classList.remove('hidden');
+    $('#admin-app').classList.add('hidden');
+  }
   function showApp() {
-    $('#login-view').classList.add('hidden'); $('#admin-app').classList.remove('hidden');
+    $('#login-view').classList.add('hidden');
+    $('#admin-app').classList.remove('hidden');
     const u = API.getUser();
-    $('#admin-user').textContent = u ? u.full_name : ''; $('#admin-role').textContent = u ? u.role : '';
+    $('#admin-user').textContent = u ? u.full_name : '';
+    $('#admin-role').textContent = u ? u.role : '';
     route();
   }
+
   $('#logout-btn').onclick = () => { API.clearAuth(); location.hash = ''; location.reload(); };
   $('#login-form').onsubmit = async (e) => {
     e.preventDefault();
-    const msg = $('#login-msg'); msg.innerHTML = '';
+    const msg = $('#login-msg');
+    msg.innerHTML = '';
     try {
       const data = await API.login($('#email').value, $('#password').value);
-      if (!isStaffUser(data.user)) { msg.innerHTML = '<div class="alert alert-error">Staff access only</div>'; return; }
-      API.setAuth(data.token, data.user); showApp();
-    } catch (err) { msg.innerHTML = `<div class="alert alert-error">${esc(err.message)}</div>`; }
+      if (!isStaffUser(data.user)) {
+        msg.innerHTML = '<div class="alert alert-error">Staff access only</div>';
+        return;
+      }
+      API.setAuth(data.token, data.user);
+      showApp();
+    } catch (err) {
+      msg.innerHTML = `<div class="alert alert-error">${esc(err.message)}</div>`;
+    }
   };
 
-  /* ======================= Dashboard ======================= */
+  /* =====================================================================
+     Dashboard
+     ===================================================================== */
   async function renderDashboard(root) {
     const d = await API.adminDashboard();
-    const now = new Date(), from = ymd(new Date(now.getFullYear(), now.getMonth(), 1)), to = ymd(now);
+    const now = new Date();
+    const from = ymd(new Date(now.getFullYear(), now.getMonth(), 1)), to = ymd(now);
     const rep = await API.adminSalesReport(from, to).catch(() => null);
-    badges = { orders: num(d.pending_orders), inventory: num(d.low_stock_count) }; renderNav();
 
-    const salesMonth = num(d.sales_month.total), gp = num(d.gross_profit_month);
+    badges = { orders: num(d.pending_orders), inventory: num(d.low_stock_count) };
+    renderNav();
+
+    const salesMonth = num(d.sales_month.total);
+    const gp = num(d.gross_profit_month);
     const margin = salesMonth ? Math.round(gp / salesMonth * 100) : 0;
     const avg = d.sales_month.count ? salesMonth / d.sales_month.count : 0;
     const net = num(d.net_profit_month);
 
     const stat = (href, ico, lbl, value, sub, tone = '') =>
-      `<a class="stat ${tone}" href="${href}"><span class="go"><i data-lucide="arrow-up-right"></i></span>
-       <div class="ico"><i data-lucide="${ico}"></i></div><div class="label">${lbl}</div><div class="value">${value}</div><div class="sub">${sub || '&nbsp;'}</div></a>`;
+      `<a class="stat ${tone}" href="${href}">
+         <span class="go"><i data-lucide="arrow-up-right"></i></span>
+         <div class="ico"><i data-lucide="${ico}"></i></div>
+         <div class="label">${lbl}</div><div class="value">${value}</div><div class="sub">${sub || '&nbsp;'}</div>
+       </a>`;
 
     const hour = now.getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    const firstName = (API.getUser()?.full_name || '').split(' ')[0];
+
     root.innerHTML = `
-      ${pageHead(`${hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'}, ${esc((API.getUser()?.full_name || '').split(' ')[0])}`,
+      ${pageHead(`${greeting}, ${esc(firstName)}`,
         now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
-        `<label class="check" style="margin:0"><input type="checkbox" id="auto-refresh"> Auto-refresh</label>`)}
+        '<label class="check" style="margin:0"><input type="checkbox" id="auto-refresh"> Auto-refresh</label>')}
+
       <div class="quick">
         <button class="btn btn-primary" data-q="product"><i data-lucide="plus"></i> Add product</button>
         <button class="btn" data-q="expense"><i data-lucide="receipt"></i> Record expense</button>
         <button class="btn" data-q="po"><i data-lucide="truck"></i> New purchase order</button>
         <button class="btn" data-q="stock"><i data-lucide="package"></i> Restock alerts</button>
       </div>
+
       <div class="grid-stats">
         ${stat(link('orders', { period: 'today' }), 'banknote', 'Sales today', kes(d.sales_today.total), `${d.sales_today.count} orders`)}
         ${stat(link('sales'), 'trending-up', 'Sales this month', kes(salesMonth), `${d.sales_month.count} orders · avg ${kes(avg)}`)}
@@ -504,73 +671,108 @@
         ${stat(link('inventory', { state: 'alerts' }), 'alert-triangle', 'Low stock', num(d.low_stock_count), 'Items to reorder', num(d.low_stock_count) ? 'bad' : '')}
         ${stat(link('suppliers', { tab: 'pos' }), 'truck', 'Open POs', kes(d.outstanding_purchases), 'Awaiting delivery', 'info')}
       </div>
+
       <div class="cols">
-        <div class="card"><div class="card-head"><h2>Payment methods · this month</h2><a class="btn btn-sm" href="${link('sales')}">Full report</a></div>
-          ${rep ? donut((rep.by_payment || []).map((r) => ({ label: r.payment_method, value: num(r.total), display: kes(r.total) }))) : '<p class="muted">Unavailable</p>'}</div>
-        <div class="card"><div class="card-head"><h2>Top sellers · this month</h2><a class="btn btn-sm" href="${link('sales')}">See all</a></div>
-          ${rep ? hbars((rep.top_products || []).slice(0, 5).map((r) => ({ label: r.product_name, value: num(r.revenue), display: kes(r.revenue), sub: `${r.qty_sold} sold` }))) : '<p class="muted">Unavailable</p>'}</div>
+        <div class="card">
+          <div class="card-head"><h2>Payment methods · this month</h2><a class="btn btn-sm" href="${link('sales')}">Full report</a></div>
+          ${rep ? donut((rep.by_payment || []).map((r) => ({ label: r.payment_method, value: num(r.total), display: kes(r.total) }))) : '<p class="muted">Unavailable</p>'}
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Top sellers · this month</h2><a class="btn btn-sm" href="${link('sales')}">See all</a></div>
+          ${rep ? hbars((rep.top_products || []).slice(0, 5).map((r) => ({ label: r.product_name, value: num(r.revenue), display: kes(r.revenue), sub: `${r.qty_sold} sold` }))) : '<p class="muted">Unavailable</p>'}
+        </div>
       </div>
+
       <div class="cols">
-        <div><div class="card-head"><h2>Recent orders</h2><a class="btn btn-sm" href="${link('orders')}">View all</a></div><div class="table-wrap" id="dash-orders"></div></div>
-        <div><div class="card-head"><h2>Low stock</h2><a class="btn btn-sm" href="${link('inventory', { state: 'alerts' })}">View all</a></div><div class="table-wrap" id="dash-low"></div></div>
+        <div>
+          <div class="card-head"><h2>Recent orders</h2><a class="btn btn-sm" href="${link('orders')}">View all</a></div>
+          <div class="table-wrap" id="dash-orders"></div>
+        </div>
+        <div>
+          <div class="card-head"><h2>Low stock</h2><a class="btn btn-sm" href="${link('inventory', { state: 'alerts' })}">View all</a></div>
+          <div class="table-wrap" id="dash-low"></div>
+        </div>
       </div>`;
 
     mountTable($('#dash-orders', root), {
-      pageSize: 6, rows: d.recent_orders || [], empty: 'No orders yet', onRow: (o) => openOrderModal(o.id),
+      pageSize: 6, rows: d.recent_orders || [], empty: 'No orders yet',
+      onRow: (o) => openOrderModal(o.id),
       columns: [
-        { key: 'order_number', label: 'Order' }, { key: 'customer_name', label: 'Customer' },
+        { key: 'order_number', label: 'Order' },
+        { key: 'customer_name', label: 'Customer' },
         { key: 'total_kes', label: 'Total', render: (o) => kes(o.total_kes) },
-        { key: 'order_status', label: 'Status', render: (o) => badge(o.order_status) }]
-    });
-    mountTable($('#dash-low', root), {
-      pageSize: 6, rows: (d.low_stock_products || []).map((p) => ({ ...p, id: p.id ?? p.name })), empty: 'All products are well stocked',
-      onAction: (a, p) => openPOModal(p.id),
-      columns: [
-        { key: 'name', label: 'Product' }, { key: 'stock_qty', label: 'Qty', render: (p) => `<b class="${num(p.stock_qty) <= 0 ? 'neg' : ''}">${p.stock_qty}</b>` },
-        { key: 'low_stock_threshold', label: 'Min' },
-        { key: 'x', label: '', sortable: false, csv: false, cls: 'right', render: () => `<button class="btn btn-sm btn-soft" data-act="po"><i data-lucide="truck"></i> Reorder</button>` }]
+        { key: 'order_status', label: 'Status', render: (o) => badge(o.order_status) }
+      ]
     });
 
-    $$('[data-q]', root).forEach((b) => b.onclick = () => guarded(async () => {
-      const k = b.dataset.q;
-      if (k === 'product') openProductForm(null, (await API.categories()).categories);
-      if (k === 'expense') openExpenseModal();
-      if (k === 'po') openPOModal();
-      if (k === 'stock') go('inventory', { state: 'alerts' });
-    }));
+    mountTable($('#dash-low', root), {
+      pageSize: 6, empty: 'All products are well stocked',
+      rows: (d.low_stock_products || []).map((p) => ({ ...p, id: p.id ?? p.name })),
+      onAction: (a, p) => openPOModal(p.id),
+      columns: [
+        { key: 'name', label: 'Product' },
+        { key: 'stock_qty', label: 'Qty', render: (p) => `<b class="${num(p.stock_qty) <= 0 ? 'neg' : ''}">${p.stock_qty}</b>` },
+        { key: 'low_stock_threshold', label: 'Min' },
+        { key: 'x', label: '', sortable: false, csv: false, cls: 'right',
+          render: () => '<button class="btn btn-sm btn-soft" data-act="po"><i data-lucide="truck"></i> Reorder</button>' }
+      ]
+    });
+
+    $$('[data-q]', root).forEach((b) => {
+      b.onclick = () => guarded(async () => {
+        const k = b.dataset.q;
+        if (k === 'product') openProductForm(null, (await API.categories()).categories);
+        if (k === 'expense') openExpenseModal();
+        if (k === 'po') openPOModal();
+        if (k === 'stock') go('inventory', { state: 'alerts' });
+      });
+    });
+
     const ar = $('#auto-refresh', root);
     ar.checked = sessionStorage.getItem('autoRefresh') === '1';
     ar.onchange = () => { sessionStorage.setItem('autoRefresh', ar.checked ? '1' : '0'); setAuto(); };
   }
+
   let autoTimer;
   function setAuto() {
     clearInterval(autoTimer);
-    if (sessionStorage.getItem('autoRefresh') === '1')
-      autoTimer = setInterval(() => { if (currentView === 'dashboard' && !modalOpen() && !document.hidden) route(); }, 60000);
+    if (sessionStorage.getItem('autoRefresh') === '1') {
+      autoTimer = setInterval(() => {
+        if (currentView === 'dashboard' && !modalOpen() && !document.hidden) route();
+      }, 60000);
+    }
   }
   setAuto();
 
-  /* ======================= Orders ======================= */
+  /* =====================================================================
+     Orders
+     ===================================================================== */
   const FLOW = ['pending', 'confirmed', 'processing', 'ready', 'completed'];
   const nextStatus = (o) => {
     if (o.order_status === 'ready' && o.fulfilment_type === 'delivery') return 'out_for_delivery';
-    const i = FLOW.indexOf(o.order_status); return i >= 0 && i < FLOW.length - 1 ? FLOW[i + 1] : null;
+    const i = FLOW.indexOf(o.order_status);
+    return i >= 0 && i < FLOW.length - 1 ? FLOW[i + 1] : null;
   };
 
   async function renderOrders(root, params) {
     const { orders } = await API.adminOrders({ limit: 500 });
-    let status = params.status || '', query = params.q || '', period = params.period || '';
+    let status = params.status || '';
+    const query = params.q || '', period = params.period || '';
     const today = ymd(new Date());
-    const counts = (s) => s ? orders.filter((o) => o.order_status === s).length : orders.length;
+    const countOf = (s) => (s ? orders.filter((o) => o.order_status === s).length : orders.length);
+
     root.innerHTML = `
       ${pageHead('Orders', `${orders.length} most recent orders`, '<button class="btn" id="o-export"><i data-lucide="download"></i> Export CSV</button>')}
-      <div class="chips" id="o-chips">${['', ...ORDER_STATUSES].map((s) => `<button class="chip" data-s="${s}">${s ? label(s) : 'All'} <b>${counts(s)}</b></button>`).join('')}</div>
+      <div class="chips" id="o-chips">${['', ...ORDER_STATUSES].map((s) =>
+        `<button class="chip" data-s="${s}">${s ? label(s) : 'All'} <b>${countOf(s)}</b></button>`).join('')}</div>
       <div class="toolbar">
         <input id="o-q" type="search" placeholder="Search order #, name, phone…" value="${esc(query)}">
         <select id="o-pay"><option value="">Any payment</option><option value="paid">Paid</option><option value="unpaid">Unpaid / pending</option></select>
         <select id="o-period"><option value="">All time</option><option value="today">Today</option></select>
-      </div><div class="table-wrap" id="o-table"></div>`;
+      </div>
+      <div class="table-wrap" id="o-table"></div>`;
     $('#o-period', root).value = period;
+
     const cols = [
       { key: 'order_number', label: 'Order', render: (o) => `<b>${esc(o.order_number)}</b>` },
       { key: 'customer_name', label: 'Customer', render: (o) => `${esc(o.customer_name)}<div class="hint">${esc(o.customer_phone)}</div>` },
@@ -579,19 +781,30 @@
       { key: 'order_status', label: 'Status', render: (o) => badge(o.order_status) },
       { key: 'created_at', label: 'Date', cls: 'nowrap', render: (o) => `<span class="hint">${esc(o.created_at)}</span>` },
       { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: (o) => {
-        const n = nextStatus(o);
-        return `<div class="row-actions">${n ? `<button class="btn btn-sm btn-soft" data-act="next" title="Move to ${label(n)}"><i data-lucide="arrow-right"></i> ${label(n)}</button>` : ''}
-        <a class="btn btn-sm" href="/pages/receipt.html?id=${o.id}" target="_blank" title="Receipt"><i data-lucide="receipt"></i></a></div>`; } }
+          const n = nextStatus(o);
+          return `<div class="row-actions">
+            ${n ? `<button class="btn btn-sm btn-soft" data-act="next" title="Move to ${label(n)}"><i data-lucide="arrow-right"></i> ${label(n)}</button>` : ''}
+            <a class="btn btn-sm" href="/pages/receipt.html?id=${o.id}" target="_blank" title="Receipt"><i data-lucide="receipt"></i></a>
+          </div>`;
+      } }
     ];
+
     const t = mountTable($('#o-table', root), {
-      columns: cols, rows: [], sort: 'created_at', dir: 'desc', empty: 'No orders found', onRow: (o) => openOrderModal(o.id),
+      columns: cols, rows: [], sort: 'created_at', dir: 'desc', empty: 'No orders found',
+      onRow: (o) => openOrderModal(o.id),
       onAction: (a, o) => guarded(async () => {
-        const n = nextStatus(o); if (!n) return;
-        await API.adminUpdateOrder(o.id, { order_status: n }); toast(`${o.order_number} → ${label(n)}`); route();
+        const n = nextStatus(o);
+        if (!n) return;
+        await API.adminUpdateOrder(o.id, { order_status: n });
+        toast(`${o.order_number} → ${label(n)}`);
+        route();
       })
     });
+
     const apply = () => {
-      const q = $('#o-q', root).value.trim().toLowerCase(), pay = $('#o-pay', root).value, per = $('#o-period', root).value;
+      const q = $('#o-q', root).value.trim().toLowerCase();
+      const pay = $('#o-pay', root).value;
+      const per = $('#o-period', root).value;
       t.setRows(orders.filter((o) =>
         (!status || o.order_status === status) &&
         (!pay || (pay === 'paid' ? o.payment_status === 'paid' : o.payment_status !== 'paid')) &&
@@ -599,8 +812,11 @@
         (!q || [o.order_number, o.customer_name, o.customer_phone].some((v) => String(v || '').toLowerCase().includes(q)))));
       $$('#o-chips .chip', root).forEach((c) => c.classList.toggle('on', c.dataset.s === status));
     };
-    $$('#o-chips .chip', root).forEach((c) => c.onclick = () => { status = c.dataset.s; apply(); });
-    $('#o-q', root).oninput = debounce(apply, 150); $('#o-pay', root).onchange = apply; $('#o-period', root).onchange = apply;
+
+    $$('#o-chips .chip', root).forEach((c) => { c.onclick = () => { status = c.dataset.s; apply(); }; });
+    $('#o-q', root).oninput = debounce(apply, 150);
+    $('#o-pay', root).onchange = apply;
+    $('#o-period', root).onchange = apply;
     $('#o-export', root).onclick = () => exportCSV('orders', cols, t.rows());
     apply();
   }
@@ -609,42 +825,72 @@
     await guarded(async () => {
       const { order } = await API.adminOrder(id);
       const idx = FLOW.indexOf(order.order_status);
+
       openModal(`
         <h2>${esc(order.order_number)} ${badge(order.order_status)}</h2>
-        <div class="stepper" id="o-steps">${FLOW.map((s, i) => `<div class="step ${i < idx ? 'done' : ''} ${i === idx ? 'cur' : ''}" data-s="${s}">${label(s)}</div>`).join('')}
-          <div class="step cancel ${order.order_status === 'cancelled' ? 'cur' : ''}" data-s="cancelled">cancelled</div></div>
+        <div class="stepper" id="o-steps">
+          ${FLOW.map((s, i) => `<div class="step ${i < idx ? 'done' : ''} ${i === idx ? 'cur' : ''}" data-s="${s}">${label(s)}</div>`).join('')}
+          <div class="step cancel ${order.order_status === 'cancelled' ? 'cur' : ''}" data-s="cancelled">cancelled</div>
+        </div>
         <dl class="kv">
           <dt>Customer</dt><dd>${esc(order.customer_name)} · <a href="tel:${esc(order.customer_phone)}">${esc(order.customer_phone)}</a></dd>
           <dt>Fulfilment</dt><dd><b>${esc(order.fulfilment_type)}</b>${order.delivery_address ? ' — ' + esc(order.delivery_address) : ''}</dd>
           <dt>Payment</dt><dd>${esc(order.payment_method)} ${badge(order.payment_status)}</dd>
-          <dt>Placed</dt><dd>${esc(order.created_at)}</dd></dl>
-        <div class="table-wrap"><table><thead><tr><th>Item</th><th>Qty</th><th class="right">Total</th></tr></thead><tbody>
-          ${(order.items || []).map((i) => `<tr><td>${esc(i.product_name)}</td><td>${i.quantity}</td><td class="right">${kes(i.line_total_kes)}</td></tr>`).join('')}
-          <tr><td colspan="2"><b>Total</b></td><td class="right"><b>${kes(order.total_kes)}</b></td></tr></tbody></table></div>
-        <div class="form-group" style="margin-top:1rem"><label>Order status</label>
-          <select id="m-status">${ORDER_STATUSES.map((s) => `<option value="${s}" ${order.order_status === s ? 'selected' : ''}>${label(s)}</option>`).join('')}</select></div>
+          <dt>Placed</dt><dd>${esc(order.created_at)}</dd>
+        </dl>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Item</th><th>Qty</th><th class="right">Total</th></tr></thead>
+          <tbody>
+            ${(order.items || []).map((i) => `<tr><td>${esc(i.product_name)}</td><td>${i.quantity}</td><td class="right">${kes(i.line_total_kes)}</td></tr>`).join('')}
+            <tr><td colspan="2"><b>Total</b></td><td class="right"><b>${kes(order.total_kes)}</b></td></tr>
+          </tbody>
+        </table></div>
+        <div class="form-group" style="margin-top:1rem">
+          <label>Order status</label>
+          <select id="m-status">${ORDER_STATUSES.map((s) => `<option value="${s}" ${order.order_status === s ? 'selected' : ''}>${label(s)}</option>`).join('')}</select>
+        </div>
         <div class="modal-actions">
           ${order.payment_status !== 'paid' ? '<button class="btn btn-soft" id="m-paid"><i data-lucide="banknote"></i> Mark paid</button>' : ''}
           <button class="btn" id="m-print"><i data-lucide="printer"></i> Print</button>
           <a class="btn" href="/pages/receipt.html?id=${order.id}" target="_blank"><i data-lucide="receipt"></i> Receipt</a>
           <button class="btn btn-primary" id="m-save"><i data-lucide="save"></i> Save</button>
-          <button class="btn" id="m-close">Close</button></div>`);
+          <button class="btn" id="m-close">Close</button>
+        </div>`);
+
       const save = (status) => guarded(async () => {
-        await API.adminUpdateOrder(id, { order_status: status }); closeModal(); toast('Order status saved'); route();
+        await API.adminUpdateOrder(id, { order_status: status });
+        closeModal();
+        toast('Order status saved');
+        route();
       });
-      $$('#o-steps .step').forEach((s) => s.onclick = () => { $('#m-status').value = s.dataset.s; });
+
+      $$('#o-steps .step').forEach((s) => { s.onclick = () => { $('#m-status').value = s.dataset.s; }; });
       $('#m-close').onclick = closeModal;
       $('#m-save').onclick = () => save($('#m-status').value);
       $('#m-print').onclick = () => window.open(`/pages/receipt.html?id=${order.id}&print=1`, '_blank');
+
       const paid = $('#m-paid');
-      if (paid) paid.onclick = () => guarded(async () => { await API.adminMarkPaid(id); closeModal(); toast('Order marked as paid'); route(); });
+      if (paid) {
+        paid.onclick = () => guarded(async () => {
+          await API.adminMarkPaid(id);
+          closeModal();
+          toast('Order marked as paid');
+          route();
+        });
+      }
     });
   }
 
-  /* ======================= Products ======================= */
+  /* =====================================================================
+     Products
+     ===================================================================== */
   async function renderProducts(root, params) {
     const [{ categories }, data] = await Promise.all([API.categories(), API.adminProducts({ limit: 1000 })]);
-    const products = data.products.map((p) => ({ ...p, _margin: num(p.price_kes) ? Math.round((num(p.price_kes) - num(p.cost_kes)) / num(p.price_kes) * 100) : 0 }));
+    const products = data.products.map((p) => ({
+      ...p,
+      _margin: num(p.price_kes) ? Math.round((num(p.price_kes) - num(p.cost_kes)) / num(p.price_kes) * 100) : 0
+    }));
+
     root.innerHTML = `
       ${pageHead('Products', `${products.length} books and items`, `
         <button class="btn" id="p-export"><i data-lucide="download"></i> Export CSV</button>
@@ -653,11 +899,19 @@
       <div class="toolbar">
         <input id="p-q" type="search" placeholder="Search name, SKU, barcode, category…" value="${esc(params.q || '')}">
         <select id="p-cat"><option value="">All categories</option>${categories.map((c) => `<option>${esc(c.name)}</option>`).join('')}</select>
-        <select id="p-state"><option value="">All products</option><option value="ok">In stock</option><option value="low">Low stock</option><option value="out">Out of stock</option><option value="archived">Archived</option></select>
-      </div><div id="p-count" class="hint" style="margin-bottom:.5rem"></div><div class="table-wrap" id="p-table"></div>`;
-    $('#p-state', root).value = params.state || ''; $('#p-cat', root).value = params.cat || '';
+        <select id="p-state">
+          <option value="">All products</option><option value="ok">In stock</option><option value="low">Low stock</option>
+          <option value="out">Out of stock</option><option value="archived">Archived</option>
+        </select>
+      </div>
+      <div id="p-count" class="hint" style="margin-bottom:.5rem"></div>
+      <div class="table-wrap" id="p-table"></div>`;
+    $('#p-state', root).value = params.state || '';
+    $('#p-cat', root).value = params.cat || '';
+
     const cols = [
-      { key: 'image_url', label: '', sortable: false, csv: false, render: (p) => p.image_url ? `<img class="thumb" loading="lazy" src="${esc(p.image_url)}" alt="">` : '<span class="thumb"></span>' },
+      { key: 'image_url', label: '', sortable: false, csv: false,
+        render: (p) => p.image_url ? `<img class="thumb" loading="lazy" src="${esc(p.image_url)}" alt="">` : '<span class="thumb"></span>' },
       { key: 'sku', label: 'SKU', render: (p) => esc(p.sku || '—') },
       { key: 'name', label: 'Name', render: (p) => `<b>${esc(p.name)}</b>${p.barcode ? `<div class="hint">${esc(p.barcode)}</div>` : ''}` },
       { key: 'category_name', label: 'Category', render: (p) => esc(p.category_name || '—') },
@@ -666,23 +920,35 @@
       { key: '_margin', label: 'Margin', render: (p) => `<span class="${p._margin < 15 ? 'neg' : 'pos'}">${p._margin}%</span>` },
       { key: 'stock_qty', label: 'Qty', value: (p) => num(p.stock_qty) },
       { key: 'state', label: 'Status', value: (p) => stateOf(p), render: statePill },
-      { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => `<div class="row-actions">
-        <button class="btn btn-sm" data-act="edit"><i data-lucide="pencil"></i></button>
-        <button class="btn btn-sm" data-act="stock" title="Adjust stock"><i data-lucide="package"></i></button>
-        <button class="btn btn-sm btn-danger" data-act="del"><i data-lucide="trash-2"></i></button></div>` }
+      { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => `
+        <div class="row-actions">
+          <button class="btn btn-sm" data-act="edit"><i data-lucide="pencil"></i></button>
+          <button class="btn btn-sm" data-act="stock" title="Adjust stock"><i data-lucide="package"></i></button>
+          <button class="btn btn-sm btn-danger" data-act="del"><i data-lucide="trash-2"></i></button>
+        </div>` }
     ];
+
     const t = mountTable($('#p-table', root), {
       columns: cols, rows: [], pageSize: 20, sort: 'name', empty: 'No products match your search',
-      rowClass: (p) => stateOf(p) === 'archived' ? 'dim' : '',
+      rowClass: (p) => (stateOf(p) === 'archived' ? 'dim' : ''),
       onRow: (p) => openProductForm(p, categories),
-      onAction: (a, p) => ({ edit: () => openProductForm(p, categories), stock: () => openStockModal(p), del: () => deleteProduct(p) })[a]()
+      onAction: (a, p) => ({
+        edit: () => openProductForm(p, categories),
+        stock: () => openStockModal(p),
+        del: () => deleteProduct(p)
+      })[a]()
     });
+
     const apply = () => {
       const q = $('#p-q', root).value, cat = $('#p-cat', root).value, st = $('#p-state', root).value;
       const list = products.filter((p) => matches(p, q) && (!cat || p.category_name === cat) && (!st || stateOf(p) === st));
-      $('#p-count', root).textContent = `${list.length} of ${products.length} products`; t.setRows(list);
+      $('#p-count', root).textContent = `${list.length} of ${products.length} products`;
+      t.setRows(list);
     };
-    $('#p-q', root).oninput = debounce(apply, 150); $('#p-cat', root).onchange = apply; $('#p-state', root).onchange = apply;
+
+    $('#p-q', root).oninput = debounce(apply, 150);
+    $('#p-cat', root).onchange = apply;
+    $('#p-state', root).onchange = apply;
     $('#p-new', root).onclick = () => openProductForm(null, categories);
     $('#p-import', root).onclick = importProducts;
     $('#p-export', root).onclick = () => exportCSV('products', cols, t.rows());
@@ -690,167 +956,550 @@
   }
 
   function importProducts() {
-    openModal(`<h2>Import products</h2>
+    openModal(`
+      <h2>Import products</h2>
       <p class="muted">Paste a JSON array or choose a .json file.</p>
       <div class="form-group"><input type="file" id="imp-file" accept=".json,application/json"></div>
       <div class="form-group"><textarea id="imp-text" rows="9" placeholder='[{ "name":"Exercise book", "price_kes":100, "cost_kes":60, "sku":"EB-01", "stock_qty":10, "category_slug":"stationery" }]'></textarea></div>
-      <div class="modal-actions"><button class="btn" id="imp-cancel">Cancel</button><button class="btn btn-primary" id="imp-go"><i data-lucide="upload"></i> Import</button></div>`);
-    $('#imp-file').onchange = async (e) => { const f = e.target.files[0]; if (f) $('#imp-text').value = await f.text(); };
+      <div class="modal-actions">
+        <button class="btn" id="imp-cancel">Cancel</button>
+        <button class="btn btn-primary" id="imp-go"><i data-lucide="upload"></i> Import</button>
+      </div>`);
+
+    $('#imp-file').onchange = async (e) => {
+      const f = e.target.files[0];
+      if (f) $('#imp-text').value = await f.text();
+    };
     $('#imp-cancel').onclick = closeModal;
     $('#imp-go').onclick = () => {
-      let list; try { list = JSON.parse($('#imp-text').value); if (!Array.isArray(list)) throw 0; } catch { return toast('Not a valid JSON array', 'error'); }
-      guarded(async () => { const r = await API.adminImportProducts(list); closeModal(); toast(`Imported ${r.created}, skipped ${r.skipped}`); route(); });
+      let list;
+      try {
+        list = JSON.parse($('#imp-text').value);
+        if (!Array.isArray(list)) throw new Error('not array');
+      } catch {
+        return toast('Not a valid JSON array', 'error');
+      }
+      guarded(async () => {
+        const r = await API.adminImportProducts(list);
+        closeModal();
+        toast(`Imported ${r.created}, skipped ${r.skipped}`);
+        route();
+      });
     };
   }
 
   function openProductForm(product, categories) {
     const isEdit = !!product, p = product || {};
+
     openModal(`
       <h2>${isEdit ? 'Edit product' : 'Add product'}</h2>
       <form id="prod-form">
         <div class="form-group"><label>Book name *</label><input name="name" required value="${esc(p.name)}"></div>
-        <div class="form-group"><label>Category</label><select name="category_id"><option value="">No category</option>
-          ${categories.map((c) => `<option value="${c.id}" ${String(p.category_id) === String(c.id) ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Category</label>
+          <select name="category_id"><option value="">No category</option>
+            ${categories.map((c) => `<option value="${c.id}" ${String(p.category_id) === String(c.id) ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}
+          </select></div>
         <div class="form-row">
           <div class="form-group"><label>SKU</label><input name="sku" value="${esc(p.sku)}"></div>
-          <div class="form-group"><label>Barcode</label><input name="barcode" value="${esc(p.barcode)}"></div></div>
+          <div class="form-group"><label>Barcode</label><input name="barcode" value="${esc(p.barcode)}"></div>
+        </div>
         <div class="form-row">
           <div class="form-group"><label>Buying price (KES)</label><input name="cost_kes" id="pf-cost" type="number" step="0.01" min="0" value="${p.cost_kes ?? 0}"></div>
-          <div class="form-group"><label>Selling price (KES) *</label><input name="price_kes" id="pf-price" type="number" step="0.01" min="0" required value="${p.price_kes ?? ''}"></div></div>
+          <div class="form-group"><label>Selling price (KES) *</label><input name="price_kes" id="pf-price" type="number" step="0.01" min="0" required value="${p.price_kes ?? ''}"></div>
+        </div>
         <div class="hint" id="pf-margin" style="margin:-.4rem 0 .8rem"></div>
         <div class="form-row">
-          <div class="form-group"><label>${isEdit ? 'Quantity in stock' : 'Opening quantity'}</label><input name="stock_qty" type="number" min="0" step="1" value="${p.stock_qty ?? 0}">
+          <div class="form-group"><label>${isEdit ? 'Quantity in stock' : 'Opening quantity'}</label>
+            <input name="stock_qty" type="number" min="0" step="1" value="${p.stock_qty ?? 0}">
             ${isEdit ? '<div class="hint">Changing this records a stock count correction.</div>' : ''}</div>
-          <div class="form-group"><label>Minimum stock</label><input name="low_stock_threshold" type="number" min="0" step="1" value="${p.low_stock_threshold ?? 5}">
-            <div class="hint">Alert when quantity reaches this level.</div></div></div>
+          <div class="form-group"><label>Minimum stock</label>
+            <input name="low_stock_threshold" type="number" min="0" step="1" value="${p.low_stock_threshold ?? 5}">
+            <div class="hint">Alert when quantity reaches this level.</div></div>
+        </div>
         <div class="form-group"><label>Description</label><textarea name="description" rows="2">${esc(p.description)}</textarea></div>
-        <div class="form-group"><label>Image</label><input name="image" id="pf-image" type="file" accept="image/*">
+        <div class="form-group"><label>Image</label>
+          <input name="image" id="pf-image" type="file" accept="image/*">
           <img class="img-preview ${p.image_url ? '' : 'hidden'}" id="pf-preview" src="${esc(p.image_url)}" alt=""></div>
         <details><summary>Sale pricing (optional)</summary>
-          <div class="form-row"><div class="form-group"><label>Discount %</label><input name="discount_percent" type="number" min="0" max="100" value="${p.discount_percent ?? 0}"></div>
-            <div class="form-group"><label>Sale price (KES)</label><input name="discount_price_kes" type="number" step="0.01" min="0" value="${p.discount_price_kes ?? ''}"></div></div>
-          <div class="form-row"><div class="form-group"><label>Sale label</label><input name="sale_label" placeholder="e.g. Back to school" value="${esc(p.sale_label)}"></div>
-            <div class="form-group"><label>Sale ends</label><input name="sale_ends_at" type="date" value="${p.sale_ends_at ? String(p.sale_ends_at).slice(0, 10) : ''}"></div></div></details>
+          <div class="form-row">
+            <div class="form-group"><label>Discount %</label><input name="discount_percent" type="number" min="0" max="100" value="${p.discount_percent ?? 0}"></div>
+            <div class="form-group"><label>Sale price (KES)</label><input name="discount_price_kes" type="number" step="0.01" min="0" value="${p.discount_price_kes ?? ''}"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Sale label</label><input name="sale_label" placeholder="e.g. Back to school" value="${esc(p.sale_label)}"></div>
+            <div class="form-group"><label>Sale ends</label><input name="sale_ends_at" type="date" value="${p.sale_ends_at ? String(p.sale_ends_at).slice(0, 10) : ''}"></div>
+          </div>
+        </details>
         <label class="check"><input type="checkbox" name="is_active" ${!isEdit || p.is_active ? 'checked' : ''}> Active — show on the customer website</label>
-        <div class="modal-actions"><button type="button" class="btn" id="pf-close">Cancel</button>
-          <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> ${isEdit ? 'Save changes' : 'Add product'}</button></div>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="pf-close">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> ${isEdit ? 'Save changes' : 'Add product'}</button>
+        </div>
       </form>`);
+
     const margin = () => {
       const c = num($('#pf-cost').value), s = num($('#pf-price').value);
-      $('#pf-margin').innerHTML = s ? `Profit per unit <b class="${s < c ? 'neg' : 'pos'}">${kes(s - c)}</b> · margin ${Math.round((s - c) / s * 100)}%` : '';
+      $('#pf-margin').innerHTML = s
+        ? `Profit per unit <b class="${s < c ? 'neg' : 'pos'}">${kes(s - c)}</b> · margin ${Math.round((s - c) / s * 100)}%`
+        : '';
     };
-    $('#pf-cost').oninput = margin; $('#pf-price').oninput = margin; margin();
+    $('#pf-cost').oninput = margin;
+    $('#pf-price').oninput = margin;
+    margin();
+
     $('#pf-close').onclick = closeModal;
-    $('#pf-image').onchange = (e) => { const f = e.target.files[0]; if (!f) return; $('#pf-preview').src = URL.createObjectURL(f); $('#pf-preview').classList.remove('hidden'); };
+    $('#pf-image').onchange = (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      $('#pf-preview').src = URL.createObjectURL(f);
+      $('#pf-preview').classList.remove('hidden');
+    };
+
     $('#prod-form').onsubmit = (e) => {
       e.preventDefault();
       guarded(async () => {
         const form = e.target, fd = new FormData(form);
-        if (num(fd.get('price_kes')) < num(fd.get('cost_kes')) && !(await confirmDialog('Selling below cost', 'The selling price is lower than the buying price. Save anyway?', 'Save anyway'))) return;
+
+        if (num(fd.get('price_kes')) < num(fd.get('cost_kes')) &&
+            !(await confirmDialog('Selling below cost', 'The selling price is lower than the buying price. Save anyway?', 'Save anyway'))) return;
+
         fd.set('is_active', form.is_active.checked ? '1' : '0');
-        const img = fd.get('image'); if (img && img.size === 0) fd.delete('image');
+        const img = fd.get('image');
+        if (img && img.size === 0) fd.delete('image');
+
         if (isEdit) {
-          const newQty = num(fd.get('stock_qty')); fd.delete('stock_qty');
+          const newQty = num(fd.get('stock_qty'));
+          fd.delete('stock_qty');
           await API.adminUpdateProduct(product.id, fd);
           const delta = newQty - num(product.stock_qty);
           if (delta) await API.adminAdjustStock(product.id, { change_qty: delta, reason: 'count', notes: 'Edited in product form' });
           toast('Product updated');
-        } else { await API.adminCreateProduct(fd); toast(form.is_active.checked ? 'Product added and published' : 'Product added as inactive'); }
-        closeModal(); route();
+        } else {
+          await API.adminCreateProduct(fd);
+          toast(form.is_active.checked ? 'Product added and published' : 'Product added as inactive');
+        }
+        closeModal();
+        route();
       });
     };
   }
 
   async function deleteProduct(p) {
-    if (!(await confirmDialog('Delete product', `${p.name} — products that have been sold are archived instead of deleted so your sales history stays accurate.`, 'Delete', true))) return;
+    const ok = await confirmDialog(
+      'Delete product',
+      `${p.name} — products that have been sold are archived instead of deleted so your sales history stays accurate.`,
+      'Delete', true);
+    if (!ok) return;
     guarded(async () => {
       const r = await API.adminDeleteProduct(p.id);
-      toast(r && r.archived ? `${p.name} has sales history, so it was archived` : `${p.name} was deleted`); route();
+      toast(r && r.archived ? `${p.name} has sales history, so it was archived` : `${p.name} was deleted`);
+      route();
     });
   }
 
   function openStockModal(p) {
-    openModal(`<h2>Adjust stock</h2><p>${esc(p.name)} — currently <b>${p.stock_qty}</b> in stock</p>
+    openModal(`
+      <h2>Adjust stock</h2>
+      <p>${esc(p.name)} — currently <b>${p.stock_qty}</b> in stock</p>
       <div class="form-group"><label>Change quantity (+ add, − remove)</label><input id="st-qty" type="number" step="1" value="1"></div>
-      <div class="form-group"><label>Reason</label><select id="st-reason"><option value="received">Received / restock</option><option value="adjustment">Adjustment</option>
-        <option value="damaged">Damaged / write-off</option><option value="count">Stock count correction</option></select></div>
+      <div class="form-group"><label>Reason</label>
+        <select id="st-reason">
+          <option value="received">Received / restock</option>
+          <option value="adjustment">Adjustment</option>
+          <option value="damaged">Damaged / write-off</option>
+          <option value="count">Stock count correction</option>
+        </select></div>
       <div class="form-group"><label>Notes</label><input id="st-notes"></div>
       <div class="hint" id="st-after"></div>
-      <div class="modal-actions"><button class="btn" id="st-close">Cancel</button><button class="btn btn-primary" id="st-save">Apply</button></div>`);
+      <div class="modal-actions">
+        <button class="btn" id="st-close">Cancel</button>
+        <button class="btn btn-primary" id="st-save">Apply</button>
+      </div>`);
+
     const after = () => { $('#st-after').textContent = `New quantity: ${num(p.stock_qty) + num($('#st-qty').value)}`; };
-    $('#st-qty').oninput = after; after();
+    $('#st-qty').oninput = after;
+    after();
     $('#st-close').onclick = closeModal;
     $('#st-save').onclick = () => guarded(async () => {
       const c = num($('#st-qty').value);
       if (!c) return toast('Enter a quantity other than zero', 'error');
       if (num(p.stock_qty) + c < 0) return toast('Stock cannot go below zero', 'error');
       await API.adminAdjustStock(p.id, { change_qty: c, reason: $('#st-reason').value, notes: $('#st-notes').value });
-      closeModal(); toast('Stock updated'); route();
+      closeModal();
+      toast('Stock updated');
+      route();
     });
   }
 
-  /* ======================= Inventory ======================= */
+  /* =====================================================================
+     Promotions & Coupons
+     ===================================================================== */
+  async function renderPromotions(root) {
+    const data = await API.adminCoupons({ limit: 500 }).catch(() => ({ coupons: [] }));
+    const coupons = data.coupons || [];
+    const now = new Date();
+
+    const statusOf = (c) => {
+      if (!c.is_active) return 'inactive';
+      if (c.expires_at && new Date(c.expires_at) < now) return 'expired';
+      if (c.total_usage_limit != null && num(c.times_used) >= num(c.total_usage_limit)) return 'used_up';
+      return 'active';
+    };
+    const typeLabel = (c) => {
+      if (c.type === 'percentage') return `${c.value}% off`;
+      if (c.type === 'fixed') return `${kes(c.value)} off`;
+      if (c.type === 'free_delivery') return 'Free delivery';
+      return c.type || '—';
+    };
+
+    root.innerHTML = `
+      ${pageHead('Promotions & Coupons', 'Create and manage discount codes for the storefront',
+        '<button class="btn btn-primary" id="c-new"><i data-lucide="plus"></i> New coupon</button>')}
+      <div class="chips" id="c-chips">
+        <button class="chip on" data-s="">All <b>${coupons.length}</b></button>
+        <button class="chip" data-s="active">Active</button>
+        <button class="chip" data-s="inactive">Inactive</button>
+        <button class="chip" data-s="expired">Expired</button>
+        <button class="chip" data-s="used_up">Used up</button>
+      </div>
+      <div class="toolbar"><input id="c-q" type="search" placeholder="Search code or description…"></div>
+      <div class="table-wrap" id="c-table"></div>`;
+
+    const cols = [
+      { key: 'code', label: 'Code', render: (c) => `<b style="letter-spacing:.04em">${esc(c.code)}</b>` },
+      { key: 'type', label: 'Discount', render: typeLabel },
+      { key: 'min_order_amount', label: 'Min order', render: (c) => (c.min_order_amount ? kes(c.min_order_amount) : '—') },
+      { key: 'times_used', label: 'Used', render: (c) => {
+          const used = num(c.times_used);
+          return c.total_usage_limit != null ? `${used} / ${num(c.total_usage_limit)}` : String(used);
+      } },
+      { key: 'expires_at', label: 'Expires', cls: 'nowrap', render: (c) => (c.expires_at ? esc(String(c.expires_at).slice(0, 10)) : 'Never') },
+      { key: 'status', label: 'Status', value: statusOf, render: (c) => {
+          const s = statusOf(c);
+          const tone = { active: 'ok', inactive: 'archived', expired: 'cancelled', used_up: 'low' };
+          return badge(tone[s] || 'default', s.replace('_', ' '));
+      } },
+      { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: (c) => `
+        <div class="row-actions">
+          <button class="btn btn-sm" data-act="edit" title="Edit"><i data-lucide="pencil"></i></button>
+          <button class="btn btn-sm" data-act="toggle" title="${c.is_active ? 'Deactivate' : 'Activate'}"><i data-lucide="${c.is_active ? 'toggle-right' : 'toggle-left'}"></i></button>
+          <button class="btn btn-sm" data-act="usage" title="Usage"><i data-lucide="list"></i></button>
+          <button class="btn btn-sm btn-danger" data-act="del" title="Delete"><i data-lucide="trash-2"></i></button>
+        </div>` }
+    ];
+
+    let filter = '';
+    const t = mountTable($('#c-table', root), {
+      columns: cols, rows: [], pageSize: 20, sort: 'code', empty: 'No coupons yet',
+      onAction: (act, c) => ({
+        edit: () => openCouponForm(c),
+        toggle: () => toggleCoupon(c),
+        usage: () => openCouponUsage(c),
+        del: () => deleteCoupon(c)
+      })[act]()
+    });
+
+    const apply = () => {
+      const q = $('#c-q', root).value.trim().toLowerCase();
+      t.setRows(coupons.filter((c) =>
+        (!filter || statusOf(c) === filter) &&
+        (!q || c.code.toLowerCase().includes(q) || String(c.description || '').toLowerCase().includes(q))));
+      $$('#c-chips .chip', root).forEach((ch) => ch.classList.toggle('on', ch.dataset.s === filter));
+    };
+
+    $$('#c-chips .chip', root).forEach((ch) => { ch.onclick = () => { filter = ch.dataset.s; apply(); }; });
+    $('#c-q', root).oninput = debounce(apply, 150);
+    $('#c-new', root).onclick = () => openCouponForm(null);
+    apply();
+  }
+
+  function openCouponForm(coupon) {
+    const isEdit = !!coupon, c = coupon || {};
+    const dateVal = (v) => (v ? String(v).slice(0, 10) : '');
+
+    openModal(`
+      <h2>${isEdit ? 'Edit coupon' : 'New coupon'}</h2>
+      <form id="cpn-form">
+        <div class="form-row">
+          <div class="form-group"><label>Code *</label>
+            <input name="code" required maxlength="40" style="text-transform:uppercase" value="${esc(c.code || '')}" placeholder="e.g. BACK2SCHOOL"></div>
+          <div class="form-group"><label>Type *</label>
+            <select name="type" id="cpn-type">
+              <option value="percentage" ${c.type === 'percentage' ? 'selected' : ''}>Percentage (%)</option>
+              <option value="fixed" ${c.type === 'fixed' ? 'selected' : ''}>Fixed amount (KES)</option>
+              <option value="free_delivery" ${c.type === 'free_delivery' ? 'selected' : ''}>Free delivery</option>
+            </select></div>
+        </div>
+
+        <div class="form-row" id="cpn-value-row">
+          <div class="form-group"><label id="cpn-value-label">Value *</label>
+            <input name="value" type="number" step="0.01" min="0" required value="${c.value ?? ''}"></div>
+          <div class="form-group" id="cpn-max-wrap"><label>Max discount (KES)</label>
+            <input name="max_discount" type="number" step="0.01" min="0" value="${c.max_discount ?? ''}" placeholder="Optional ceiling for %"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group"><label>Minimum order (KES)</label>
+            <input name="min_order_amount" type="number" step="0.01" min="0" value="${c.min_order_amount ?? ''}"></div>
+          <div class="form-group"><label>Total usage limit</label>
+            <input name="total_usage_limit" type="number" min="1" step="1" value="${c.total_usage_limit ?? ''}" placeholder="Leave empty = unlimited"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group"><label>Per-customer limit</label>
+            <input name="per_customer_limit" type="number" min="1" step="1" value="${c.per_customer_limit ?? ''}" placeholder="Leave empty = unlimited"></div>
+          <div class="form-group"><label>Starts at</label>
+            <input name="starts_at" type="date" value="${dateVal(c.starts_at)}"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group"><label>Expires at</label>
+            <input name="expires_at" type="date" value="${dateVal(c.expires_at)}"></div>
+          <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:.35rem">
+            <label class="check" style="margin:0"><input type="checkbox" name="first_order_only" ${c.first_order_only ? 'checked' : ''}> First order only</label></div>
+        </div>
+
+        <div class="form-group"><label>Internal note / description</label>
+          <input name="description" value="${esc(c.description || '')}" placeholder="Optional"></div>
+
+        <label class="check"><input type="checkbox" name="is_active" ${!isEdit || c.is_active ? 'checked' : ''}> Active — customers can use this code</label>
+
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cpn-close">Cancel</button>
+          <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> ${isEdit ? 'Save changes' : 'Create coupon'}</button>
+        </div>
+      </form>`);
+
+    const typeEl = $('#cpn-type'), valueRow = $('#cpn-value-row');
+    const valueInput = valueRow.querySelector('[name=value]');
+    const syncType = () => {
+      const t = typeEl.value;
+      if (t === 'free_delivery') {
+        valueRow.style.display = 'none';
+        valueInput.required = false;
+        return;
+      }
+      valueRow.style.display = '';
+      valueInput.required = true;
+      $('#cpn-value-label').textContent = t === 'percentage' ? 'Percentage (%) *' : 'Amount (KES) *';
+      $('#cpn-max-wrap').style.display = t === 'percentage' ? '' : 'none';
+    };
+    typeEl.onchange = syncType;
+    syncType();
+
+    $('#cpn-close').onclick = closeModal;
+    $('#cpn-form').onsubmit = (e) => {
+      e.preventDefault();
+      guarded(async () => {
+        const fd = new FormData(e.target);
+        const optNum = (k) => (fd.get(k) ? num(fd.get(k)) : null);
+        const payload = {
+          code: String(fd.get('code') || '').trim().toUpperCase(),
+          type: fd.get('type'),
+          value: num(fd.get('value')),
+          max_discount: optNum('max_discount'),
+          min_order_amount: optNum('min_order_amount'),
+          total_usage_limit: optNum('total_usage_limit'),
+          per_customer_limit: optNum('per_customer_limit'),
+          starts_at: fd.get('starts_at') || null,
+          expires_at: fd.get('expires_at') || null,
+          first_order_only: !!fd.get('first_order_only'),
+          description: String(fd.get('description') || '').trim() || null,
+          is_active: !!fd.get('is_active')
+        };
+        if (payload.type === 'free_delivery') payload.value = 0;
+
+        if (isEdit) {
+          await API.adminUpdateCoupon(coupon.id, payload);
+          toast('Coupon updated');
+        } else {
+          await API.adminCreateCoupon(payload);
+          toast('Coupon created');
+        }
+        closeModal();
+        route();
+      });
+    };
+  }
+
+  async function toggleCoupon(c) {
+    const next = !c.is_active;
+    const ok = await confirmDialog(
+      next ? 'Activate coupon' : 'Deactivate coupon',
+      `${c.code} will become ${next ? 'available' : 'unavailable'} to customers.`,
+      next ? 'Activate' : 'Deactivate');
+    if (!ok) return;
+    guarded(async () => {
+      await API.adminUpdateCoupon(c.id, { is_active: next });
+      toast(next ? 'Coupon activated' : 'Coupon deactivated');
+      route();
+    });
+  }
+
+  async function deleteCoupon(c) {
+    const ok = await confirmDialog(
+      'Delete coupon',
+      `${c.code} — this cannot be undone. Past orders that used it keep their discount history.`,
+      'Delete', true);
+    if (!ok) return;
+    guarded(async () => {
+      await API.adminDeleteCoupon(c.id);
+      toast('Coupon deleted');
+      route();
+    });
+  }
+
+  async function openCouponUsage(c) {
+    await guarded(async () => {
+      const data = await API.adminCoupon(c.id);
+      const usage = data.usage || data.orders || [];
+
+      openModal(`
+        <h2>Usage · ${esc(c.code)}</h2>
+        <p class="muted" style="margin-bottom:1rem">
+          ${num(c.times_used)} redemptions
+          ${c.total_usage_limit != null ? `· limit ${c.total_usage_limit}` : ''}
+          · total discount given ${kes(data.total_discount_given || 0)}
+        </p>
+        <div class="table-wrap" style="max-height:360px;overflow:auto">
+          <table>
+            <thead><tr><th>Order</th><th>Customer</th><th>Discount</th><th>Date</th></tr></thead>
+            <tbody>
+              ${usage.length ? usage.map((u) => `
+                <tr>
+                  <td><b>${esc(u.order_number)}</b></td>
+                  <td>${esc(u.customer_name || '—')}</td>
+                  <td>${kes(u.discount_kes || 0)}</td>
+                  <td class="nowrap hint">${esc(String(u.created_at || '').slice(0, 16))}</td>
+                </tr>`).join('') : '<tr><td class="empty" colspan="4">No usage yet</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-actions"><button class="btn" id="u-close">Close</button></div>`);
+      $('#u-close').onclick = closeModal;
+    });
+  }
+
+  /* =====================================================================
+     Inventory
+     ===================================================================== */
   async function renderInventory(root, params) {
     const { products, totals } = await API.adminInventory();
-    const out = products.filter((p) => stateOf(p) === 'out').length, low = products.filter((p) => stateOf(p) === 'low').length;
-    badges.inventory = low + out; renderNav();
-    const stat = (l, v, ico, href) => `<a class="stat" href="${href || '#'}"><div class="ico"><i data-lucide="${ico}"></i></div><div class="label">${l}</div><div class="value">${v}</div></a>`;
+    const out = products.filter((p) => stateOf(p) === 'out').length;
+    const low = products.filter((p) => stateOf(p) === 'low').length;
+    badges.inventory = low + out;
+    renderNav();
+
+    const stockValue = (p) => num(p.stock_value_cost ?? p.stock_qty * (p.cost_kes || 0));
+    const stat = (l, v, ico, href) =>
+      `<a class="stat" href="${href || '#'}"><div class="ico"><i data-lucide="${ico}"></i></div><div class="label">${l}</div><div class="value">${v}</div></a>`;
+
     const byCat = {};
-    products.forEach((p) => { const k = p.category_name || 'Uncategorised'; byCat[k] = (byCat[k] || 0) + num(p.stock_value_cost ?? p.stock_qty * (p.cost_kes || 0)); });
+    products.forEach((p) => {
+      const k = p.category_name || 'Uncategorised';
+      byCat[k] = (byCat[k] || 0) + stockValue(p);
+    });
+
     root.innerHTML = `
-      ${pageHead('Inventory', 'Stock levels and valuation', '<button class="btn" id="i-export"><i data-lucide="download"></i> Export CSV</button><button class="btn btn-primary" id="i-po"><i data-lucide="truck"></i> New PO</button>')}
+      ${pageHead('Inventory', 'Stock levels and valuation',
+        '<button class="btn" id="i-export"><i data-lucide="download"></i> Export CSV</button><button class="btn btn-primary" id="i-po"><i data-lucide="truck"></i> New PO</button>')}
       <div class="grid-stats">
         ${stat('Total units', num(totals.units).toLocaleString(), 'boxes')}
         ${stat('Value (buying)', kes(totals.value_cost), 'wallet')}
         ${stat('Value (selling)', kes(totals.value_retail), 'tags')}
         ${stat('Low stock', low, 'alert-triangle', link('inventory', { state: 'low' }))}
-        ${stat('Out of stock', out, 'x-octagon', link('inventory', { state: 'out' }))}</div>
-      <div class="card" style="margin-bottom:1.1rem"><div class="card-head"><h2>Stock value by category</h2></div>
-        ${hbars(Object.entries(byCat).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, v]) => ({ label: k, value: v, display: kes(v) })))}</div>
-      <div class="toolbar"><input id="i-q" type="search" placeholder="Search name, SKU, barcode, category…">
-        <select id="i-state"><option value="">All products</option><option value="alerts">Needs attention (low + out)</option><option value="low">Low stock</option><option value="out">Out of stock</option><option value="ok">In stock</option></select></div>
+        ${stat('Out of stock', out, 'x-octagon', link('inventory', { state: 'out' }))}
+      </div>
+      <div class="card" style="margin-bottom:1.1rem">
+        <div class="card-head"><h2>Stock value by category</h2></div>
+        ${hbars(Object.entries(byCat).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, v]) => ({ label: k, value: v, display: kes(v) })))}
+      </div>
+      <div class="toolbar">
+        <input id="i-q" type="search" placeholder="Search name, SKU, barcode, category…">
+        <select id="i-state">
+          <option value="">All products</option><option value="alerts">Needs attention (low + out)</option>
+          <option value="low">Low stock</option><option value="out">Out of stock</option><option value="ok">In stock</option>
+        </select>
+      </div>
       <div class="table-wrap" id="i-table"></div>`;
     $('#i-state', root).value = params.state || '';
+
     const cols = [
-      { key: 'sku', label: 'SKU', render: (p) => esc(p.sku || '—') }, { key: 'name', label: 'Name', render: (p) => `<b>${esc(p.name)}</b>` },
+      { key: 'sku', label: 'SKU', render: (p) => esc(p.sku || '—') },
+      { key: 'name', label: 'Name', render: (p) => `<b>${esc(p.name)}</b>` },
       { key: 'category_name', label: 'Category', render: (p) => esc(p.category_name || '—') },
-      { key: 'stock_qty', label: 'Qty', value: (p) => num(p.stock_qty) }, { key: 'low_stock_threshold', label: 'Min', value: (p) => num(p.low_stock_threshold ?? 5) },
+      { key: 'stock_qty', label: 'Qty', value: (p) => num(p.stock_qty) },
+      { key: 'low_stock_threshold', label: 'Min', value: (p) => num(p.low_stock_threshold ?? 5) },
       { key: 'cost_kes', label: 'Buying', value: (p) => num(p.cost_kes), render: (p) => kes(p.cost_kes) },
       { key: 'price_kes', label: 'Selling', value: (p) => num(p.price_kes), render: (p) => kes(p.price_kes) },
-      { key: 'sv', label: 'Stock value', value: (p) => num(p.stock_value_cost ?? p.stock_qty * (p.cost_kes || 0)), render: (p) => kes(p.stock_value_cost ?? p.stock_qty * (p.cost_kes || 0)) },
+      { key: 'sv', label: 'Stock value', value: stockValue, render: (p) => kes(stockValue(p)) },
       { key: 'state', label: 'Status', value: stateOf, render: statePill },
-      { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => `<div class="row-actions">
-        <button class="btn btn-sm" data-act="stock"><i data-lucide="package"></i> Adjust</button>
-        <button class="btn btn-sm btn-soft" data-act="po"><i data-lucide="truck"></i> Reorder</button></div>` }];
+      { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => `
+        <div class="row-actions">
+          <button class="btn btn-sm" data-act="stock"><i data-lucide="package"></i> Adjust</button>
+          <button class="btn btn-sm btn-soft" data-act="po"><i data-lucide="truck"></i> Reorder</button>
+        </div>` }
+    ];
+
     const t = mountTable($('#i-table', root), {
-      columns: cols, rows: [], pageSize: 20, empty: 'No products match', rowClass: (p) => stateOf(p) === 'archived' ? 'dim' : '',
+      columns: cols, rows: [], pageSize: 20, empty: 'No products match',
+      rowClass: (p) => (stateOf(p) === 'archived' ? 'dim' : ''),
       onAction: (a, p) => (a === 'stock' ? openStockModal(p) : openPOModal(p.id))
     });
+
     const apply = () => {
       const q = $('#i-q', root).value, st = $('#i-state', root).value;
-      t.setRows(products.filter((p) => { const s = stateOf(p); return (!st || s === st || (st === 'alerts' && (s === 'low' || s === 'out'))) && matches(p, q); }));
+      t.setRows(products.filter((p) => {
+        const s = stateOf(p);
+        return (!st || s === st || (st === 'alerts' && (s === 'low' || s === 'out'))) && matches(p, q);
+      }));
     };
-    $('#i-q', root).oninput = debounce(apply, 150); $('#i-state', root).onchange = apply;
+
+    $('#i-q', root).oninput = debounce(apply, 150);
+    $('#i-state', root).onchange = apply;
     $('#i-export', root).onclick = () => exportCSV('inventory', cols, t.rows());
     $('#i-po', root).onclick = () => openPOModal();
     apply();
   }
 
-  /* ======================= Expenses ======================= */
+  /* =====================================================================
+     Expenses
+     ===================================================================== */
   let expenseCats = null;
+
   async function openExpenseModal() {
     await guarded(async () => {
       expenseCats = expenseCats || (await API.adminExpenseCategories()).categories;
-      openModal(`<h2>Record expense</h2><form id="exp-form">
-        <div class="form-group"><label>Category</label><select name="category" required>${expenseCats.map((c) => `<option>${esc(c)}</option>`).join('')}</select></div>
-        <div class="form-row"><div class="form-group"><label>Amount (KES)</label><input name="amount_kes" type="number" step="0.01" min="0" required></div>
-          <div class="form-group"><label>Date</label><input name="expense_date" type="date" value="${ymd(new Date())}"></div></div>
-        <div class="form-group"><label>Description</label><input name="description"></div>
-        <div class="form-group"><label>Payment method</label><select name="payment_method"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option><option value="bank">Bank</option><option value="card">Card</option></select></div>
-        <div class="modal-actions"><button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Save</button></div></form>`);
+      openModal(`
+        <h2>Record expense</h2>
+        <form id="exp-form">
+          <div class="form-group"><label>Category</label>
+            <select name="category" required>${expenseCats.map((c) => `<option>${esc(c)}</option>`).join('')}</select></div>
+          <div class="form-row">
+            <div class="form-group"><label>Amount (KES)</label><input name="amount_kes" type="number" step="0.01" min="0" required></div>
+            <div class="form-group"><label>Date</label><input name="expense_date" type="date" value="${ymd(new Date())}"></div>
+          </div>
+          <div class="form-group"><label>Description</label><input name="description"></div>
+          <div class="form-group"><label>Payment method</label>
+            <select name="payment_method">
+              <option value="cash">Cash</option><option value="mpesa">M-Pesa</option>
+              <option value="bank">Bank</option><option value="card">Card</option>
+            </select></div>
+          <div class="modal-actions">
+            <button type="button" class="btn" id="c">Cancel</button>
+            <button class="btn btn-primary">Save</button>
+          </div>
+        </form>`);
       $('#c').onclick = closeModal;
-      $('#exp-form').onsubmit = (e) => { e.preventDefault(); guarded(async () => {
-        await API.adminCreateExpense(Object.fromEntries(new FormData(e.target))); closeModal(); toast('Expense saved'); route(); }); };
+      $('#exp-form').onsubmit = (e) => {
+        e.preventDefault();
+        guarded(async () => {
+          await API.adminCreateExpense(Object.fromEntries(new FormData(e.target)));
+          closeModal();
+          toast('Expense saved');
+          route();
+        });
+      };
     });
   }
 
@@ -858,119 +1507,238 @@
     const [data, cats] = await Promise.all([API.adminExpenses({ limit: 500 }), API.adminExpenseCategories()]);
     expenseCats = cats.categories;
     const all = data.expenses || [];
+
     root.innerHTML = `
-      ${pageHead('Operating expenses', 'Gross profit − expenses = net profit', '<button class="btn" id="e-export"><i data-lucide="download"></i> Export CSV</button><button class="btn btn-primary" id="e-new"><i data-lucide="plus"></i> Expense</button>')}
-      <div class="cols-3"><div>
-        <div class="toolbar"><select id="e-cat"><option value="">All categories</option>${cats.categories.map((c) => `<option>${esc(c)}</option>`).join('')}</select>
-          <input type="date" id="e-from"><input type="date" id="e-to"><input id="e-q" type="search" placeholder="Search description…"></div>
-        <div class="table-wrap" id="e-table"></div></div>
-        <div class="card"><div class="card-head"><h2>By category</h2></div><div id="e-chart"></div>
-          <div class="pnl-line sub"><span>Total (filtered)</span><b id="e-total"></b></div></div></div>`;
+      ${pageHead('Operating expenses', 'Gross profit − expenses = net profit',
+        '<button class="btn" id="e-export"><i data-lucide="download"></i> Export CSV</button><button class="btn btn-primary" id="e-new"><i data-lucide="plus"></i> Expense</button>')}
+      <div class="cols-3">
+        <div>
+          <div class="toolbar">
+            <select id="e-cat"><option value="">All categories</option>${cats.categories.map((c) => `<option>${esc(c)}</option>`).join('')}</select>
+            <input type="date" id="e-from"><input type="date" id="e-to">
+            <input id="e-q" type="search" placeholder="Search description…">
+          </div>
+          <div class="table-wrap" id="e-table"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>By category</h2></div>
+          <div id="e-chart"></div>
+          <div class="pnl-line sub"><span>Total (filtered)</span><b id="e-total"></b></div>
+        </div>
+      </div>`;
+
     const cols = [
-      { key: 'expense_date', label: 'Date', cls: 'nowrap' }, { key: 'category', label: 'Category' },
+      { key: 'expense_date', label: 'Date', cls: 'nowrap' },
+      { key: 'category', label: 'Category' },
       { key: 'description', label: 'Description', render: (e) => esc(e.description || '') },
       { key: 'amount_kes', label: 'Amount', value: (e) => num(e.amount_kes), render: (e) => `<b>${kes(e.amount_kes)}</b>` },
-      { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => '<button class="btn btn-sm btn-danger" data-act="del"><i data-lucide="trash-2"></i></button>' }];
+      { key: 'a', label: '', sortable: false, csv: false, cls: 'right',
+        render: () => '<button class="btn btn-sm btn-danger" data-act="del"><i data-lucide="trash-2"></i></button>' }
+    ];
+
     const t = mountTable($('#e-table', root), {
       columns: cols, rows: [], sort: 'expense_date', dir: 'desc', empty: 'No expenses recorded',
-      onAction: async (a, e) => { if (await confirmDialog('Delete expense', `${e.category} — ${kes(e.amount_kes)}`, 'Delete', true))
-        guarded(async () => { await API.adminDeleteExpense(e.id); toast('Expense deleted'); route(); }); }
+      onAction: async (a, e) => {
+        const ok = await confirmDialog('Delete expense', `${e.category} — ${kes(e.amount_kes)}`, 'Delete', true);
+        if (!ok) return;
+        guarded(async () => {
+          await API.adminDeleteExpense(e.id);
+          toast('Expense deleted');
+          route();
+        });
+      }
     });
+
     const apply = () => {
-      const c = $('#e-cat', root).value, f = $('#e-from', root).value, to = $('#e-to', root).value, q = $('#e-q', root).value.toLowerCase();
-      const list = all.filter((e) => (!c || e.category === c) && (!f || e.expense_date >= f) && (!to || e.expense_date <= to) && (!q || String(e.description || '').toLowerCase().includes(q)));
+      const c = $('#e-cat', root).value, f = $('#e-from', root).value, to = $('#e-to', root).value;
+      const q = $('#e-q', root).value.toLowerCase();
+      const list = all.filter((e) =>
+        (!c || e.category === c) && (!f || e.expense_date >= f) && (!to || e.expense_date <= to) &&
+        (!q || String(e.description || '').toLowerCase().includes(q)));
       t.setRows(list);
-      const sums = {}; list.forEach((e) => { sums[e.category] = (sums[e.category] || 0) + num(e.amount_kes); });
+
+      const sums = {};
+      list.forEach((e) => { sums[e.category] = (sums[e.category] || 0) + num(e.amount_kes); });
       $('#e-chart', root).innerHTML = hbars(Object.entries(sums).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label: k, value: v, display: kes(v) })));
       $('#e-total', root).textContent = kes(list.reduce((s, e) => s + num(e.amount_kes), 0));
     };
-    ['e-cat', 'e-from', 'e-to'].forEach((id) => $('#' + id, root).onchange = apply); $('#e-q', root).oninput = debounce(apply, 150);
-    $('#e-new', root).onclick = openExpenseModal; $('#e-export', root).onclick = () => exportCSV('expenses', cols, t.rows());
+
+    ['e-cat', 'e-from', 'e-to'].forEach((id) => { $('#' + id, root).onchange = apply; });
+    $('#e-q', root).oninput = debounce(apply, 150);
+    $('#e-new', root).onclick = openExpenseModal;
+    $('#e-export', root).onclick = () => exportCSV('expenses', cols, t.rows());
     apply();
   }
 
-  /* ======================= Sales report ======================= */
+  /* =====================================================================
+     Sales report
+     ===================================================================== */
   async function renderSales(root) {
-    root.innerHTML = `${pageHead('Sales report', 'Revenue, profit and best sellers', '<button class="btn" id="s-export"><i data-lucide="download"></i> Export CSV</button>')}
+    root.innerHTML = `
+      ${pageHead('Sales report', 'Revenue, profit and best sellers', '<button class="btn" id="s-export"><i data-lucide="download"></i> Export CSV</button>')}
       <div id="s-range"></div><div id="s-body"></div>`;
     let last = null;
+
+    const stat = (l, v, ico, sub = '') =>
+      `<div class="stat" style="cursor:default"><div class="ico"><i data-lucide="${ico}"></i></div><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${sub || '&nbsp;'}</div></div>`;
+
     rangeToolbar($('#s-range', root), (f, t) => guarded(async () => {
-      const d = last = await API.adminSalesReport(f, t), s = d.summary;
-      const avg = s.order_count ? num(s.revenue) / s.order_count : 0, mg = num(s.revenue) ? Math.round(num(s.gross_profit) / num(s.revenue) * 100) : 0;
-      const stat = (l, v, ico, sub = '') => `<div class="stat" style="cursor:default"><div class="ico"><i data-lucide="${ico}"></i></div><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${sub || '&nbsp;'}</div></div>`;
-      $('#s-body', root).innerHTML = `<div class="grid-stats">
-        ${stat('Orders', s.order_count, 'shopping-cart', `avg ${kes(avg)}`)}${stat('Revenue', kes(s.revenue), 'banknote')}
-        ${stat('Gross profit', kes(s.gross_profit), 'piggy-bank', `${mg}% margin`)}${stat('Expenses', kes(s.total_expenses), 'receipt')}
-        ${stat('Net profit', `<span class="${num(s.net_profit) < 0 ? 'neg' : ''}">${kes(s.net_profit)}</span>`, 'scale')}</div>
-        <div class="cols"><div class="card"><div class="card-head"><h2>By payment method</h2></div>
-          ${donut((d.by_payment || []).map((r) => ({ label: r.payment_method, value: num(r.total), display: kes(r.total) })))}</div>
-        <div class="card"><div class="card-head"><h2>Top products</h2></div>
-          ${hbars((d.top_products || []).slice(0, 8).map((r) => ({ label: r.product_name, value: num(r.revenue), display: kes(r.revenue), sub: `${r.qty_sold} sold` })))}</div></div>`;
+      const d = last = await API.adminSalesReport(f, t);
+      const s = d.summary;
+      const avg = s.order_count ? num(s.revenue) / s.order_count : 0;
+      const mg = num(s.revenue) ? Math.round(num(s.gross_profit) / num(s.revenue) * 100) : 0;
+
+      $('#s-body', root).innerHTML = `
+        <div class="grid-stats">
+          ${stat('Orders', s.order_count, 'shopping-cart', `avg ${kes(avg)}`)}
+          ${stat('Revenue', kes(s.revenue), 'banknote')}
+          ${stat('Gross profit', kes(s.gross_profit), 'piggy-bank', `${mg}% margin`)}
+          ${stat('Expenses', kes(s.total_expenses), 'receipt')}
+          ${stat('Net profit', `<span class="${num(s.net_profit) < 0 ? 'neg' : ''}">${kes(s.net_profit)}</span>`, 'scale')}
+        </div>
+        <div class="cols">
+          <div class="card"><div class="card-head"><h2>By payment method</h2></div>
+            ${donut((d.by_payment || []).map((r) => ({ label: r.payment_method, value: num(r.total), display: kes(r.total) })))}</div>
+          <div class="card"><div class="card-head"><h2>Top products</h2></div>
+            ${hbars((d.top_products || []).slice(0, 8).map((r) => ({ label: r.product_name, value: num(r.revenue), display: kes(r.revenue), sub: `${r.qty_sold} sold` })))}</div>
+        </div>`;
       icons($('#s-body', root));
     }));
-    $('#s-export', root).onclick = () => last ? exportCSV('top-products', [
-      { key: 'product_name', label: 'Product' }, { key: 'qty_sold', label: 'Qty sold' }, { key: 'revenue', label: 'Revenue' }], last.top_products || []) : null;
+
+    $('#s-export', root).onclick = () => {
+      if (!last) return;
+      exportCSV('top-products', [
+        { key: 'product_name', label: 'Product' },
+        { key: 'qty_sold', label: 'Qty sold' },
+        { key: 'revenue', label: 'Revenue' }
+      ], last.top_products || []);
+    };
   }
 
-  /* ======================= Profit & loss ======================= */
+  /* =====================================================================
+     Profit & loss
+     ===================================================================== */
   async function renderPnL(root) {
-    root.innerHTML = `${pageHead('Profit & loss', 'Net profit = Gross profit − Operating expenses', '<button class="btn" id="pl-print"><i data-lucide="printer"></i> Print</button>')}
+    root.innerHTML = `
+      ${pageHead('Profit & loss', 'Net profit = Gross profit − Operating expenses', '<button class="btn" id="pl-print"><i data-lucide="printer"></i> Print</button>')}
       <div id="pl-range"></div><div id="pl-body"></div>`;
     const line = (l, v, cls = '') => `<div class="pnl-line ${cls}"><span>${l}</span><b>${v}</b></div>`;
+
     rangeToolbar($('#pl-range', root), (f, t) => guarded(async () => {
-      const d = await API.adminProfitLoss(f, t), net = num(d.net_profit);
+      const d = await API.adminProfitLoss(f, t);
+      const net = num(d.net_profit);
       const gm = num(d.revenue) ? Math.round(num(d.gross_profit) / num(d.revenue) * 100) : 0;
-      $('#pl-body', root).innerHTML = `<div class="cols"><div class="card">
-        ${line('Revenue (paid orders)', kes(d.revenue))}${line('Cost of goods sold', '− ' + kes(d.cost_of_goods))}
-        ${line(`Gross profit <span class="hint">${gm}% margin</span>`, kes(d.gross_profit), 'sub')}
-        ${line('Operating expenses', '− ' + kes(d.operating_expenses))}
-        ${line('Net profit', `<span class="${net < 0 ? 'neg' : 'pos'}">${kes(net)}</span>`, 'total')}
-        <p class="hint">${d.order_count} paid orders in period</p></div>
-        <div class="card"><div class="card-head"><h2>Expenses by category</h2><a class="btn btn-sm" href="${link('expenses')}">Details</a></div>
-          ${hbars(Object.entries(d.expenses_by_category || {}).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label: k, value: num(v), display: kes(v) })))}</div></div>`;
+
+      $('#pl-body', root).innerHTML = `
+        <div class="cols">
+          <div class="card">
+            ${line('Revenue (paid orders)', kes(d.revenue))}
+            ${line('Cost of goods sold', '− ' + kes(d.cost_of_goods))}
+            ${line(`Gross profit <span class="hint">${gm}% margin</span>`, kes(d.gross_profit), 'sub')}
+            ${line('Operating expenses', '− ' + kes(d.operating_expenses))}
+            ${line('Net profit', `<span class="${net < 0 ? 'neg' : 'pos'}">${kes(net)}</span>`, 'total')}
+            <p class="hint">${d.order_count} paid orders in period</p>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Expenses by category</h2><a class="btn btn-sm" href="${link('expenses')}">Details</a></div>
+            ${hbars(Object.entries(d.expenses_by_category || {}).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label: k, value: num(v), display: kes(v) })))}
+          </div>
+        </div>`;
     }));
+
     $('#pl-print', root).onclick = () => window.print();
   }
 
-  /* ======================= Suppliers & POs ======================= */
+  /* =====================================================================
+     Suppliers & purchase orders
+     ===================================================================== */
   async function renderSuppliers(root, params) {
     const [sup, pos] = await Promise.all([API.adminSuppliers(), API.adminPurchaseOrders()]);
-    let tab = params.tab === 'suppliers' ? 'suppliers' : 'pos', filter = '';
+    let tab = params.tab === 'suppliers' ? 'suppliers' : 'pos';
+    let filter = '';
     const list = pos.purchase_orders || [];
-    root.innerHTML = `${pageHead('Suppliers & purchase orders', '', '<button class="btn" id="add-sup"><i data-lucide="plus"></i> Supplier</button><button class="btn btn-primary" id="add-po"><i data-lucide="plus"></i> Purchase order</button>')}
-      <div class="chips" id="tabs"><button class="chip" data-t="pos">Purchase orders <b>${list.length}</b></button><button class="chip" data-t="suppliers">Suppliers <b>${(sup.suppliers || []).length}</b></button></div>
-      <div id="po-filter" class="chips"></div><div class="table-wrap" id="main-table"></div>`;
+
+    root.innerHTML = `
+      ${pageHead('Suppliers & purchase orders', '',
+        '<button class="btn" id="add-sup"><i data-lucide="plus"></i> Supplier</button><button class="btn btn-primary" id="add-po"><i data-lucide="plus"></i> Purchase order</button>')}
+      <div class="chips" id="tabs">
+        <button class="chip" data-t="pos">Purchase orders <b>${list.length}</b></button>
+        <button class="chip" data-t="suppliers">Suppliers <b>${(sup.suppliers || []).length}</b></button>
+      </div>
+      <div id="po-filter" class="chips"></div>
+      <div class="table-wrap" id="main-table"></div>`;
+
     const poCols = [
-      { key: 'po_number', label: 'PO #', render: (p) => `<b>${esc(p.po_number)}</b>` }, { key: 'supplier_name', label: 'Supplier' },
+      { key: 'po_number', label: 'PO #', render: (p) => `<b>${esc(p.po_number)}</b>` },
+      { key: 'supplier_name', label: 'Supplier' },
       { key: 'total_kes', label: 'Total', value: (p) => num(p.total_kes), render: (p) => kes(p.total_kes) },
       { key: 'status', label: 'Status', render: (p) => badge(p.status) },
-      { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: (p) => p.status === 'ordered' ? '<button class="btn btn-sm btn-primary" data-act="recv"><i data-lucide="package-check"></i> Receive stock</button>' : '' }];
-    const supCols = [{ key: 'name', label: 'Name', render: (s) => `<b>${esc(s.name)}</b>` }, { key: 'contact_person', label: 'Contact' },
-      { key: 'phone', label: 'Phone', render: (s) => s.phone ? `<a href="tel:${esc(s.phone)}">${esc(s.phone)}</a>` : '' },
-      { key: 'email', label: 'Email', render: (s) => s.email ? `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>` : '' }];
-    const mk = (cols, rows, extra = {}) => mountTable($('#main-table', root), { columns: cols, rows, empty: 'Nothing here yet', ...extra });
+      { key: 'a', label: '', sortable: false, csv: false, cls: 'right',
+        render: (p) => (p.status === 'ordered' ? '<button class="btn btn-sm btn-primary" data-act="recv"><i data-lucide="package-check"></i> Receive stock</button>' : '') }
+    ];
+    const supCols = [
+      { key: 'name', label: 'Name', render: (s) => `<b>${esc(s.name)}</b>` },
+      { key: 'contact_person', label: 'Contact' },
+      { key: 'phone', label: 'Phone', render: (s) => (s.phone ? `<a href="tel:${esc(s.phone)}">${esc(s.phone)}</a>` : '') },
+      { key: 'email', label: 'Email', render: (s) => (s.email ? `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>` : '') }
+    ];
+
+    const mk = (cols, rows, extra = {}) =>
+      mountTable($('#main-table', root), { columns: cols, rows, empty: 'Nothing here yet', ...extra });
+
     const draw = () => {
       $$('#tabs .chip', root).forEach((c) => c.classList.toggle('on', c.dataset.t === tab));
       const f = $('#po-filter', root);
+
       if (tab === 'pos') {
-        f.innerHTML = ['', 'ordered', 'received', 'cancelled'].map((s) => `<button class="chip ${s === filter ? 'on' : ''}" data-f="${s}">${s || 'All'}</button>`).join('');
-        $$('[data-f]', f).forEach((b) => b.onclick = () => { filter = b.dataset.f; draw(); });
+        f.innerHTML = ['', 'ordered', 'received', 'cancelled']
+          .map((s) => `<button class="chip ${s === filter ? 'on' : ''}" data-f="${s}">${s || 'All'}</button>`).join('');
+        $$('[data-f]', f).forEach((b) => { b.onclick = () => { filter = b.dataset.f; draw(); }; });
         mk(poCols, list.filter((p) => !filter || p.status === filter), {
-          onAction: async (a, p) => { if (await confirmDialog('Receive stock', `Receive ${p.po_number} and add the stock?`, 'Receive'))
-            guarded(async () => { await API.adminReceivePO(p.id); toast('Stock received'); route(); }); } });
-      } else { f.innerHTML = ''; mk(supCols, sup.suppliers || []); }
+          onAction: async (a, p) => {
+            const ok = await confirmDialog('Receive stock', `Receive ${p.po_number} and add the stock?`, 'Receive');
+            if (!ok) return;
+            guarded(async () => {
+              await API.adminReceivePO(p.id);
+              toast('Stock received');
+              route();
+            });
+          }
+        });
+      } else {
+        f.innerHTML = '';
+        mk(supCols, sup.suppliers || []);
+      }
     };
-    $$('#tabs .chip', root).forEach((c) => c.onclick = () => { tab = c.dataset.t; draw(); });
+
+    $$('#tabs .chip', root).forEach((c) => { c.onclick = () => { tab = c.dataset.t; draw(); }; });
     $('#add-po', root).onclick = () => openPOModal();
     $('#add-sup', root).onclick = () => {
-      openModal(`<h2>New supplier</h2><form id="sup-form">
-        <div class="form-group"><label>Name *</label><input name="name" required></div>
-        <div class="form-group"><label>Contact</label><input name="contact_person"></div>
-        <div class="form-row"><div class="form-group"><label>Phone</label><input name="phone"></div><div class="form-group"><label>Email</label><input name="email" type="email"></div></div>
-        <div class="modal-actions"><button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Save</button></div></form>`);
+      openModal(`
+        <h2>New supplier</h2>
+        <form id="sup-form">
+          <div class="form-group"><label>Name *</label><input name="name" required></div>
+          <div class="form-group"><label>Contact</label><input name="contact_person"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Phone</label><input name="phone"></div>
+            <div class="form-group"><label>Email</label><input name="email" type="email"></div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn" id="c">Cancel</button>
+            <button class="btn btn-primary">Save</button>
+          </div>
+        </form>`);
       $('#c').onclick = closeModal;
-      $('#sup-form').onsubmit = (e) => { e.preventDefault(); guarded(async () => {
-        await API.adminCreateSupplier(Object.fromEntries(new FormData(e.target))); closeModal(); toast('Supplier saved'); go('suppliers', { tab: 'suppliers' }); route(); }); };
+      $('#sup-form').onsubmit = (e) => {
+        e.preventDefault();
+        guarded(async () => {
+          await API.adminCreateSupplier(Object.fromEntries(new FormData(e.target)));
+          closeModal();
+          toast('Supplier saved');
+          go('suppliers', { tab: 'suppliers' });
+          route();
+        });
+      };
     };
     draw();
   }
@@ -980,111 +1748,200 @@
       const [sup, prods] = await Promise.all([API.adminSuppliers(), API.adminProducts({ limit: 1000 })]);
       if (!sup.suppliers.length) return toast('Add a supplier first', 'error');
       const lines = [];
-      openModal(`<h2>New purchase order</h2><form id="po-form">
-        <div class="form-group"><label>Supplier</label><select name="supplier_id" required>${sup.suppliers.map((s) => `<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></div>
-        <div class="form-group"><label>Product</label><select id="po-product">${prods.products.filter((p) => stateOf(p) !== 'archived').map((p) =>
-          `<option value="${p.id}" data-cost="${p.cost_kes || 0}" data-low="${num(p.low_stock_threshold ?? 5)}" ${String(p.id) === String(prefillProductId) ? 'selected' : ''}>${esc(p.name)} (${esc(p.sku || 'no SKU')}) · ${p.stock_qty} in stock</option>`).join('')}</select></div>
-        <div class="form-row"><div class="form-group"><label>Quantity</label><input type="number" id="po-qty" value="10" min="1"></div>
-          <div class="form-group"><label>Unit cost (KES)</label><input type="number" id="po-cost" step="0.01" min="0"></div></div>
-        <button type="button" class="btn btn-sm" id="po-add"><i data-lucide="plus"></i> Add line</button>
-        <div class="table-wrap" style="margin-top:.8rem"><table><tbody id="po-lines"><tr><td class="empty">No lines yet</td></tr></tbody></table></div>
-        <div class="modal-actions"><span style="margin-right:auto;font-weight:700" id="po-total"></span>
-          <button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Create PO</button></div></form>`);
-      const sel = $('#po-product'), sync = () => { $('#po-cost').value = sel.selectedOptions[0]?.dataset.cost || 0; };
-      sync(); sel.onchange = sync;
+
+      const productOptions = prods.products.filter((p) => stateOf(p) !== 'archived').map((p) =>
+        `<option value="${p.id}" data-cost="${p.cost_kes || 0}" data-low="${num(p.low_stock_threshold ?? 5)}" ${String(p.id) === String(prefillProductId) ? 'selected' : ''}>${esc(p.name)} (${esc(p.sku || 'no SKU')}) · ${p.stock_qty} in stock</option>`).join('');
+
+      openModal(`
+        <h2>New purchase order</h2>
+        <form id="po-form">
+          <div class="form-group"><label>Supplier</label>
+            <select name="supplier_id" required>${sup.suppliers.map((s) => `<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></div>
+          <div class="form-group"><label>Product</label><select id="po-product">${productOptions}</select></div>
+          <div class="form-row">
+            <div class="form-group"><label>Quantity</label><input type="number" id="po-qty" value="10" min="1"></div>
+            <div class="form-group"><label>Unit cost (KES)</label><input type="number" id="po-cost" step="0.01" min="0"></div>
+          </div>
+          <button type="button" class="btn btn-sm" id="po-add"><i data-lucide="plus"></i> Add line</button>
+          <div class="table-wrap" style="margin-top:.8rem"><table><tbody id="po-lines"><tr><td class="empty">No lines yet</td></tr></tbody></table></div>
+          <div class="modal-actions">
+            <span style="margin-right:auto;font-weight:700" id="po-total"></span>
+            <button type="button" class="btn" id="c">Cancel</button>
+            <button class="btn btn-primary">Create PO</button>
+          </div>
+        </form>`);
+
+      const sel = $('#po-product');
+      const sync = () => { $('#po-cost').value = sel.selectedOptions[0]?.dataset.cost || 0; };
+      sync();
+      sel.onchange = sync;
+
       const drawLines = () => {
-        $('#po-lines').innerHTML = lines.length ? lines.map((l, i) => `<tr><td>${esc(l.name)}</td><td>${l.quantity} × ${kes(l.unit_cost_kes)}</td><td class="right"><b>${kes(l.quantity * l.unit_cost_kes)}</b></td>
-          <td class="right"><button type="button" class="btn btn-sm btn-danger" data-rm="${i}"><i data-lucide="x"></i></button></td></tr>`).join('') : '<tr><td class="empty">No lines yet</td></tr>';
+        $('#po-lines').innerHTML = lines.length
+          ? lines.map((l, i) => `<tr>
+              <td>${esc(l.name)}</td>
+              <td>${l.quantity} × ${kes(l.unit_cost_kes)}</td>
+              <td class="right"><b>${kes(l.quantity * l.unit_cost_kes)}</b></td>
+              <td class="right"><button type="button" class="btn btn-sm btn-danger" data-rm="${i}"><i data-lucide="x"></i></button></td>
+            </tr>`).join('')
+          : '<tr><td class="empty">No lines yet</td></tr>';
         $('#po-total').textContent = lines.length ? `Total ${kes(lines.reduce((s, l) => s + l.quantity * l.unit_cost_kes, 0))}` : '';
-        $$('[data-rm]').forEach((b) => b.onclick = () => { lines.splice(Number(b.dataset.rm), 1); drawLines(); }); icons($('#po-lines'));
+        $$('[data-rm]').forEach((b) => { b.onclick = () => { lines.splice(Number(b.dataset.rm), 1); drawLines(); }; });
+        icons($('#po-lines'));
       };
+
       $('#po-add').onclick = () => {
-        const q = num($('#po-qty').value); if (!(q > 0)) return toast('Quantity must be at least 1', 'error');
-        lines.push({ product_id: Number(sel.value), quantity: q, unit_cost_kes: num($('#po-cost').value), name: sel.selectedOptions[0].textContent.split(' · ')[0] }); drawLines();
+        const q = num($('#po-qty').value);
+        if (!(q > 0)) return toast('Quantity must be at least 1', 'error');
+        lines.push({
+          product_id: Number(sel.value),
+          quantity: q,
+          unit_cost_kes: num($('#po-cost').value),
+          name: sel.selectedOptions[0].textContent.split(' · ')[0]
+        });
+        drawLines();
       };
       if (prefillProductId) $('#po-add').click();
+
       $('#c').onclick = closeModal;
-      $('#po-form').onsubmit = (e) => { e.preventDefault();
+      $('#po-form').onsubmit = (e) => {
+        e.preventDefault();
         if (!lines.length) return toast('Add at least one line', 'error');
         guarded(async () => {
-          await API.adminCreatePO({ supplier_id: Number(new FormData(e.target).get('supplier_id')), items: lines.map(({ product_id, quantity, unit_cost_kes }) => ({ product_id, quantity, unit_cost_kes })) });
-          closeModal(); toast('Purchase order created'); go('suppliers', { tab: 'pos' }); route();
-        }); };
+          await API.adminCreatePO({
+            supplier_id: Number(new FormData(e.target).get('supplier_id')),
+            items: lines.map(({ product_id, quantity, unit_cost_kes }) => ({ product_id, quantity, unit_cost_kes }))
+          });
+          closeModal();
+          toast('Purchase order created');
+          go('suppliers', { tab: 'pos' });
+          route();
+        });
+      };
     });
   }
 
-  /* ======================= Staff ======================= */
+  /* =====================================================================
+     Staff
+     ===================================================================== */
   async function renderStaff(root) {
     const data = await API.adminStaff();
-    root.innerHTML = `${pageHead('Staff accounts', 'Roles: owner, manager, inventory, cashier, staff', '<button class="btn btn-primary" id="add-staff"><i data-lucide="user-plus"></i> Staff</button>')}
-      <div class="toolbar"><input id="st-q" type="search" placeholder="Search name or email…"></div><div class="table-wrap" id="st-table"></div>`;
-    const t = mountTable($('#st-table', root), { rows: data.users || [], empty: 'No staff', columns: [
-      { key: 'full_name', label: 'Name', render: (u) => `<b>${esc(u.full_name)}</b>` }, { key: 'email', label: 'Email' },
-      { key: 'role', label: 'Role', render: (u) => `<span class="pill t-${u.role === 'owner' ? 'ok' : 'confirmed'}">${esc(u.role)}</span>` },
-      { key: 'is_active', label: 'Active', render: (u) => u.is_active ? badge('ok', 'Active') : badge('archived', 'Disabled') }] });
-    $('#st-q', root).oninput = debounce((e) => { const q = e.target.value.toLowerCase();
-      t.setRows((data.users || []).filter((u) => `${u.full_name} ${u.email}`.toLowerCase().includes(q))); }, 150);
+    const users = data.users || [];
+
+    root.innerHTML = `
+      ${pageHead('Staff accounts', 'Roles: owner, manager, inventory, cashier, staff',
+        '<button class="btn btn-primary" id="add-staff"><i data-lucide="user-plus"></i> Staff</button>')}
+      <div class="toolbar"><input id="st-q" type="search" placeholder="Search name or email…"></div>
+      <div class="table-wrap" id="st-table"></div>`;
+
+    const t = mountTable($('#st-table', root), {
+      rows: users, empty: 'No staff',
+      columns: [
+        { key: 'full_name', label: 'Name', render: (u) => `<b>${esc(u.full_name)}</b>` },
+        { key: 'email', label: 'Email' },
+        { key: 'role', label: 'Role', render: (u) => `<span class="pill t-${u.role === 'owner' ? 'ok' : 'confirmed'}">${esc(u.role)}</span>` },
+        { key: 'is_active', label: 'Active', render: (u) => (u.is_active ? badge('ok', 'Active') : badge('archived', 'Disabled')) }
+      ]
+    });
+
+    $('#st-q', root).oninput = debounce((e) => {
+      const q = e.target.value.toLowerCase();
+      t.setRows(users.filter((u) => `${u.full_name} ${u.email}`.toLowerCase().includes(q)));
+    }, 150);
+
     $('#add-staff', root).onclick = () => {
-      openModal(`<h2>New staff</h2><form id="stf">
-        <div class="form-group"><label>Full name</label><input name="full_name" required></div>
-        <div class="form-group"><label>Email</label><input name="email" type="email" required></div>
-        <div class="form-row"><div class="form-group"><label>Password</label><input name="password" type="password" required minlength="6" autocomplete="new-password"></div>
-          <div class="form-group"><label>Phone</label><input name="phone"></div></div>
-        <div class="form-group"><label>Role</label><select name="role"><option value="staff">Staff</option><option value="cashier">Cashier</option><option value="inventory">Inventory</option><option value="manager">Manager</option></select></div>
-        <div class="modal-actions"><button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Create</button></div></form>`);
+      openModal(`
+        <h2>New staff</h2>
+        <form id="stf">
+          <div class="form-group"><label>Full name</label><input name="full_name" required></div>
+          <div class="form-group"><label>Email</label><input name="email" type="email" required></div>
+          <div class="form-row">
+            <div class="form-group"><label>Password</label><input name="password" type="password" required minlength="6" autocomplete="new-password"></div>
+            <div class="form-group"><label>Phone</label><input name="phone"></div>
+          </div>
+          <div class="form-group"><label>Role</label>
+            <select name="role">
+              <option value="staff">Staff</option><option value="cashier">Cashier</option>
+              <option value="inventory">Inventory</option><option value="manager">Manager</option>
+            </select></div>
+          <div class="modal-actions">
+            <button type="button" class="btn" id="c">Cancel</button>
+            <button class="btn btn-primary">Create</button>
+          </div>
+        </form>`);
       $('#c').onclick = closeModal;
-      $('#stf').onsubmit = (e) => { e.preventDefault(); guarded(async () => {
-        await API.adminCreateStaff(Object.fromEntries(new FormData(e.target))); closeModal(); toast('Staff account created'); route(); }); };
+      $('#stf').onsubmit = (e) => {
+        e.preventDefault();
+        guarded(async () => {
+          await API.adminCreateStaff(Object.fromEntries(new FormData(e.target)));
+          closeModal();
+          toast('Staff account created');
+          route();
+        });
+      };
     };
   }
 
-  /* ======================= Command palette ======================= */
   function openPalette() {
     const base = [
       ...NAV.filter((n) => can(n.id)).map((n) => ({ t: `Go to ${n.label}`, icon: n.icon, run: () => go(n.id) })),
       { t: 'Add product', icon: 'plus', run: () => guarded(async () => openProductForm(null, (await API.categories()).categories)) },
+      ...(can('promotions') ? [{ t: 'New coupon', icon: 'ticket-percent', run: () => openCouponForm(null) }] : []),
       { t: 'Record expense', icon: 'receipt', run: openExpenseModal },
       { t: 'New purchase order', icon: 'truck', run: () => openPOModal() },
       { t: 'Pending orders', icon: 'clock', run: () => go('orders', { status: 'pending' }) },
       { t: 'Low stock items', icon: 'alert-triangle', run: () => go('inventory', { state: 'alerts' }) },
       { t: 'Toggle dark mode', icon: 'moon', run: toggleTheme }
     ];
-    openModal(`<input id="pal-q" placeholder="Type a command, or search products and orders…" autocomplete="off"><ul id="pal-list"></ul>`, 'palette');
+
+    openModal('<input id="pal-q" placeholder="Type a command, or search products and orders…" autocomplete="off"><ul id="pal-list"></ul>', 'palette');
     let sel = 0, items = base;
+
     const draw = () => {
-      $('#pal-list').innerHTML = items.map((i, n) => `<li class="${n === sel ? 'sel' : ''}" data-n="${n}"><i data-lucide="${i.icon}"></i>${esc(i.t)}${i.hint ? `<span class="hint">${esc(i.hint)}</span>` : ''}</li>`).join('') || '<li class="muted">No matches</li>';
-      icons($('#pal-list')); $('.sel', $('#pal-list'))?.scrollIntoView({ block: 'nearest' });
+      $('#pal-list').innerHTML = items.map((i, n) =>
+        `<li class="${n === sel ? 'sel' : ''}" data-n="${n}"><i data-lucide="${i.icon}"></i>${esc(i.t)}${i.hint ? `<span class="hint">${esc(i.hint)}</span>` : ''}</li>`).join('')
+        || '<li class="muted">No matches</li>';
+      icons($('#pal-list'));
+      $('.sel', $('#pal-list'))?.scrollIntoView({ block: 'nearest' });
     };
-    const run = (i) => { closeModal(); i && i.run(); };
+    const run = (i) => { closeModal(); if (i) i.run(); };
+
     $('#pal-q').oninput = (e) => {
-      const q = e.target.value.trim().toLowerCase();
+      const raw = e.target.value.trim(), q = raw.toLowerCase();
       items = base.filter((i) => i.t.toLowerCase().includes(q));
       if (q) {
-        if (can('products')) items.push({ t: `Search products for “${e.target.value.trim()}”`, icon: 'book-open', hint: 'Products', run: () => go('products', { q: e.target.value.trim() }) });
-        if (can('orders')) items.push({ t: `Search orders for “${e.target.value.trim()}”`, icon: 'shopping-cart', hint: 'Orders', run: () => go('orders', { q: e.target.value.trim() }) });
+        if (can('products')) items.push({ t: `Search products for “${raw}”`, icon: 'book-open', hint: 'Products', run: () => go('products', { q: raw }) });
+        if (can('orders')) items.push({ t: `Search orders for “${raw}”`, icon: 'shopping-cart', hint: 'Orders', run: () => go('orders', { q: raw }) });
       }
-      sel = 0; draw();
+      sel = 0;
+      draw();
     };
     $('#pal-q').onkeydown = (e) => {
       if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, items.length - 1); draw(); e.preventDefault(); }
       else if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); draw(); e.preventDefault(); }
       else if (e.key === 'Enter') run(items[sel]);
     };
-    $('#pal-list').onclick = (e) => { const li = e.target.closest('li[data-n]'); if (li) run(items[Number(li.dataset.n)]); };
+    $('#pal-list').onclick = (e) => {
+      const li = e.target.closest('li[data-n]');
+      if (li) run(items[Number(li.dataset.n)]);
+    };
     draw();
   }
 
-  /* ======================= Chrome: theme, menu, shortcuts ======================= */
   function applyTheme(t) {
     document.documentElement.dataset.theme = t;
-    const b = $('#theme-btn'); if (b) { b.innerHTML = `<i data-lucide="${t === 'dark' ? 'sun' : 'moon'}"></i>`; icons(b); }
+    const b = $('#theme-btn');
+    if (b) { b.innerHTML = `<i data-lucide="${t === 'dark' ? 'sun' : 'moon'}"></i>`; icons(b); }
   }
   function toggleTheme() {
     const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem('admin-theme', t); } catch {} applyTheme(t);
+    try { localStorage.setItem('admin-theme', t); } catch {}
+    applyTheme(t);
   }
-  let saved = null; try { saved = localStorage.getItem('admin-theme'); } catch {}
-  applyTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+
+  let savedTheme = null;
+  try { savedTheme = localStorage.getItem('admin-theme'); } catch {}
+  applyTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 
   $('#theme-btn').onclick = toggleTheme;
   $('#menu-btn').onclick = () => $('#sidebar').classList.toggle('open');
@@ -1092,18 +1949,32 @@
   $('#refresh-btn').onclick = () => { route(); toast('Refreshed'); };
 
   document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if (isStaffUser(API.getUser())) openPalette(); return; }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (isStaffUser(API.getUser())) openPalette();
+      return;
+    }
     if (e.key === 'Escape' && modalOpen()) return closeModal();
     if (/input|textarea|select/i.test(e.target.tagName) || modalOpen() || e.ctrlKey || e.metaKey || e.altKey) return;
+
     if (e.key === 'r') route();
-    if (e.key === '/') { e.preventDefault(); const s = $('input[type=search]'); if (s) s.focus(); else openPalette(); }
-    if (e.key === 'g') { // g then letter: quick navigation
-      const handler = (ev) => { const m = { d: 'dashboard', o: 'orders', p: 'products', i: 'inventory', s: 'sales', e: 'expenses' }[ev.key]; if (m && can(m)) go(m); document.removeEventListener('keydown', handler, true); };
-      document.addEventListener('keydown', handler, true); setTimeout(() => document.removeEventListener('keydown', handler, true), 1500);
+    if (e.key === '/') {
+      e.preventDefault();
+      const s = $('input[type=search]');
+      if (s) s.focus(); else openPalette();
+    }
+    if (e.key === 'g') { // "g" then a letter: quick navigation
+      const targets = { d: 'dashboard', o: 'orders', p: 'products', i: 'inventory', s: 'sales', e: 'expenses', c: 'promotions' };
+      const handler = (ev) => {
+        const m = targets[ev.key];
+        if (m && can(m)) go(m);
+        document.removeEventListener('keydown', handler, true);
+      };
+      document.addEventListener('keydown', handler, true);
+      setTimeout(() => document.removeEventListener('keydown', handler, true), 1500);
     }
   });
 
-  /* ======================= Start ======================= */
   icons();
   if (isStaffUser(API.getUser())) showApp(); else showLogin();
 })();

@@ -1145,20 +1145,6 @@
       )?.value || fallback;
     }
 
-    // =====================================================
-    // KENYAN PHONE NUMBER NORMALIZATION
-    // =====================================================
-
-    /**
-     * Accepts Kenyan mobile numbers beginning with 01 or 07.
-     * Supports local and international formats.
-     *
-     * Returns:
-     *   254XXXXXXXXX
-     *
-     * Returns null for invalid numbers.
-     */
-
     function normalizeKenyanPhone(phone) {
       let value = String(phone || "").trim();
 
