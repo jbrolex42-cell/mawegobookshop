@@ -7,8 +7,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <script src="https://unpkg.com/lucide@0.469.0"></script>
 <style>
-:root{--bg:#f5f6f8;--surface:#fff;--surface-2:#f0f2f5;--text:#1b1f27;--muted:#6b7280;--border:#e3e6eb;--brand:#1f7a4d;--brand-2:#155c3a;--brand-soft:#e3f4ea;--danger:#c0392b;--danger-soft:#fde8e6;--warn:#b7791f;--warn-soft:#fff3d6;--info:#2b6cb0;--info-soft:#e6f0fb;--shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);--shadow-lg:0 12px 32px rgba(16,24,40,.18);--radius:12px;--sidebar:236px;--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+:root{--bg:#f5f6f8;--surface:#fff;--surface-2:#f0f2f5;--text:#1b1f27;--muted:#6b7280;--border:#e3e6eb;--brand:#1f7a4d;--brand-2:#155c3a;--brand-soft:#e3f4ea;--danger:#c0392b;--danger-soft:#fde8e6;--warn:#b7791f;--warn-soft:#fff3d6;--info:#2b6cb0;--info-soft:#e6f0fb;--shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);--shadow-lg:0 12px 32px rgba(16,24,40,.18);--radius:12px;--sidebar:236px;--cell-y:.65rem;--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
 :root[data-theme="dark"]{--bg:#0f1318;--surface:#171c23;--surface-2:#1f262f;--text:#e8ebf0;--muted:#8b95a5;--border:#2a323d;--brand:#3ca873;--brand-2:#2f8c5f;--brand-soft:#16352a;--danger:#e5675a;--danger-soft:#3a1d1a;--warn:#e0b04a;--warn-soft:#3a2f12;--info:#6ea8e8;--info-soft:#17283d;--shadow:0 1px 2px rgba(0,0,0,.4);--shadow-lg:0 12px 32px rgba(0,0,0,.6)}
+body.compact{--cell-y:.3rem}
 *{box-sizing:border-box}html,body{margin:0}
 body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.45}
 h1,h2,h3{margin:0}h1{font-size:1.45rem}h2{font-size:1.05rem}a{color:inherit;text-decoration:none}
@@ -21,15 +22,17 @@ i[data-lucide],svg.lucide{width:16px;height:16px;vertical-align:-3px;flex:none}
 .btn-soft{background:var(--brand-soft);color:var(--brand);border-color:transparent}
 .btn-sm{padding:.3rem .6rem;font-size:.8rem;border-radius:8px}.btn-icon{padding:.45rem}
 input,select,textarea{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:.5rem .65rem;width:100%}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:-1px;border-color:transparent}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--brand);outline-offset:-1px;border-color:transparent}
 input[type=checkbox]{width:auto}
 label{font-size:.8rem;font-weight:600;color:var(--muted);display:block;margin-bottom:.25rem}
 .form-group{margin-bottom:.85rem}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
 .check{display:flex;align-items:center;gap:.5rem;color:var(--text);font-size:.9rem}
+details{margin-bottom:.85rem}summary{cursor:pointer;font-weight:600;margin-bottom:.6rem}
+.img-preview{max-width:90px;max-height:120px;margin-top:.5rem;border-radius:6px;display:block}
 #login-view{min-height:100vh;display:grid;place-items:center;padding:1rem;background:linear-gradient(135deg,var(--brand-soft),var(--bg))}
 .login-card{width:100%;max-width:400px;background:var(--surface);border-radius:16px;padding:2rem;box-shadow:var(--shadow-lg)}
 .login-card .mark{width:48px;height:48px;border-radius:12px;background:var(--brand);color:#fff;display:grid;place-items:center;margin-bottom:1rem}
-.alert{padding:.65rem .85rem;border-radius:9px;margin-bottom:.85rem;font-size:.88rem}.alert-error{background:var(--danger-soft);color:var(--danger)}
+.alert{padding:.65rem .85rem;border-radius:9px;margin-bottom:.85rem;font-size:.88rem}.alert-error{background:var(--danger-soft);color:var(--danger)}.alert-warn{background:var(--warn-soft);color:var(--warn)}
 .shell{display:grid;grid-template-columns:var(--sidebar) 1fr;min-height:100vh}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1rem .75rem;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:.15rem}
 .brand{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.05rem;padding:.4rem .6rem 1rem}
@@ -44,46 +47,55 @@ label{font-size:.8rem;font-weight:600;color:var(--muted);display:block;margin-bo
 .search-trigger{display:flex;align-items:center;gap:.6rem;min-width:260px;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:.45rem .7rem;cursor:pointer;font:inherit}
 kbd{font-family:inherit;font-size:.7rem;border:1px solid var(--border);background:var(--surface);border-radius:5px;padding:.05rem .35rem;margin-left:auto}
 .menu-btn{display:none}.content{padding:1.5rem;max-width:1400px}
+.offline{background:var(--warn-soft);color:var(--warn);text-align:center;padding:.4rem;font-weight:600;font-size:.82rem}
 .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
 .page-head p{margin:.2rem 0 0;color:var(--muted)}.actions{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow)}
 .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;gap:.5rem}
 .grid-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.9rem;margin-bottom:1.25rem}
-.stat{display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);position:relative;transition:.15s;cursor:pointer}
-.stat:hover{transform:translateY(-2px);border-color:var(--brand);box-shadow:var(--shadow-lg)}
+.stat{display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);position:relative;transition:.15s}
+a.stat{cursor:pointer}a.stat:hover{transform:translateY(-2px);border-color:var(--brand);box-shadow:var(--shadow-lg)}
 .stat .ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand);margin-bottom:.6rem}
 .stat.warn .ico{background:var(--warn-soft);color:var(--warn)}.stat.bad .ico{background:var(--danger-soft);color:var(--danger)}.stat.info .ico{background:var(--info-soft);color:var(--info)}
-.stat .label{font-size:.78rem;color:var(--muted);font-weight:600;margin:0}.stat .value{font-size:1.4rem;font-weight:800;margin:.1rem 0}.stat .sub{font-size:.78rem;color:var(--muted)}
+.stat .label{font-size:.78rem;color:var(--muted);font-weight:600}.stat .value{font-size:1.4rem;font-weight:800;margin:.1rem 0}.stat .sub{font-size:.78rem;color:var(--muted)}
 .stat .go{position:absolute;top:.9rem;right:.9rem;color:var(--muted);opacity:0;transition:.15s}.stat:hover .go{opacity:1}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.1rem}
+.cols-3{display:grid;grid-template-columns:2fr 1fr;gap:1.1rem}
 .quick{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
 .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:auto;box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse}
 th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:.65rem .85rem;background:var(--surface-2);border-bottom:1px solid var(--border);white-space:nowrap;user-select:none}
 th.sortable{cursor:pointer}th.sortable:hover{color:var(--text)}
-td{padding:.65rem .85rem;border-bottom:1px solid var(--border);vertical-align:middle}
+td{padding:var(--cell-y) .85rem;border-bottom:1px solid var(--border);vertical-align:middle}
+td.sel,th.sel{width:34px;padding-right:0}
 tr:last-child td{border-bottom:0}tbody tr.click{cursor:pointer}tbody tr:hover{background:var(--surface-2)}tr.dim td{opacity:.55}
 .empty{text-align:center;color:var(--muted);padding:2rem!important}
 .pager{display:flex;justify-content:space-between;align-items:center;padding:.6rem .85rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--muted)}
 .row-actions{display:flex;gap:.3rem;justify-content:flex-end;flex-wrap:wrap}
 .thumb{width:34px;height:46px;object-fit:cover;border-radius:4px;background:var(--surface-2);display:block}
-.toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.9rem}
+.toolbar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:.9rem}
 .toolbar input[type=search]{max-width:340px;flex:1;min-width:180px}.toolbar select,.toolbar input[type=date]{width:auto}
+.bulkbar{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;background:var(--brand-soft);color:var(--brand);padding:.5rem .8rem;border-radius:10px;margin-bottom:.9rem;font-weight:600}
 .chips{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem}
-.chip{border:1px solid var(--border);background:var(--surface);border-radius:99px;padding:.25rem .75rem;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer}
+.chip{border:1px solid var(--border);background:var(--surface);border-radius:99px;padding:.25rem .75rem;font:inherit;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer}
 .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}.chip b{opacity:.8;margin-left:.25rem}
 .pill,.badge{display:inline-block;padding:.12rem .6rem;border-radius:99px;font-size:.74rem;font-weight:700;text-transform:capitalize;white-space:nowrap}
 .t-ok,.t-paid,.t-completed,.t-received,.t-published,.t-active,.t-sent,.t-subscribed{background:var(--brand-soft);color:var(--brand)}
-.t-low,.t-pending,.t-ordered,.t-unpaid,.t-draft,.t-scheduled{background:var(--warn-soft);color:var(--warn)}
-.t-out,.t-cancelled,.t-failed,.t-expired,.t-exhausted,.t-unsubscribed,.t-blacklisted,.t-bounced{background:var(--danger-soft);color:var(--danger)}
+.t-low,.t-pending,.t-ordered,.t-unpaid,.t-draft,.t-scheduled,.t-used_up{background:var(--warn-soft);color:var(--warn)}
+.t-out,.t-cancelled,.t-failed,.t-expired,.t-unsubscribed,.t-blacklisted,.t-bounced{background:var(--danger-soft);color:var(--danger)}
 .t-confirmed,.t-processing,.t-ready,.t-out_for_delivery,.t-upcoming,.t-queued,.t-in_process{background:var(--info-soft);color:var(--info)}
 .t-archived,.t-default,.t-inactive{background:var(--surface-2);color:var(--muted)}
 .bars .bar{margin:.55rem 0}.bar .top{display:flex;justify-content:space-between;font-size:.85rem;gap:.5rem}
 .bar .track{height:8px;background:var(--surface-2);border-radius:99px;margin-top:.25rem;overflow:hidden}
-.bar .fill{height:100%;background:var(--brand);border-radius:99px;transition:width .5s}
+.bar .fill{height:100%;background:var(--brand);border-radius:99px}
 .donut-wrap{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
 .legend div{display:flex;align-items:center;gap:.5rem;margin:.3rem 0;font-size:.85rem}
 .legend i.dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+.trend{display:flex;align-items:flex-end;gap:6px;height:140px;padding-top:.5rem}
+.trend .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.trend .b{width:100%;background:var(--brand);border-radius:5px 5px 0 0;min-height:2px;opacity:.85}.trend .col:hover .b{opacity:1}
+.trend .d{font-size:.65rem;color:var(--muted);margin-top:.25rem}
+.delta{font-size:.75rem;font-weight:700}
 .pnl-line{display:flex;justify-content:space-between;padding:.5rem 0}.pnl-line.sub{border-top:1px solid var(--border)}
 .pnl-line.total{border-top:2px solid var(--brand);margin-top:.4rem;padding-top:.8rem;font-size:1.15rem}
 .neg{color:var(--danger)}.pos{color:var(--brand)}
@@ -92,6 +104,9 @@ tr:last-child td{border-bottom:0}tbody tr.click{cursor:pointer}tbody tr:hover{ba
 .modal.wide{max-width:780px}.modal h2{margin-bottom:.9rem;font-size:1.2rem}
 .modal-actions{display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap;margin-top:1.1rem}
 .kv{display:grid;grid-template-columns:130px 1fr;gap:.35rem .75rem;margin-bottom:1rem;font-size:.9rem}.kv dt{color:var(--muted)}.kv dd{margin:0}
+.stepper{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:1rem}
+.step{flex:1;min-width:70px;text-align:center;padding:.35rem .4rem;border-radius:8px;background:var(--surface-2);color:var(--muted);font-size:.72rem;font-weight:700;text-transform:capitalize;cursor:pointer}
+.step.done{background:var(--brand-soft);color:var(--brand)}.step.cur{background:var(--brand);color:#fff}.step.cancel.cur{background:var(--danger)}
 #toasts{position:fixed;right:1rem;bottom:1rem;display:flex;flex-direction:column;gap:.5rem;z-index:200}
 .toast{background:var(--text);color:var(--bg);padding:.7rem 1rem;border-radius:10px;box-shadow:var(--shadow-lg);display:flex;gap:.6rem;align-items:center;max-width:360px;animation:pop .2s}
 .toast.error{background:var(--danger);color:#fff}
@@ -99,10 +114,9 @@ tr:last-child td{border-bottom:0}tbody tr.click{cursor:pointer}tbody tr:hover{ba
 .palette input{border:0;border-bottom:1px solid var(--border);border-radius:0;padding:1rem 1.2rem;font-size:1rem}.palette input:focus{outline:none}
 .palette ul{list-style:none;margin:0;padding:.4rem;max-height:340px;overflow:auto}
 .palette li{display:flex;align-items:center;gap:.7rem;padding:.55rem .75rem;border-radius:8px;cursor:pointer}
-.palette li.sel{background:var(--brand-soft);color:var(--brand)}
+.palette li .hint{margin-left:auto}.palette li.sel{background:var(--brand-soft);color:var(--brand)}
 .loading{display:grid;place-items:center;padding:4rem;color:var(--muted)}.spin{animation:spin 1s linear infinite}
 @keyframes fade{from{opacity:0}}@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}}@keyframes spin{to{transform:rotate(360deg)}}
-/* Marketing */
 .mkt-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1.1rem;border-bottom:1px solid var(--border);padding-bottom:.6rem}
 .mkt-tab{padding:.45rem .9rem;border-radius:9px;font-weight:600;color:var(--muted);cursor:pointer;border:1px solid transparent;background:transparent;font:inherit}
 .mkt-tab:hover{background:var(--surface-2);color:var(--text)}.mkt-tab.on{background:var(--brand-soft);color:var(--brand)}
@@ -115,13 +129,14 @@ tr:last-child td{border-bottom:0}tbody tr.click{cursor:pointer}tbody tr:hover{ba
 .usage .track{flex:1;height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}.usage .fill{height:100%;background:var(--brand)}
 .preview-frame{width:100%;height:380px;border:1px solid var(--border);border-radius:10px;background:#fff}
 .tpl-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:center}.tpl-row select{width:auto}
+.sc-grid{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;font-size:.9rem}
 @media(max-width:900px){
 .shell{grid-template-columns:1fr}
 .sidebar{position:fixed;left:0;top:0;z-index:60;width:250px;transform:translateX(-100%);transition:.2s;box-shadow:var(--shadow-lg)}
-.sidebar.open{transform:none}.menu-btn{display:inline-flex}.cols{grid-template-columns:1fr}
+.sidebar.open{transform:none}.menu-btn{display:inline-flex}.cols,.cols-3{grid-template-columns:1fr}
 .search-trigger{min-width:0;flex:1}.search-trigger span,.search-trigger kbd{display:none}
 .content{padding:1rem}.form-row{grid-template-columns:1fr}}
-@media print{.sidebar,.topbar,.actions,.toolbar,.quick,#toasts{display:none!important}.shell{display:block}.card,.table-wrap{box-shadow:none}}
+@media print{.sidebar,.topbar,.actions,.toolbar,.quick,.chips,.bulkbar,#toasts{display:none!important}.shell{display:block}.card,.table-wrap{box-shadow:none}}
 </style>
 </head>
 <body>
@@ -155,10 +170,13 @@ tr:last-child td{border-bottom:0}tbody tr.click{cursor:pointer}tbody tr:hover{ba
     </div>
   </aside>
   <div class="main">
+    <div class="offline hidden" id="offline-bar">You are offline — changes will fail until the connection returns.</div>
     <header class="topbar">
       <button class="btn btn-icon menu-btn" id="menu-btn" aria-label="Menu"><i data-lucide="menu"></i></button>
       <button class="search-trigger" id="palette-btn"><i data-lucide="search"></i><span>Search or jump to…</span><kbd>Ctrl K</kbd></button>
       <div class="spacer"></div>
+      <button class="btn btn-icon" id="help-btn" title="Keyboard shortcuts (?)"><i data-lucide="keyboard"></i></button>
+      <button class="btn btn-icon" id="density-btn" title="Compact tables"><i data-lucide="rows-3"></i></button>
       <button class="btn btn-icon" id="refresh-btn" title="Refresh (R)"><i data-lucide="refresh-cw"></i></button>
       <button class="btn btn-icon" id="theme-btn" title="Toggle theme"><i data-lucide="moon"></i></button>
     </header>
@@ -174,7 +192,9 @@ tr:last-child td{border-bottom:0}tbody tr.click{cursor:pointer}tbody tr:hover{ba
 (() => {
 'use strict';
 
-/* ============ CORE HELPERS ============ */
+/* =====================================================================
+   1. HELPERS
+   ===================================================================== */
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
 const esc = (v) => escapeHtml(String(v ?? ''));
@@ -182,38 +202,29 @@ const kes = (v) => formatKes(Number(v) || 0);
 const num = (v) => Number(v) || 0;
 const label = (s) => String(s || '').replace(/_/g, ' ');
 const ymd = (d) => d.toLocaleDateString('en-CA');
+const fdate = (v) => (v ? String(v).slice(0, 10) : '—');
+const DAY = 864e5;
 const icons = (el) => { try { lucide.createIcons(el ? { nodes: [el] } : undefined); } catch {} };
 const badge = (status, text) => `<span class="badge t-${esc(status || 'default')}">${esc(label(text ?? status))}</span>`;
 const debounce = (fn, ms = 200) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+const arr = (v, k) => (Array.isArray(v) ? v : (v && Array.isArray(v[k]) ? v[k] : []));
+const pct = (v) => (v == null || v === '' ? '—' : `${Math.round((Number(v) <= 1 ? Number(v) * 100 : Number(v)) * 10) / 10}%`);
+const store = {
+  get(k, d = null) { try { return localStorage.getItem(k) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+};
+const STATUSES = (typeof ORDER_STATUSES !== 'undefined' && ORDER_STATUSES) || ['pending', 'confirmed', 'processing', 'ready', 'out_for_delivery', 'completed', 'cancelled'];
 
 const STAFF_ROLES = ['staff', 'cashier', 'inventory', 'manager', 'owner'];
 const isStaffUser = (u) => !!u && STAFF_ROLES.includes(u.role);
 
-const NAV = [
-  { id: 'dashboard',  label: 'Dashboard',       icon: 'layout-dashboard' },
-  { id: 'orders',     label: 'Orders',          icon: 'shopping-cart' },
-  { id: 'products',   label: 'Products',        icon: 'book-open' },
-  { id: 'marketing',  label: 'Marketing',       icon: 'megaphone' },
-  { id: 'promotions', label: 'Promotions',      icon: 'ticket-percent' },
-  { id: 'inventory',  label: 'Inventory',       icon: 'warehouse' },
-  { id: 'suppliers',  label: 'Suppliers & POs', icon: 'truck' },
-  { id: 'expenses',   label: 'Expenses',        icon: 'receipt' },
-  { id: 'sales',      label: 'Sales report',    icon: 'bar-chart-3' },
-  { id: 'pnl',        label: 'Profit & loss',   icon: 'line-chart' },
-  { id: 'staff',      label: 'Staff',           icon: 'users' }
-];
-const ACCESS = {
-  owner: null, manager: null,
-  cashier: ['dashboard', 'orders', 'products'],
-  inventory: ['dashboard', 'products', 'inventory', 'suppliers'],
-  staff: ['dashboard', 'orders', 'products', 'inventory', 'marketing', 'promotions']
-};
-const can = (view) => {
-  const u = API.getUser();
-  const a = u ? ACCESS[u.role] : [];
-  return a === null || (a || []).includes(view);
+const copyText = async (txt, msg = 'Copied') => {
+  try { await navigator.clipboard.writeText(txt); toast(msg); } catch { toast('Copy failed', 'error'); }
 };
 
+/* =====================================================================
+   2. UI PRIMITIVES (toast, modal, confirm, csv, table, charts)
+   ===================================================================== */
 function toast(message, type = 'success') {
   const el = document.createElement('div');
   el.className = `toast ${type === 'error' ? 'error' : ''}`;
@@ -222,6 +233,7 @@ function toast(message, type = 'success') {
   icons(el);
   setTimeout(() => el.remove(), 4500);
 }
+
 async function guarded(fn) {
   try { return await fn(); }
   catch (err) {
@@ -235,8 +247,8 @@ function openModal(html, cls = '') {
   root.innerHTML = `<div class="overlay"><div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div></div>`;
   $('.overlay', root).addEventListener('mousedown', (e) => { if (e.target.classList.contains('overlay')) closeModal(); });
   icons(root);
-  const first = $('input:not([type=hidden]):not([type=file]),select,textarea', root);
-  if (first && !cls.includes('palette')) first.focus();
+  const first = $('input:not([type=hidden]):not([type=file]):not([type=checkbox]),select,textarea', root);
+  if (first) first.focus();
   return root;
 }
 const closeModal = () => { $('#modal-root').innerHTML = ''; };
@@ -268,9 +280,12 @@ function exportCSV(name, columns, rows) {
   toast(`Exported ${rows.length} rows`);
 }
 
+/* Sortable, paginated table. Options: columns, rows, sort, dir, pageSize, empty,
+   onRow, onAction, rowClass, selectable, onSelect */
 function mountTable(el, o) {
   let rows = o.rows || [], sort = o.sort || null, dir = o.dir || 'asc', page = 1;
   const size = o.pageSize || 15;
+  const picked = new Set();
   const val = (c, r) => (c.value ? c.value(r) : r[c.key]);
   const sorted = () => {
     if (!sort) return rows;
@@ -283,20 +298,26 @@ function mountTable(el, o) {
     });
     return dir === 'desc' ? s.reverse() : s;
   };
+  const notify = () => o.onSelect && o.onSelect(rows.filter((r) => picked.has(String(r.id))));
+
   function draw() {
     const all = sorted();
     const pages = Math.max(1, Math.ceil(all.length / size));
     page = Math.min(page, pages);
     const slice = all.slice((page - 1) * size, page * size);
-    const head = o.columns.map((c) => {
-      const s = c.sortable !== false && c.label;
-      const arrow = sort === c.key ? (dir === 'asc' ? ' ▲' : ' ▼') : '';
-      return `<th class="${s ? 'sortable' : ''} ${c.cls || ''}" ${s ? `data-sort="${c.key}"` : ''}>${esc(c.label)}${arrow}</th>`;
-    }).join('');
+    const allOn = slice.length && slice.every((r) => picked.has(String(r.id)));
+    const head = (o.selectable ? `<th class="sel"><input type="checkbox" data-all ${allOn ? 'checked' : ''} aria-label="Select page"></th>` : '') +
+      o.columns.map((c) => {
+        const s = c.sortable !== false && c.label;
+        const arrow = sort === c.key ? (dir === 'asc' ? ' ▲' : ' ▼') : '';
+        return `<th class="${s ? 'sortable' : ''} ${c.cls || ''}" ${s ? `data-sort="${c.key}"` : ''}>${esc(c.label)}${arrow}</th>`;
+      }).join('');
+    const span = o.columns.length + (o.selectable ? 1 : 0);
     const body = slice.length
       ? slice.map((r) => `<tr data-id="${esc(r.id)}" class="${o.onRow ? 'click' : ''} ${o.rowClass ? o.rowClass(r) : ''}">${
+          o.selectable ? `<td class="sel"><input type="checkbox" data-pick ${picked.has(String(r.id)) ? 'checked' : ''}></td>` : ''}${
           o.columns.map((c) => `<td class="${c.cls || ''}">${c.render ? c.render(r) : esc(r[c.key])}</td>`).join('')}</tr>`).join('')
-      : `<tr><td class="empty" colspan="${o.columns.length}">${o.empty || 'Nothing to show'}</td></tr>`;
+      : `<tr><td class="empty" colspan="${span}">${o.empty || 'Nothing to show'}</td></tr>`;
     const pager = pages > 1
       ? `<span class="actions"><button class="btn btn-sm" data-pg="-1" ${page <= 1 ? 'disabled' : ''}>Prev</button>
          Page ${page} / ${pages}
@@ -305,21 +326,37 @@ function mountTable(el, o) {
       <div class="pager"><span>${all.length} ${all.length === 1 ? 'row' : 'rows'}</span>${pager}</div>`;
     icons(el);
   }
+
   el.onclick = (e) => {
+    if (e.target.matches('[data-all]')) {
+      const all = sorted().slice((page - 1) * size, page * size);
+      all.forEach((r) => (e.target.checked ? picked.add(String(r.id)) : picked.delete(String(r.id))));
+      notify(); return draw();
+    }
     const th = e.target.closest('[data-sort]');
     if (th) { dir = sort === th.dataset.sort && dir === 'asc' ? 'desc' : 'asc'; sort = th.dataset.sort; return draw(); }
     const pg = e.target.closest('[data-pg]');
     if (pg) { page += Number(pg.dataset.pg); return draw(); }
-    const btn = e.target.closest('[data-act]');
     const tr = e.target.closest('tbody tr[data-id]');
     if (!tr) return;
+    if (e.target.matches('[data-pick]')) {
+      e.target.checked ? picked.add(tr.dataset.id) : picked.delete(tr.dataset.id);
+      notify(); return;
+    }
     const row = rows.find((r) => String(r.id) === tr.dataset.id);
     if (!row) return;
+    const btn = e.target.closest('[data-act]');
     if (btn && o.onAction) { e.stopPropagation(); return o.onAction(btn.dataset.act, row); }
     if (o.onRow && !e.target.closest('a,button,input')) o.onRow(row);
   };
+
   draw();
-  return { setRows(r) { rows = r; page = 1; draw(); }, rows: sorted };
+  return {
+    setRows(r) { rows = r; page = 1; picked.clear(); notify(); draw(); },
+    rows: sorted,
+    selected: () => rows.filter((r) => picked.has(String(r.id))),
+    clear() { picked.clear(); notify(); draw(); }
+  };
 }
 
 const COLORS = ['#1f7a4d', '#2b6cb0', '#b7791f', '#8e44ad', '#c0392b', '#16a085', '#7f8c8d'];
@@ -334,9 +371,7 @@ function donut(items) {
   }).join('');
   const legend = items.map((it, i) => `<div><i class="dot" style="background:${COLORS[i % COLORS.length]}"></i>
     <span>${esc(label(it.label))}</span><b>${esc(it.display)}</b><span class="hint">${Math.round(it.value / total * 100)}%</span></div>`).join('');
-  return `<div class="donut-wrap"><svg width="150" height="150" viewBox="0 0 42 42">${segs}
-    <text x="21" y="22.5" text-anchor="middle" font-size="4.2" font-weight="800" fill="currentColor">${esc(kes(total))}</text>
-    </svg><div class="legend">${legend}</div></div>`;
+  return `<div class="donut-wrap"><svg width="150" height="150" viewBox="0 0 42 42">${segs}</svg><div class="legend">${legend}</div></div>`;
 }
 function hbars(items) {
   if (!items.length) return '<p class="muted">No data for this period</p>';
@@ -346,12 +381,23 @@ function hbars(items) {
     <div class="track"><div class="fill" style="width:${(i.value / max * 100).toFixed(1)}%"></div></div>
     ${i.sub ? `<div class="hint">${esc(i.sub)}</div>` : ''}</div>`).join('')}</div>`;
 }
+function trend(points) {
+  const max = Math.max(...points.map((p) => p.value), 1);
+  return `<div class="trend">${points.map((p) => `<div class="col" title="${esc(p.title)}">
+    <div class="b" style="height:${(p.value / max * 100).toFixed(1)}%"></div><div class="d">${esc(p.label)}</div></div>`).join('')}</div>`;
+}
+const delta = (cur, prev) => {
+  if (!prev) return '';
+  const d = Math.round((cur - prev) / prev * 100);
+  return `<span class="delta ${d < 0 ? 'neg' : 'pos'}">${d < 0 ? '▼' : '▲'} ${Math.abs(d)}%</span>`;
+};
+
 function rangeToolbar(root, run, pre = 'month') {
   const now = new Date();
   const presets = {
     today: () => [now, now],
-    '7d': () => [new Date(now - 6 * 864e5), now],
-    '30d': () => [new Date(now - 29 * 864e5), now],
+    '7d': () => [new Date(now - 6 * DAY), now],
+    '30d': () => [new Date(now - 29 * DAY), now],
     month: () => [new Date(now.getFullYear(), now.getMonth(), 1), now],
     lastmonth: () => [new Date(now.getFullYear(), now.getMonth() - 1, 1), new Date(now.getFullYear(), now.getMonth(), 0)],
     year: () => [new Date(now.getFullYear(), 0, 1), now]
@@ -362,7 +408,7 @@ function rangeToolbar(root, run, pre = 'month') {
     <div class="toolbar">
       <div><label>From</label><input type="date" id="r-from" value="${ymd(f)}"></div>
       <div><label>To</label><input type="date" id="r-to" value="${ymd(t)}"></div>
-      <button class="btn btn-primary btn-sm" id="r-run" style="align-self:end"><i data-lucide="play"></i> Run</button>
+      <button class="btn btn-primary btn-sm" id="r-run"><i data-lucide="play"></i> Run</button>
     </div>`;
   icons(root);
   const runNow = () => run($('#r-from').value, $('#r-to').value);
@@ -376,10 +422,22 @@ function rangeToolbar(root, run, pre = 'month') {
   $('#r-run').onclick = runNow;
   runNow();
 }
+/* Previous period of equal length, immediately before [from, to] */
+function prevRange(from, to) {
+  const f = new Date(from + 'T00:00:00'), t = new Date(to + 'T00:00:00');
+  const days = Math.round((t - f) / DAY) + 1;
+  const pt = new Date(f - DAY), pf = new Date(pt - (days - 1) * DAY);
+  return [ymd(pf), ymd(pt)];
+}
 
 const pageHead = (title, sub, actions = '') =>
   `<div class="page-head"><div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div class="actions">${actions}</div></div>`;
+const statCard = (o) => `<${o.href ? `a href="${o.href}"` : 'div'} class="stat ${o.tone || ''}">
+  ${o.href ? '<span class="go"><i data-lucide="arrow-up-right"></i></span>' : ''}
+  <div class="ico"><i data-lucide="${o.icon}"></i></div>
+  <div class="label">${o.label}</div><div class="value">${o.value}</div><div class="sub">${o.sub || '&nbsp;'}</div></${o.href ? 'a' : 'div'}>`;
 
+/* Product stock state */
 const stateOf = (p) => {
   const q = num(p.stock_qty);
   if (p.is_active === 0 || p.is_active === false) return 'archived';
@@ -390,7 +448,46 @@ const STATE_LABEL = { ok: 'In stock', low: 'Low stock', out: 'Out of stock', arc
 const statePill = (p) => { const s = stateOf(p); return `<span class="pill t-${s}">${STATE_LABEL[s]}</span>`; };
 const matches = (p, q) => !q || [p.name, p.sku, p.barcode, p.category_name].some((v) => String(v || '').toLowerCase().includes(q.trim().toLowerCase()));
 
-/* ============ ROUTER ============ */
+/* Shared bulk bar */
+function bulkBar(host, buttons) {
+  host.innerHTML = '';
+  return (selected) => {
+    host.innerHTML = selected.length
+      ? `<div class="bulkbar"><span>${selected.length} selected</span>${buttons.map((b) => `<button class="btn btn-sm" data-b="${b.id}"><i data-lucide="${b.icon}"></i> ${b.text}</button>`).join('')}</div>` : '';
+    icons(host);
+    $$('[data-b]', host).forEach((el) => { el.onclick = () => buttons.find((b) => b.id === el.dataset.b).run(selected); });
+  };
+}
+
+/* =====================================================================
+   3. NAVIGATION + ROUTER
+   ===================================================================== */
+const NAV = [
+  { id: 'dashboard',  label: 'Dashboard',       icon: 'layout-dashboard', key: 'd' },
+  { id: 'orders',     label: 'Orders',          icon: 'shopping-cart',    key: 'o' },
+  { id: 'products',   label: 'Products',        icon: 'book-open',        key: 'p' },
+  { id: 'customers',  label: 'Customers',       icon: 'contact',          key: 'u' },
+  { id: 'marketing',  label: 'Marketing',       icon: 'megaphone',        key: 'm' },
+  { id: 'promotions', label: 'Promotions',      icon: 'ticket-percent',   key: 'c' },
+  { id: 'inventory',  label: 'Inventory',       icon: 'warehouse',        key: 'i' },
+  { id: 'suppliers',  label: 'Suppliers & POs', icon: 'truck',            key: 'l' },
+  { id: 'expenses',   label: 'Expenses',        icon: 'receipt',          key: 'e' },
+  { id: 'sales',      label: 'Sales report',    icon: 'bar-chart-3',      key: 's' },
+  { id: 'pnl',        label: 'Profit & loss',   icon: 'line-chart',       key: 'f' },
+  { id: 'staff',      label: 'Staff',           icon: 'users',            key: 't' }
+];
+const ACCESS = {
+  owner: null, manager: null,
+  cashier: ['dashboard', 'orders', 'products'],
+  inventory: ['dashboard', 'products', 'inventory', 'suppliers'],
+  staff: ['dashboard', 'orders', 'products', 'customers', 'inventory', 'marketing', 'promotions']
+};
+const can = (view) => {
+  const u = API.getUser();
+  const a = u ? ACCESS[u.role] : [];
+  return a === null || (a || []).includes(view);
+};
+
 function parseHash() {
   const raw = location.hash.replace(/^#\/?/, '') || 'dashboard';
   const [view, qs] = raw.split('?');
@@ -399,11 +496,6 @@ function parseHash() {
 const link = (view, params = {}) => { const qs = new URLSearchParams(params).toString(); return `#/${view}${qs ? '?' + qs : ''}`; };
 const go = (view, params) => { location.hash = link(view, params); };
 
-const VIEWS = {
-  dashboard: renderDashboard, orders: renderOrders, products: renderProducts,
-  marketing: renderMarketing, promotions: renderPromotions, inventory: renderInventory,
-  suppliers: renderSuppliers, expenses: renderExpenses, sales: renderSales, pnl: renderPnL, staff: renderStaff
-};
 let currentView = '', navToken = 0;
 const badges = {};
 
@@ -448,45 +540,1230 @@ function showApp() {
   $('#admin-user').textContent = u ? u.full_name : '';
   $('#admin-role').textContent = u ? u.role : '';
   route();
+  startPolling();
 }
 $('#logout-btn').onclick = () => { API.clearAuth(); location.hash = ''; location.reload(); };
 $('#login-form').onsubmit = async (e) => {
   e.preventDefault();
   const msg = $('#login-msg'); msg.innerHTML = '';
+  const btn = $('button[type=submit]', e.target); btn.disabled = true;
   try {
     const data = await API.login($('#email').value, $('#password').value);
     if (!isStaffUser(data.user)) { msg.innerHTML = '<div class="alert alert-error">Staff access only</div>'; return; }
     API.setAuth(data.token, data.user);
     showApp();
   } catch (err) { msg.innerHTML = `<div class="alert alert-error">${esc(err.message)}</div>`; }
+  finally { btn.disabled = false; }
 };
 
-/* ============ MARKETING CENTRE (LIVE DATA ONLY) ============ */
+/* Background poll: keeps sidebar badges fresh and announces new pending orders */
+let pollTimer, lastPending = null;
+function startPolling() {
+  clearInterval(pollTimer);
+  const tick = async () => {
+    if (document.hidden || !can('dashboard') || !isStaffUser(API.getUser())) return;
+    try {
+      const d = await API.adminDashboard();
+      badges.orders = num(d.pending_orders);
+      badges.inventory = num(d.low_stock_count);
+      if (lastPending !== null && badges.orders > lastPending) toast(`${badges.orders - lastPending} new order(s) waiting`);
+      lastPending = badges.orders;
+      renderNav();
+    } catch {}
+  };
+  tick();
+  pollTimer = setInterval(tick, 60000);
+}
+
+/* =====================================================================
+   4. DASHBOARD
+   ===================================================================== */
+const FLOW = ['pending', 'confirmed', 'processing', 'ready', 'completed'];
+const nextStatus = (o) => {
+  if (o.order_status === 'ready' && o.fulfilment_type === 'delivery') return 'out_for_delivery';
+  if (o.order_status === 'out_for_delivery') return 'completed';
+  const i = FLOW.indexOf(o.order_status);
+  return i >= 0 && i < FLOW.length - 1 ? FLOW[i + 1] : null;
+};
+
+async function renderDashboard(root) {
+  const now = new Date();
+  const from = ymd(new Date(now.getFullYear(), now.getMonth(), 1)), to = ymd(now);
+  const [d, rep, ordersRes] = await Promise.all([
+    API.adminDashboard(),
+    can('sales') ? API.adminSalesReport(from, to).catch(() => null) : Promise.resolve(null),
+    can('orders') ? API.adminOrders({ limit: 500 }).catch(() => null) : Promise.resolve(null)
+  ]);
+
+  badges.orders = num(d.pending_orders);
+  badges.inventory = num(d.low_stock_count);
+  renderNav();
+
+  const sm = d.sales_month || {}, st = d.sales_today || {};
+  const salesMonth = num(sm.total), gp = num(d.gross_profit_month), net = num(d.net_profit_month);
+  const margin = salesMonth ? Math.round(gp / salesMonth * 100) : 0;
+  const avg = sm.count ? salesMonth / sm.count : 0;
+  const hour = now.getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const firstName = (API.getUser()?.full_name || '').split(' ')[0];
+
+  // 14-day revenue trend, derived from existing orders endpoint
+  let trendHtml = '<p class="muted">Unavailable</p>';
+  if (ordersRes) {
+    const days = [...Array(14)].map((_, i) => { const x = new Date(now - (13 - i) * DAY); return { k: ymd(x), label: String(x.getDate()), value: 0 }; });
+    arr(ordersRes, 'orders').forEach((o) => {
+      if (o.order_status === 'cancelled') return;
+      const day = days.find((x) => x.k === String(o.created_at || '').slice(0, 10));
+      if (day) day.value += num(o.total_kes);
+    });
+    trendHtml = trend(days.map((x) => ({ ...x, title: `${x.k}: ${kes(x.value)}` })));
+  }
+
+  root.innerHTML = `
+    ${pageHead(`${greeting}, ${esc(firstName)}`,
+      now.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
+      '<label class="check" style="margin:0"><input type="checkbox" id="auto-refresh"> Auto-refresh</label>')}
+    <div class="quick">
+      <button class="btn btn-primary" data-q="product"><i data-lucide="plus"></i> Add product</button>
+      <button class="btn" data-q="expense"><i data-lucide="receipt"></i> Record expense</button>
+      <button class="btn" data-q="po"><i data-lucide="truck"></i> New purchase order</button>
+      <button class="btn" data-q="stock"><i data-lucide="package"></i> Restock alerts</button>
+    </div>
+    <div class="grid-stats">
+      ${statCard({ href: link('orders', { period: 'today' }), icon: 'banknote', label: 'Sales today', value: kes(st.total), sub: `${num(st.count)} orders` })}
+      ${statCard({ href: link('sales'), icon: 'trending-up', label: 'Sales this month', value: kes(salesMonth), sub: `${num(sm.count)} orders · avg ${kes(avg)}` })}
+      ${statCard({ href: link('pnl'), icon: 'piggy-bank', label: 'Gross profit (month)', value: kes(gp), sub: `${margin}% margin`, tone: 'info' })}
+      ${statCard({ href: link('expenses'), icon: 'receipt', label: 'Expenses (month)', value: kes(d.expenses_month), sub: 'View all expenses', tone: 'warn' })}
+      ${statCard({ href: link('pnl'), icon: 'scale', label: 'Net profit (month)', value: `<span class="${net < 0 ? 'neg' : ''}">${kes(net)}</span>`, sub: net < 0 ? 'Running at a loss' : 'After expenses', tone: net < 0 ? 'bad' : '' })}
+      ${statCard({ href: link('inventory'), icon: 'warehouse', label: 'Inventory value', value: kes(d.inventory_value_cost), sub: 'At buying price', tone: 'info' })}
+      ${statCard({ href: link('orders', { status: 'pending' }), icon: 'clock', label: 'Open orders', value: num(d.pending_orders), sub: 'Needs action', tone: num(d.pending_orders) ? 'warn' : '' })}
+      ${statCard({ href: link('inventory', { state: 'alerts' }), icon: 'alert-triangle', label: 'Low stock', value: num(d.low_stock_count), sub: 'Items to reorder', tone: num(d.low_stock_count) ? 'bad' : '' })}
+      ${statCard({ href: link('suppliers', { tab: 'pos' }), icon: 'truck', label: 'Open POs', value: kes(d.outstanding_purchases), sub: 'Awaiting delivery', tone: 'info' })}
+    </div>
+    <div class="card" style="margin-bottom:1.1rem">
+      <div class="card-head"><h2>Revenue · last 14 days</h2><span class="hint">excludes cancelled orders</span></div>${trendHtml}
+    </div>
+    <div class="cols">
+      <div class="card">
+        <div class="card-head"><h2>Payment methods · this month</h2><a class="btn btn-sm" href="${link('sales')}">Full report</a></div>
+        ${rep ? donut((rep.by_payment || []).map((r) => ({ label: r.payment_method, value: num(r.total), display: kes(r.total) }))) : '<p class="muted">Unavailable</p>'}
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Top sellers · this month</h2><a class="btn btn-sm" href="${link('sales')}">See all</a></div>
+        ${rep ? hbars((rep.top_products || []).slice(0, 5).map((r) => ({ label: r.product_name, value: num(r.revenue), display: kes(r.revenue), sub: `${r.qty_sold} sold` }))) : '<p class="muted">Unavailable</p>'}
+      </div>
+    </div>
+    <div class="cols">
+      <div><div class="card-head"><h2>Recent orders</h2><a class="btn btn-sm" href="${link('orders')}">View all</a></div><div class="table-wrap" id="dash-orders"></div></div>
+      <div><div class="card-head"><h2>Low stock</h2><a class="btn btn-sm" href="${link('inventory', { state: 'alerts' })}">View all</a></div><div class="table-wrap" id="dash-low"></div></div>
+    </div>`;
+
+  mountTable($('#dash-orders', root), {
+    pageSize: 6, rows: d.recent_orders || [], empty: 'No orders yet', onRow: (o) => openOrderModal(o.id),
+    columns: [
+      { key: 'order_number', label: 'Order' },
+      { key: 'customer_name', label: 'Customer' },
+      { key: 'total_kes', label: 'Total', value: (o) => num(o.total_kes), render: (o) => kes(o.total_kes) },
+      { key: 'order_status', label: 'Status', render: (o) => badge(o.order_status) }
+    ]
+  });
+  mountTable($('#dash-low', root), {
+    pageSize: 6, empty: 'All products are well stocked',
+    rows: (d.low_stock_products || []).map((p) => ({ ...p, id: p.id ?? p.name })),
+    onAction: (a, p) => openPOModal(p.id),
+    columns: [
+      { key: 'name', label: 'Product' },
+      { key: 'stock_qty', label: 'Qty', value: (p) => num(p.stock_qty), render: (p) => `<b class="${num(p.stock_qty) <= 0 ? 'neg' : ''}">${esc(p.stock_qty)}</b>` },
+      { key: 'low_stock_threshold', label: 'Min' },
+      { key: 'x', label: '', sortable: false, csv: false, cls: 'right', render: () => '<button class="btn btn-sm btn-soft" data-act="po"><i data-lucide="truck"></i> Reorder</button>' }
+    ]
+  });
+
+  $$('[data-q]', root).forEach((b) => {
+    b.onclick = () => guarded(async () => {
+      const k = b.dataset.q;
+      if (k === 'product') openProductForm(null, (await API.categories()).categories);
+      if (k === 'expense') openExpenseModal();
+      if (k === 'po') openPOModal();
+      if (k === 'stock') go('inventory', { state: 'alerts' });
+    });
+  });
+  const ar = $('#auto-refresh', root);
+  ar.checked = sessionStorage.getItem('autoRefresh') === '1';
+  ar.onchange = () => { sessionStorage.setItem('autoRefresh', ar.checked ? '1' : '0'); setAuto(); };
+}
+
+let autoTimer;
+function setAuto() {
+  clearInterval(autoTimer);
+  if (sessionStorage.getItem('autoRefresh') === '1') {
+    autoTimer = setInterval(() => { if (currentView === 'dashboard' && !modalOpen() && !document.hidden) route(); }, 60000);
+  }
+}
+setAuto();
+
+/* =====================================================================
+   5. ORDERS
+   ===================================================================== */
+async function renderOrders(root, params) {
+  const { orders } = await API.adminOrders({ limit: 500 });
+  let status = params.status || '';
+  const today = ymd(new Date());
+  const countOf = (s) => (s ? orders.filter((o) => o.order_status === s).length : orders.length);
+
+  root.innerHTML = `
+    ${pageHead('Orders', `${orders.length} most recent orders`, '<button class="btn" id="o-export"><i data-lucide="download"></i> Export CSV</button>')}
+    <div class="chips" id="o-chips">${['', ...STATUSES].map((s) => `<button class="chip" data-s="${s}">${s ? label(s) : 'All'} <b>${countOf(s)}</b></button>`).join('')}</div>
+    <div class="toolbar">
+      <input id="o-q" type="search" placeholder="Search order #, name, phone…" value="${esc(params.q || '')}">
+      <select id="o-pay"><option value="">Any payment</option><option value="paid">Paid</option><option value="unpaid">Unpaid / pending</option></select>
+      <select id="o-ful"><option value="">Pickup & delivery</option><option value="pickup">Pickup</option><option value="delivery">Delivery</option></select>
+      <select id="o-period"><option value="">All time</option><option value="today">Today</option><option value="7d">Last 7 days</option></select>
+    </div>
+    <div id="o-bulk"></div>
+    <div class="table-wrap" id="o-table"></div>`;
+  $('#o-period', root).value = params.period || '';
+
+  const cols = [
+    { key: 'order_number', label: 'Order', render: (o) => `<b>${esc(o.order_number)}</b>` },
+    { key: 'customer_name', label: 'Customer', render: (o) => `${esc(o.customer_name)}<div class="hint">${esc(o.customer_phone)}</div>` },
+    { key: 'total_kes', label: 'Total', value: (o) => num(o.total_kes), render: (o) => `<b>${kes(o.total_kes)}</b>` },
+    { key: 'payment_status', label: 'Payment', render: (o) => `${badge(o.payment_status)}<div class="hint">${esc(o.payment_method)}</div>` },
+    { key: 'order_status', label: 'Status', render: (o) => badge(o.order_status) },
+    { key: 'created_at', label: 'Date', cls: 'nowrap', render: (o) => `<span class="hint">${esc(o.created_at)}</span>` },
+    { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: (o) => {
+      const n = nextStatus(o);
+      return `<div class="row-actions">
+        ${n ? `<button class="btn btn-sm btn-soft" data-act="next" title="Move to ${label(n)}"><i data-lucide="arrow-right"></i> ${label(n)}</button>` : ''}
+        <a class="btn btn-sm" href="/pages/receipt.html?id=${o.id}" target="_blank" title="Receipt"><i data-lucide="receipt"></i></a>
+      </div>`;
+    } }
+  ];
+
+  const showBulk = bulkBar($('#o-bulk', root), [
+    { id: 'adv', icon: 'arrow-right', text: 'Advance status', run: (sel) => bulkAdvance(sel) },
+    { id: 'paid', icon: 'banknote', text: 'Mark paid', run: (sel) => bulkPaid(sel) },
+    { id: 'copy', icon: 'copy', text: 'Copy phones', run: (sel) => copyText([...new Set(sel.map((o) => o.customer_phone).filter(Boolean))].join(', '), 'Phones copied') }
+  ]);
+
+  const t = mountTable($('#o-table', root), {
+    columns: cols, rows: [], sort: 'created_at', dir: 'desc', empty: 'No orders found', selectable: true, onSelect: showBulk,
+    onRow: (o) => openOrderModal(o.id),
+    onAction: (a, o) => guarded(async () => {
+      const n = nextStatus(o);
+      if (!n) return;
+      await API.adminUpdateOrder(o.id, { order_status: n });
+      toast(`${o.order_number} → ${label(n)}`);
+      route();
+    })
+  });
+
+  async function bulkAdvance(sel) {
+    const movable = sel.filter(nextStatus);
+    if (!movable.length) return toast('None of the selected orders can advance', 'error');
+    if (!(await confirmDialog('Advance orders', `Move ${movable.length} order(s) to their next status?`, 'Advance'))) return;
+    guarded(async () => {
+      let ok = 0;
+      for (const o of movable) { try { await API.adminUpdateOrder(o.id, { order_status: nextStatus(o) }); ok++; } catch {} }
+      toast(`${ok}/${movable.length} orders advanced`, ok ? 'success' : 'error');
+      route();
+    });
+  }
+  async function bulkPaid(sel) {
+    const unpaid = sel.filter((o) => o.payment_status !== 'paid');
+    if (!unpaid.length) return toast('All selected orders are already paid', 'error');
+    if (!(await confirmDialog('Mark as paid', `Mark ${unpaid.length} order(s) as paid?`, 'Mark paid'))) return;
+    guarded(async () => {
+      let ok = 0;
+      for (const o of unpaid) { try { await API.adminMarkPaid(o.id); ok++; } catch {} }
+      toast(`${ok}/${unpaid.length} orders marked paid`, ok ? 'success' : 'error');
+      route();
+    });
+  }
+
+  const apply = () => {
+    const q = $('#o-q', root).value.trim().toLowerCase();
+    const pay = $('#o-pay', root).value, ful = $('#o-ful', root).value, per = $('#o-period', root).value;
+    const since = per === '7d' ? ymd(new Date(Date.now() - 6 * DAY)) : '';
+    t.setRows(orders.filter((o) => {
+      const day = String(o.created_at || '').slice(0, 10);
+      return (!status || o.order_status === status) &&
+        (!pay || (pay === 'paid' ? o.payment_status === 'paid' : o.payment_status !== 'paid')) &&
+        (!ful || o.fulfilment_type === ful) &&
+        (per !== 'today' || day === today) && (!since || day >= since) &&
+        (!q || [o.order_number, o.customer_name, o.customer_phone].some((v) => String(v || '').toLowerCase().includes(q)));
+    }));
+    $$('#o-chips .chip', root).forEach((c) => c.classList.toggle('on', c.dataset.s === status));
+  };
+  $$('#o-chips .chip', root).forEach((c) => { c.onclick = () => { status = c.dataset.s; apply(); }; });
+  $('#o-q', root).oninput = debounce(apply, 150);
+  ['o-pay', 'o-ful', 'o-period'].forEach((id) => { $('#' + id, root).onchange = apply; });
+  $('#o-export', root).onclick = () => exportCSV('orders', cols, t.rows());
+  apply();
+}
+
+async function openOrderModal(id) {
+  await guarded(async () => {
+    const { order } = await API.adminOrder(id);
+    const idx = FLOW.indexOf(order.order_status);
+    openModal(`
+      <h2>${esc(order.order_number)} ${badge(order.order_status)}</h2>
+      <div class="stepper" id="o-steps">
+        ${FLOW.map((s, i) => `<div class="step ${i < idx ? 'done' : ''} ${i === idx ? 'cur' : ''}" data-s="${s}">${label(s)}</div>`).join('')}
+        <div class="step cancel ${order.order_status === 'cancelled' ? 'cur' : ''}" data-s="cancelled">cancelled</div>
+      </div>
+      <dl class="kv">
+        <dt>Customer</dt><dd>${esc(order.customer_name)} · <a href="tel:${esc(order.customer_phone)}">${esc(order.customer_phone)}</a></dd>
+        <dt>Fulfilment</dt><dd><b>${esc(order.fulfilment_type)}</b>${order.delivery_address ? ' — ' + esc(order.delivery_address) : ''}</dd>
+        <dt>Payment</dt><dd>${esc(order.payment_method)} ${badge(order.payment_status)}</dd>
+        <dt>Placed</dt><dd>${esc(order.created_at)}</dd>
+      </dl>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Item</th><th>Qty</th><th class="right">Total</th></tr></thead>
+        <tbody>
+          ${(order.items || []).map((i) => `<tr><td>${esc(i.product_name)}</td><td>${esc(i.quantity)}</td><td class="right">${kes(i.line_total_kes)}</td></tr>`).join('')}
+          <tr><td colspan="2"><b>Total</b></td><td class="right"><b>${kes(order.total_kes)}</b></td></tr>
+        </tbody>
+      </table></div>
+      <div class="form-group" style="margin-top:1rem"><label>Order status</label>
+        <select id="m-status">${STATUSES.map((s) => `<option value="${s}" ${order.order_status === s ? 'selected' : ''}>${label(s)}</option>`).join('')}</select></div>
+      <div class="modal-actions">
+        <button class="btn" id="m-wa"><i data-lucide="message-circle"></i> WhatsApp</button>
+        ${order.payment_status !== 'paid' ? '<button class="btn btn-soft" id="m-paid"><i data-lucide="banknote"></i> Mark paid</button>' : ''}
+        <button class="btn" id="m-print"><i data-lucide="printer"></i> Print</button>
+        <a class="btn" href="/pages/receipt.html?id=${order.id}" target="_blank"><i data-lucide="receipt"></i> Receipt</a>
+        <button class="btn btn-primary" id="m-save"><i data-lucide="save"></i> Save</button>
+        <button class="btn" id="m-close">Close</button>
+      </div>`);
+
+    $$('#o-steps .step').forEach((s) => { s.onclick = () => { $('#m-status').value = s.dataset.s; }; });
+    $('#m-close').onclick = closeModal;
+    $('#m-save').onclick = () => guarded(async () => {
+      await API.adminUpdateOrder(id, { order_status: $('#m-status').value });
+      closeModal(); toast('Order status saved'); route();
+    });
+    $('#m-print').onclick = () => window.open(`/pages/receipt.html?id=${order.id}&print=1`, '_blank');
+    $('#m-wa').onclick = () => {
+      const phone = String(order.customer_phone || '').replace(/[^\d]/g, '').replace(/^0/, '254');
+      const text = `Hello ${order.customer_name}, your Mawego Bookshop order ${order.order_number} is now ${label(order.order_status)}.`;
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+    };
+    const paid = $('#m-paid');
+    if (paid) paid.onclick = () => guarded(async () => { await API.adminMarkPaid(id); closeModal(); toast('Order marked as paid'); route(); });
+  });
+}
+
+/* =====================================================================
+   6. CUSTOMERS (derived from the existing orders endpoint)
+   ===================================================================== */
+async function renderCustomers(root, params) {
+  const { orders } = await API.adminOrders({ limit: 500 });
+  const map = new Map();
+  orders.forEach((o) => {
+    if (o.order_status === 'cancelled') return;
+    const key = String(o.customer_phone || o.customer_name || o.id).replace(/\s+/g, '');
+    const c = map.get(key) || { id: key, name: o.customer_name, phone: o.customer_phone, orders: [], spent: 0, last: '' };
+    c.orders.push(o); c.spent += num(o.total_kes);
+    if (String(o.created_at) > c.last) c.last = String(o.created_at);
+    map.set(key, c);
+  });
+  const customers = [...map.values()].map((c) => ({ ...c, count: c.orders.length, avg: c.spent / c.orders.length, repeat: c.orders.length > 1 }));
+  const repeat = customers.filter((c) => c.repeat).length;
+  const total = customers.reduce((s, c) => s + c.spent, 0);
+
+  root.innerHTML = `
+    ${pageHead('Customers', 'Built from your most recent 500 orders', '<button class="btn" id="cu-export"><i data-lucide="download"></i> Export CSV</button>')}
+    <div class="grid-stats">
+      ${statCard({ icon: 'users', label: 'Customers', value: customers.length })}
+      ${statCard({ icon: 'repeat', label: 'Repeat buyers', value: repeat, sub: customers.length ? `${Math.round(repeat / customers.length * 100)}% of customers` : '', tone: 'info' })}
+      ${statCard({ icon: 'banknote', label: 'Avg lifetime value', value: kes(customers.length ? total / customers.length : 0) })}
+    </div>
+    <div class="toolbar">
+      <input id="cu-q" type="search" placeholder="Search name or phone…" value="${esc(params.q || '')}">
+      <select id="cu-f"><option value="">All customers</option><option value="repeat">Repeat only</option><option value="new">One-time only</option></select>
+    </div>
+    <div class="table-wrap" id="cu-table"></div>`;
+
+  const cols = [
+    { key: 'name', label: 'Customer', render: (c) => `<b>${esc(c.name)}</b><div class="hint">${esc(c.phone)}</div>` },
+    { key: 'count', label: 'Orders' },
+    { key: 'spent', label: 'Total spent', value: (c) => c.spent, render: (c) => `<b>${kes(c.spent)}</b>` },
+    { key: 'avg', label: 'Avg order', value: (c) => c.avg, render: (c) => kes(c.avg) },
+    { key: 'last', label: 'Last order', cls: 'nowrap', render: (c) => esc(fdate(c.last)) },
+    { key: 'repeat', label: 'Type', value: (c) => (c.repeat ? 1 : 0), render: (c) => badge(c.repeat ? 'ok' : 'default', c.repeat ? 'Repeat' : 'New') }
+  ];
+  const t = mountTable($('#cu-table', root), {
+    columns: cols, rows: [], sort: 'spent', dir: 'desc', empty: 'No customers yet',
+    onRow: (c) => {
+      openModal(`<h2>${esc(c.name)}</h2>
+        <dl class="kv"><dt>Phone</dt><dd><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></dd><dt>Orders</dt><dd>${c.count}</dd><dt>Total spent</dt><dd>${kes(c.spent)}</dd></dl>
+        <div class="table-wrap"><table><thead><tr><th>Order</th><th>Date</th><th class="right">Total</th></tr></thead><tbody>
+        ${c.orders.slice(0, 15).map((o) => `<tr><td>${esc(o.order_number)}</td><td>${esc(fdate(o.created_at))}</td><td class="right">${kes(o.total_kes)}</td></tr>`).join('')}</tbody></table></div>
+        <div class="modal-actions"><button class="btn" id="cm-copy"><i data-lucide="copy"></i> Copy phone</button><button class="btn btn-primary" id="cm-close">Close</button></div>`);
+      $('#cm-close').onclick = closeModal;
+      $('#cm-copy').onclick = () => copyText(c.phone || '', 'Phone copied');
+    }
+  });
+  const apply = () => {
+    const q = $('#cu-q', root).value.trim().toLowerCase(), f = $('#cu-f', root).value;
+    t.setRows(customers.filter((c) => (!f || (f === 'repeat') === c.repeat) && (!q || `${c.name} ${c.phone}`.toLowerCase().includes(q))));
+  };
+  $('#cu-q', root).oninput = debounce(apply, 150);
+  $('#cu-f', root).onchange = apply;
+  $('#cu-export', root).onclick = () => exportCSV('customers', cols, t.rows());
+  apply();
+}
+
+/* =====================================================================
+   7. PRODUCTS
+   ===================================================================== */
+async function renderProducts(root, params) {
+  const [{ categories }, data] = await Promise.all([API.categories(), API.adminProducts({ limit: 1000 })]);
+  const products = data.products.map((p) => ({
+    ...p, _margin: num(p.price_kes) ? Math.round((num(p.price_kes) - num(p.cost_kes)) / num(p.price_kes) * 100) : 0
+  }));
+
+  root.innerHTML = `
+    ${pageHead('Products', `${products.length} books and items`, `
+      <button class="btn" id="p-export"><i data-lucide="download"></i> Export CSV</button>
+      <button class="btn" id="p-import"><i data-lucide="upload"></i> Import JSON</button>
+      <button class="btn btn-primary" id="p-new"><i data-lucide="plus"></i> Add product</button>`)}
+    <div class="toolbar">
+      <input id="p-q" type="search" placeholder="Search name, SKU, barcode, category…" value="${esc(params.q || '')}">
+      <select id="p-cat"><option value="">All categories</option>${categories.map((c) => `<option>${esc(c.name)}</option>`).join('')}</select>
+      <select id="p-state"><option value="">All products</option><option value="ok">In stock</option><option value="low">Low stock</option><option value="out">Out of stock</option><option value="archived">Archived</option></select>
+      <select id="p-margin"><option value="">Any margin</option><option value="low">Low margin (&lt; 15%)</option><option value="neg">Selling below cost</option></select>
+    </div>
+    <div id="p-count" class="hint" style="margin-bottom:.5rem"></div>
+    <div id="p-bulk"></div>
+    <div class="table-wrap" id="p-table"></div>`;
+  $('#p-state', root).value = params.state || '';
+  $('#p-cat', root).value = params.cat || '';
+
+  const cols = [
+    { key: 'image_url', label: '', sortable: false, csv: false, render: (p) => (p.image_url ? `<img class="thumb" loading="lazy" src="${esc(p.image_url)}" alt="">` : '<span class="thumb"></span>') },
+    { key: 'sku', label: 'SKU', render: (p) => esc(p.sku || '—') },
+    { key: 'name', label: 'Name', render: (p) => `<b>${esc(p.name)}</b>${p.barcode ? `<div class="hint">${esc(p.barcode)}</div>` : ''}` },
+    { key: 'category_name', label: 'Category', render: (p) => esc(p.category_name || '—') },
+    { key: 'cost_kes', label: 'Buying', value: (p) => num(p.cost_kes), render: (p) => kes(p.cost_kes) },
+    { key: 'price_kes', label: 'Selling', value: (p) => num(p.price_kes), render: (p) => kes(p.price_kes) },
+    { key: '_margin', label: 'Margin', render: (p) => `<span class="${p._margin < 15 ? 'neg' : 'pos'}">${p._margin}%</span>` },
+    { key: 'stock_qty', label: 'Qty', value: (p) => num(p.stock_qty) },
+    { key: 'state', label: 'Status', value: stateOf, render: statePill },
+    { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => `
+      <div class="row-actions">
+        <button class="btn btn-sm" data-act="edit" title="Edit"><i data-lucide="pencil"></i></button>
+        <button class="btn btn-sm" data-act="dup" title="Duplicate"><i data-lucide="copy"></i></button>
+        <button class="btn btn-sm" data-act="stock" title="Adjust stock"><i data-lucide="package"></i></button>
+        <button class="btn btn-sm btn-danger" data-act="del" title="Delete"><i data-lucide="trash-2"></i></button>
+      </div>` }
+  ];
+
+  const showBulk = bulkBar($('#p-bulk', root), [
+    { id: 'po', icon: 'truck', text: 'Reorder selected', run: (sel) => openPOModal(null, sel.map((p) => p.id)) },
+    { id: 'sku', icon: 'copy', text: 'Copy SKUs', run: (sel) => copyText(sel.map((p) => p.sku).filter(Boolean).join(', '), 'SKUs copied') }
+  ]);
+
+  const t = mountTable($('#p-table', root), {
+    columns: cols, rows: [], pageSize: 20, sort: 'name', empty: 'No products match your search', selectable: true, onSelect: showBulk,
+    rowClass: (p) => (stateOf(p) === 'archived' ? 'dim' : ''),
+    onRow: (p) => openProductForm(p, categories),
+    onAction: (a, p) => ({
+      edit: () => openProductForm(p, categories),
+      dup: () => openProductForm(p, categories, true),
+      stock: () => openStockModal(p),
+      del: () => deleteProduct(p)
+    })[a]()
+  });
+
+  const apply = () => {
+    const q = $('#p-q', root).value, cat = $('#p-cat', root).value, st = $('#p-state', root).value, mg = $('#p-margin', root).value;
+    const list = products.filter((p) => matches(p, q) && (!cat || p.category_name === cat) && (!st || stateOf(p) === st) &&
+      (!mg || (mg === 'low' ? p._margin < 15 : num(p.price_kes) < num(p.cost_kes))));
+    $('#p-count', root).textContent = `${list.length} of ${products.length} products`;
+    t.setRows(list);
+  };
+  $('#p-q', root).oninput = debounce(apply, 150);
+  ['p-cat', 'p-state', 'p-margin'].forEach((id) => { $('#' + id, root).onchange = apply; });
+  $('#p-new', root).onclick = () => openProductForm(null, categories);
+  $('#p-import', root).onclick = importProducts;
+  $('#p-export', root).onclick = () => exportCSV('products', cols, t.rows());
+  apply();
+}
+
+function importProducts() {
+  openModal(`
+    <h2>Import products</h2>
+    <p class="muted">Paste a JSON array or choose a .json file.</p>
+    <div class="form-group"><input type="file" id="imp-file" accept=".json,application/json"></div>
+    <div class="form-group"><textarea id="imp-text" rows="9" placeholder='[{ "name":"Exercise book", "price_kes":100, "cost_kes":60, "sku":"EB-01", "stock_qty":10, "category_slug":"stationery" }]'></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" id="imp-cancel">Cancel</button>
+      <button class="btn btn-primary" id="imp-go"><i data-lucide="upload"></i> Import</button>
+    </div>`);
+  $('#imp-file').onchange = async (e) => { const f = e.target.files[0]; if (f) $('#imp-text').value = await f.text(); };
+  $('#imp-cancel').onclick = closeModal;
+  $('#imp-go').onclick = () => {
+    let list;
+    try { list = JSON.parse($('#imp-text').value); if (!Array.isArray(list)) throw 0; }
+    catch { return toast('Not a valid JSON array', 'error'); }
+    guarded(async () => {
+      const r = await API.adminImportProducts(list);
+      closeModal(); toast(`Imported ${r.created}, skipped ${r.skipped}`); route();
+    });
+  };
+}
+
+function openProductForm(product, categories, duplicate = false) {
+  const isEdit = !!product && !duplicate;
+  const p = product ? (duplicate ? { ...product, sku: '', barcode: '', stock_qty: 0, image_url: '', name: `${product.name} (copy)` } : product) : {};
+
+  openModal(`
+    <h2>${isEdit ? 'Edit product' : duplicate ? 'Duplicate product' : 'Add product'}</h2>
+    <form id="prod-form">
+      <div class="form-group"><label>Book name *</label><input name="name" required value="${esc(p.name)}"></div>
+      <div class="form-group"><label>Category</label>
+        <select name="category_id"><option value="">No category</option>
+          ${categories.map((c) => `<option value="${c.id}" ${String(p.category_id) === String(c.id) ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}
+        </select></div>
+      <div class="form-row">
+        <div class="form-group"><label>SKU</label><input name="sku" value="${esc(p.sku)}"></div>
+        <div class="form-group"><label>Barcode</label><input name="barcode" value="${esc(p.barcode)}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Buying price (KES)</label><input name="cost_kes" id="pf-cost" type="number" step="0.01" min="0" value="${p.cost_kes ?? 0}"></div>
+        <div class="form-group"><label>Selling price (KES) *</label><input name="price_kes" id="pf-price" type="number" step="0.01" min="0" required value="${p.price_kes ?? ''}"></div>
+      </div>
+      <div class="hint" id="pf-margin" style="margin:-.4rem 0 .8rem"></div>
+      <div class="form-row">
+        <div class="form-group"><label>${isEdit ? 'Quantity in stock' : 'Opening quantity'}</label>
+          <input name="stock_qty" type="number" min="0" step="1" value="${p.stock_qty ?? 0}">
+          ${isEdit ? '<div class="hint">Changing this records a stock count correction.</div>' : ''}</div>
+        <div class="form-group"><label>Minimum stock</label>
+          <input name="low_stock_threshold" type="number" min="0" step="1" value="${p.low_stock_threshold ?? 5}">
+          <div class="hint">Alert when quantity reaches this level.</div></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea name="description" rows="2">${esc(p.description)}</textarea></div>
+      <div class="form-group"><label>Image</label>
+        <input name="image" id="pf-image" type="file" accept="image/*">
+        <img class="img-preview ${p.image_url ? '' : 'hidden'}" id="pf-preview" src="${esc(p.image_url)}" alt=""></div>
+      <details><summary>Sale pricing (optional)</summary>
+        <div class="form-row">
+          <div class="form-group"><label>Discount %</label><input name="discount_percent" type="number" min="0" max="100" value="${p.discount_percent ?? 0}"></div>
+          <div class="form-group"><label>Sale price (KES)</label><input name="discount_price_kes" type="number" step="0.01" min="0" value="${p.discount_price_kes ?? ''}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Sale label</label><input name="sale_label" placeholder="e.g. Back to school" value="${esc(p.sale_label)}"></div>
+          <div class="form-group"><label>Sale ends</label><input name="sale_ends_at" type="date" value="${p.sale_ends_at ? String(p.sale_ends_at).slice(0, 10) : ''}"></div>
+        </div>
+      </details>
+      <label class="check"><input type="checkbox" name="is_active" ${!isEdit || p.is_active ? 'checked' : ''}> Active — show on the customer website</label>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="pf-close">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> ${isEdit ? 'Save changes' : 'Add product'}</button>
+      </div>
+    </form>`);
+
+  const margin = () => {
+    const c = num($('#pf-cost').value), s = num($('#pf-price').value);
+    $('#pf-margin').innerHTML = s ? `Profit per unit <b class="${s < c ? 'neg' : 'pos'}">${kes(s - c)}</b> · margin ${Math.round((s - c) / s * 100)}%` : '';
+  };
+  $('#pf-cost').oninput = margin; $('#pf-price').oninput = margin; margin();
+  $('#pf-close').onclick = closeModal;
+  $('#pf-image').onchange = (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    $('#pf-preview').src = URL.createObjectURL(f); $('#pf-preview').classList.remove('hidden');
+  };
+
+  $('#prod-form').onsubmit = (e) => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', e.target); btn.disabled = true;
+    guarded(async () => {
+      const form = e.target, fd = new FormData(form);
+      if (num(fd.get('price_kes')) < num(fd.get('cost_kes')) &&
+          !(await confirmDialog('Selling below cost', 'The selling price is lower than the buying price. Save anyway?', 'Save anyway'))) return;
+      fd.set('is_active', form.is_active.checked ? '1' : '0');
+      const img = fd.get('image');
+      if (img && img.size === 0) fd.delete('image');
+
+      if (isEdit) {
+        const newQty = num(fd.get('stock_qty'));
+        fd.delete('stock_qty');
+        await API.adminUpdateProduct(product.id, fd);
+        const d = newQty - num(product.stock_qty);
+        if (d) await API.adminAdjustStock(product.id, { change_qty: d, reason: 'count', notes: 'Edited in product form' });
+        toast('Product updated');
+      } else {
+        await API.adminCreateProduct(fd);
+        toast(form.is_active.checked ? 'Product added and published' : 'Product added as inactive');
+      }
+      closeModal(); route();
+    }).then(() => { btn.disabled = false; });
+  };
+}
+
+async function deleteProduct(p) {
+  const ok = await confirmDialog('Delete product',
+    `${p.name} — products that have been sold are archived instead of deleted so your sales history stays accurate.`, 'Delete', true);
+  if (!ok) return;
+  guarded(async () => {
+    const r = await API.adminDeleteProduct(p.id);
+    toast(r && r.archived ? `${p.name} has sales history, so it was archived` : `${p.name} was deleted`);
+    route();
+  });
+}
+
+function openStockModal(p) {
+  openModal(`
+    <h2>Adjust stock</h2>
+    <p>${esc(p.name)} — currently <b>${esc(p.stock_qty)}</b> in stock</p>
+    <div class="form-group"><label>Change quantity (+ add, − remove)</label><input id="st-qty" type="number" step="1" value="1"></div>
+    <div class="form-group"><label>Reason</label>
+      <select id="st-reason">
+        <option value="received">Received / restock</option><option value="adjustment">Adjustment</option>
+        <option value="damaged">Damaged / write-off</option><option value="count">Stock count correction</option>
+      </select></div>
+    <div class="form-group"><label>Notes</label><input id="st-notes"></div>
+    <div class="hint" id="st-after"></div>
+    <div class="modal-actions"><button class="btn" id="st-close">Cancel</button><button class="btn btn-primary" id="st-save">Apply</button></div>`);
+  const after = () => { $('#st-after').textContent = `New quantity: ${num(p.stock_qty) + num($('#st-qty').value)}`; };
+  $('#st-qty').oninput = after; after();
+  $('#st-close').onclick = closeModal;
+  $('#st-save').onclick = () => guarded(async () => {
+    const c = num($('#st-qty').value);
+    if (!c) return toast('Enter a quantity other than zero', 'error');
+    if (num(p.stock_qty) + c < 0) return toast('Stock cannot go below zero', 'error');
+    await API.adminAdjustStock(p.id, { change_qty: c, reason: $('#st-reason').value, notes: $('#st-notes').value });
+    closeModal(); toast('Stock updated'); route();
+  });
+}
+
+/* =====================================================================
+   8. PROMOTIONS (shared normaliser used by Marketing too)
+   ===================================================================== */
+function promoStatus(c) {
+  const now = Date.now();
+  if (!c.is_active) return 'inactive';
+  if (c.expires_at && new Date(c.expires_at) < now) return 'expired';
+  if (c.starts_at && new Date(c.starts_at) > now) return 'scheduled';
+  if (c.usage_limit != null && num(c.used_count) >= num(c.usage_limit)) return 'used_up';
+  return 'active';
+}
+const promoValue = (c) => (c.discount_type === 'percent' ? `${num(c.discount_value)}% off` : `${kes(c.discount_value)} off`);
+const normPromo = (p, i) => ({
+  ...p, id: p.id ?? p.code ?? i, code: p.code || '',
+  used: num(p.used_count), max: p.usage_limit != null ? num(p.usage_limit) : 0,
+  state: promoStatus(p)
+});
+const PROMO_STATES = ['active', 'scheduled', 'inactive', 'expired', 'used_up'];
+
+async function renderPromotions(root, params) {
+  const data = await API.adminPromos();
+  const coupons = arr(data, 'promos').map(normPromo);
+  let filter = PROMO_STATES.includes(params.filter) ? params.filter : '';
+
+  root.innerHTML = `
+    ${pageHead('Promotions & Coupons', 'Create and manage discount codes for the storefront', '<button class="btn btn-primary" id="c-new"><i data-lucide="plus"></i> New coupon</button>')}
+    <div class="chips" id="c-chips">
+      <button class="chip" data-s="">All <b>${coupons.length}</b></button>
+      ${PROMO_STATES.map((s) => `<button class="chip" data-s="${s}">${label(s)} <b>${coupons.filter((c) => c.state === s).length}</b></button>`).join('')}
+    </div>
+    <div class="toolbar"><input id="c-q" type="search" placeholder="Search code or description…"></div>
+    <div class="table-wrap" id="c-table"></div>`;
+
+  const cols = [
+    { key: 'code', label: 'Code', render: (c) => `<b style="letter-spacing:.04em">${esc(c.code)}</b>${c.description ? `<div class="hint">${esc(c.description)}</div>` : ''}` },
+    { key: 'discount_value', label: 'Discount', value: (c) => num(c.discount_value), render: (c) =>
+      promoValue(c) + (c.discount_type === 'percent' && c.max_discount_kes != null ? `<div class="hint">max ${kes(c.max_discount_kes)}</div>` : '') },
+    { key: 'min_order_kes', label: 'Min order', value: (c) => num(c.min_order_kes), render: (c) => (num(c.min_order_kes) ? kes(c.min_order_kes) : '—') },
+    { key: 'used', label: 'Used', value: (c) => c.used, render: (c) => (c.max
+      ? `<div class="usage"><div class="track"><div class="fill" style="width:${Math.min(100, c.used / c.max * 100)}%"></div></div><span class="hint nowrap">${c.used}/${c.max}</span></div>` : String(c.used)) },
+    { key: 'per_user_limit', label: 'Per customer', render: (c) => (c.per_user_limit ? String(c.per_user_limit) : '—') },
+    { key: 'expires_at', label: 'Expires', cls: 'nowrap', value: (c) => c.expires_at || '9999', render: (c) => (c.expires_at ? esc(fdate(c.expires_at)) : 'Never') },
+    { key: 'state', label: 'Status', render: (c) => badge(c.state, label(c.state)) },
+    { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: (c) => `
+      <div class="row-actions">
+        <button class="btn btn-sm" data-act="copy" title="Copy code"><i data-lucide="copy"></i></button>
+        <button class="btn btn-sm" data-act="dup" title="Duplicate"><i data-lucide="files"></i></button>
+        <button class="btn btn-sm" data-act="edit" title="Edit"><i data-lucide="pencil"></i></button>
+        <button class="btn btn-sm" data-act="toggle" title="${c.is_active ? 'Deactivate' : 'Activate'}"><i data-lucide="${c.is_active ? 'toggle-right' : 'toggle-left'}"></i></button>
+        ${c.is_active ? '<button class="btn btn-sm btn-danger" data-act="del" title="Deactivate"><i data-lucide="trash-2"></i></button>' : ''}
+      </div>` }
+  ];
+  const t = mountTable($('#c-table', root), {
+    columns: cols, rows: [], pageSize: 20, sort: 'code', empty: 'No coupons yet',
+    rowClass: (c) => (['expired', 'inactive', 'used_up'].includes(c.state) ? 'dim' : ''),
+    onAction: (act, c) => ({
+      copy: () => copyText(c.code, 'Code copied'),
+      dup: () => openCouponForm({ ...c, code: `${c.code}-2`, used_count: 0 }, true),
+      edit: () => openCouponForm(c),
+      toggle: () => toggleCoupon(c),
+      del: () => deleteCoupon(c)
+    })[act]()
+  });
+  const apply = () => {
+    const q = $('#c-q', root).value.trim().toLowerCase();
+    t.setRows(coupons.filter((c) => (!filter || c.state === filter) && (!q || `${c.code} ${c.description || ''}`.toLowerCase().includes(q))));
+    $$('#c-chips .chip', root).forEach((ch) => ch.classList.toggle('on', ch.dataset.s === filter));
+  };
+  $$('#c-chips .chip', root).forEach((ch) => { ch.onclick = () => { filter = ch.dataset.s; apply(); }; });
+  $('#c-q', root).oninput = debounce(apply, 150);
+  $('#c-new', root).onclick = () => openCouponForm(null);
+  apply();
+}
+
+function openCouponForm(coupon, duplicate = false) {
+  const isEdit = !!coupon && !duplicate, c = coupon || {};
+  const dateVal = (v) => (v ? String(v).slice(0, 10) : '');
+  openModal(`
+    <h2>${isEdit ? 'Edit coupon' : 'New coupon'}</h2>
+    <form id="cpn-form">
+      <div class="form-row">
+        <div class="form-group"><label>Code * <span class="hint">(3–40 letters, numbers, - or _)</span></label>
+          <input name="code" required minlength="3" maxlength="40" pattern="[A-Za-z0-9_\\-]{3,40}" style="text-transform:uppercase" value="${esc(c.code || '')}" placeholder="e.g. BACK2SCHOOL"></div>
+        <div class="form-group"><label>Type *</label>
+          <select name="discount_type" id="cpn-type">
+            <option value="percent" ${c.discount_type !== 'fixed' ? 'selected' : ''}>Percentage (%)</option>
+            <option value="fixed" ${c.discount_type === 'fixed' ? 'selected' : ''}>Fixed amount (KES)</option>
+          </select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label id="cpn-value-label">Value *</label><input name="discount_value" type="number" step="0.01" min="0.01" required value="${c.discount_value ?? ''}"></div>
+        <div class="form-group" id="cpn-max-wrap"><label>Max discount (KES)</label><input name="max_discount_kes" type="number" step="0.01" min="0" value="${c.max_discount_kes ?? ''}" placeholder="Optional ceiling for %"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Minimum order (KES)</label><input name="min_order_kes" type="number" step="0.01" min="0" value="${c.min_order_kes ?? ''}"></div>
+        <div class="form-group"><label>Total usage limit</label><input name="usage_limit" type="number" min="1" step="1" value="${c.usage_limit ?? ''}" placeholder="Leave empty = unlimited"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Per-customer limit</label><input name="per_user_limit" type="number" min="1" step="1" value="${c.per_user_limit ?? 1}"><div class="hint">Defaults to 1 use per customer.</div></div>
+        <div class="form-group"><label>Starts</label><input name="starts_at" type="date" value="${dateVal(c.starts_at)}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Expires (end of day)</label><input name="expires_at" type="date" value="${dateVal(c.expires_at)}"></div>
+        <div class="form-group"><label>Description</label><input name="description" value="${esc(c.description || '')}" placeholder="Optional note"></div>
+      </div>
+      <label class="check"><input type="checkbox" name="is_active" ${!isEdit || c.is_active ? 'checked' : ''}> Active — customers can use this code</label>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="cpn-close">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> ${isEdit ? 'Save changes' : 'Create coupon'}</button>
+      </div>
+    </form>`);
+
+  const typeEl = $('#cpn-type');
+  const syncType = () => {
+    const isPct = typeEl.value === 'percent';
+    $('#cpn-value-label').textContent = isPct ? 'Percentage (%) *' : 'Amount (KES) *';
+    $('#cpn-max-wrap').style.display = isPct ? '' : 'none';
+    $('#cpn-form [name=discount_value]').max = isPct ? '100' : '';
+  };
+  typeEl.onchange = syncType; syncType();
+  $('#cpn-close').onclick = closeModal;
+
+  $('#cpn-form').onsubmit = (e) => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', e.target); btn.disabled = true;
+    guarded(async () => {
+      const fd = new FormData(e.target);
+      const opt = (k) => (fd.get(k) ? num(fd.get(k)) : null);
+      const starts = fd.get('starts_at'), ends = fd.get('expires_at');
+      const isPct = fd.get('discount_type') === 'percent';
+      if (starts && ends && starts > ends) return toast('Expiry must be after the start date', 'error');
+      const payload = {
+        code: String(fd.get('code') || '').trim().toUpperCase(),
+        discount_type: fd.get('discount_type'),
+        discount_value: num(fd.get('discount_value')),
+        max_discount_kes: isPct ? opt('max_discount_kes') : null,
+        min_order_kes: num(fd.get('min_order_kes')),
+        usage_limit: opt('usage_limit'),
+        per_user_limit: opt('per_user_limit') || 1,
+        starts_at: starts ? new Date(`${starts}T00:00:00`).toISOString() : null,
+        expires_at: ends ? new Date(`${ends}T23:59:59`).toISOString() : null,
+        description: String(fd.get('description') || '').trim(),
+        is_active: !!fd.get('is_active')
+      };
+      if (isEdit) { await API.put('/admin/promos/' + encodeURIComponent(coupon.id), payload); toast('Coupon updated'); }
+      else { await API.adminCreatePromo(payload); toast('Coupon created'); }
+      closeModal(); route();
+    }).then(() => { btn.disabled = false; });
+  };
+}
+
+async function toggleCoupon(c) {
+  const next = !c.is_active;
+  const ok = await confirmDialog(next ? 'Activate coupon' : 'Deactivate coupon', `${c.code} will become ${next ? 'available' : 'unavailable'} to customers.`, next ? 'Activate' : 'Deactivate');
+  if (!ok) return;
+  guarded(async () => {
+    await API.put('/admin/promos/' + encodeURIComponent(c.id), { is_active: next });
+    toast(next ? 'Coupon activated' : 'Coupon deactivated'); route();
+  });
+}
+async function deleteCoupon(c) {
+  const ok = await confirmDialog('Deactivate coupon', `${c.code} will be disabled and customers can no longer use it. Past orders keep their discount history.`, 'Deactivate', true);
+  if (!ok) return;
+  guarded(async () => { await API.del('/admin/promos/' + encodeURIComponent(c.id)); toast('Coupon deactivated'); route(); });
+}
+
+/* =====================================================================
+   9. INVENTORY
+   ===================================================================== */
+async function renderInventory(root, params) {
+  const { products, totals } = await API.adminInventory();
+  const out = products.filter((p) => stateOf(p) === 'out').length;
+  const low = products.filter((p) => stateOf(p) === 'low').length;
+  badges.inventory = low + out;
+  renderNav();
+
+  const stockValue = (p) => num(p.stock_value_cost ?? p.stock_qty * (p.cost_kes || 0));
+  const byCat = {};
+  products.forEach((p) => { const k = p.category_name || 'Uncategorised'; byCat[k] = (byCat[k] || 0) + stockValue(p); });
+  const potential = num(totals.value_retail) - num(totals.value_cost);
+
+  root.innerHTML = `
+    ${pageHead('Inventory', 'Stock levels and valuation',
+      '<button class="btn" id="i-export"><i data-lucide="download"></i> Export CSV</button><button class="btn btn-primary" id="i-po"><i data-lucide="truck"></i> New PO</button>')}
+    <div class="grid-stats">
+      ${statCard({ icon: 'boxes', label: 'Total units', value: num(totals.units).toLocaleString() })}
+      ${statCard({ icon: 'wallet', label: 'Value (buying)', value: kes(totals.value_cost) })}
+      ${statCard({ icon: 'tags', label: 'Value (selling)', value: kes(totals.value_retail), sub: `Potential profit ${kes(potential)}`, tone: 'info' })}
+      ${statCard({ href: link('inventory', { state: 'low' }), icon: 'alert-triangle', label: 'Low stock', value: low, tone: low ? 'warn' : '' })}
+      ${statCard({ href: link('inventory', { state: 'out' }), icon: 'x-octagon', label: 'Out of stock', value: out, tone: out ? 'bad' : '' })}
+    </div>
+    <div class="card" style="margin-bottom:1.1rem">
+      <div class="card-head"><h2>Stock value by category</h2></div>
+      ${hbars(Object.entries(byCat).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, v]) => ({ label: k, value: v, display: kes(v) })))}
+    </div>
+    <div class="toolbar">
+      <input id="i-q" type="search" placeholder="Search name, SKU, barcode, category…">
+      <select id="i-state">
+        <option value="">All products</option><option value="alerts">Needs attention (low + out)</option>
+        <option value="low">Low stock</option><option value="out">Out of stock</option><option value="ok">In stock</option>
+      </select>
+    </div>
+    <div id="i-bulk"></div>
+    <div class="table-wrap" id="i-table"></div>`;
+  $('#i-state', root).value = params.state || '';
+
+  const cols = [
+    { key: 'sku', label: 'SKU', render: (p) => esc(p.sku || '—') },
+    { key: 'name', label: 'Name', render: (p) => `<b>${esc(p.name)}</b>` },
+    { key: 'category_name', label: 'Category', render: (p) => esc(p.category_name || '—') },
+    { key: 'stock_qty', label: 'Qty', value: (p) => num(p.stock_qty) },
+    { key: 'low_stock_threshold', label: 'Min', value: (p) => num(p.low_stock_threshold ?? 5) },
+    { key: 'cost_kes', label: 'Buying', value: (p) => num(p.cost_kes), render: (p) => kes(p.cost_kes) },
+    { key: 'price_kes', label: 'Selling', value: (p) => num(p.price_kes), render: (p) => kes(p.price_kes) },
+    { key: 'sv', label: 'Stock value', value: stockValue, render: (p) => kes(stockValue(p)) },
+    { key: 'state', label: 'Status', value: stateOf, render: statePill },
+    { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => `
+      <div class="row-actions">
+        <button class="btn btn-sm" data-act="stock"><i data-lucide="package"></i> Adjust</button>
+        <button class="btn btn-sm btn-soft" data-act="po"><i data-lucide="truck"></i> Reorder</button>
+      </div>` }
+  ];
+  const showBulk = bulkBar($('#i-bulk', root), [
+    { id: 'po', icon: 'truck', text: 'Create PO for selected', run: (sel) => openPOModal(null, sel.map((p) => p.id)) }
+  ]);
+  const t = mountTable($('#i-table', root), {
+    columns: cols, rows: [], pageSize: 20, empty: 'No products match', selectable: true, onSelect: showBulk,
+    rowClass: (p) => (stateOf(p) === 'archived' ? 'dim' : ''),
+    onAction: (a, p) => (a === 'stock' ? openStockModal(p) : openPOModal(p.id))
+  });
+  const apply = () => {
+    const q = $('#i-q', root).value, st = $('#i-state', root).value;
+    t.setRows(products.filter((p) => {
+      const s = stateOf(p);
+      return (!st || s === st || (st === 'alerts' && (s === 'low' || s === 'out'))) && matches(p, q);
+    }));
+  };
+  $('#i-q', root).oninput = debounce(apply, 150);
+  $('#i-state', root).onchange = apply;
+  $('#i-export', root).onclick = () => exportCSV('inventory', cols, t.rows());
+  $('#i-po', root).onclick = () => openPOModal();
+  apply();
+}
+
+/* =====================================================================
+   10. EXPENSES
+   ===================================================================== */
+let expenseCats = null;
+
+async function openExpenseModal() {
+  await guarded(async () => {
+    expenseCats = expenseCats || (await API.adminExpenseCategories()).categories;
+    openModal(`
+      <h2>Record expense</h2>
+      <form id="exp-form">
+        <div class="form-group"><label>Category</label><select name="category" required>${expenseCats.map((c) => `<option>${esc(c)}</option>`).join('')}</select></div>
+        <div class="form-row">
+          <div class="form-group"><label>Amount (KES)</label><input name="amount_kes" type="number" step="0.01" min="0.01" required></div>
+          <div class="form-group"><label>Date</label><input name="expense_date" type="date" value="${ymd(new Date())}"></div>
+        </div>
+        <div class="form-group"><label>Description</label><input name="description"></div>
+        <div class="form-group"><label>Payment method</label>
+          <select name="payment_method"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option><option value="bank">Bank</option><option value="card">Card</option></select></div>
+        <div class="modal-actions"><button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Save</button></div>
+      </form>`);
+    $('#c').onclick = closeModal;
+    $('#exp-form').onsubmit = (e) => {
+      e.preventDefault();
+      guarded(async () => {
+        await API.adminCreateExpense(Object.fromEntries(new FormData(e.target)));
+        closeModal(); toast('Expense saved'); route();
+      });
+    };
+  });
+}
+
+async function renderExpenses(root) {
+  const [data, cats] = await Promise.all([API.adminExpenses({ limit: 500 }), API.adminExpenseCategories()]);
+  expenseCats = cats.categories;
+  const all = data.expenses || [];
+
+  root.innerHTML = `
+    ${pageHead('Operating expenses', 'Gross profit − expenses = net profit',
+      '<button class="btn" id="e-export"><i data-lucide="download"></i> Export CSV</button><button class="btn btn-primary" id="e-new"><i data-lucide="plus"></i> Expense</button>')}
+    <div class="cols-3">
+      <div>
+        <div class="toolbar">
+          <select id="e-cat"><option value="">All categories</option>${cats.categories.map((c) => `<option>${esc(c)}</option>`).join('')}</select>
+          <input type="date" id="e-from" aria-label="From"><input type="date" id="e-to" aria-label="To">
+          <input id="e-q" type="search" placeholder="Search description…">
+        </div>
+        <div class="table-wrap" id="e-table"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>By category</h2></div>
+        <div id="e-chart"></div>
+        <div class="pnl-line sub"><span>Total (filtered)</span><b id="e-total"></b></div>
+      </div>
+    </div>`;
+
+  const cols = [
+    { key: 'expense_date', label: 'Date', cls: 'nowrap' },
+    { key: 'category', label: 'Category' },
+    { key: 'description', label: 'Description', render: (e) => esc(e.description || '') },
+    { key: 'amount_kes', label: 'Amount', value: (e) => num(e.amount_kes), render: (e) => `<b>${kes(e.amount_kes)}</b>` },
+    { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: () => '<button class="btn btn-sm btn-danger" data-act="del"><i data-lucide="trash-2"></i></button>' }
+  ];
+  const t = mountTable($('#e-table', root), {
+    columns: cols, rows: [], sort: 'expense_date', dir: 'desc', empty: 'No expenses recorded',
+    onAction: async (a, e) => {
+      if (!(await confirmDialog('Delete expense', `${e.category} — ${kes(e.amount_kes)}`, 'Delete', true))) return;
+      guarded(async () => { await API.adminDeleteExpense(e.id); toast('Expense deleted'); route(); });
+    }
+  });
+  const apply = () => {
+    const c = $('#e-cat', root).value, f = $('#e-from', root).value, to = $('#e-to', root).value, q = $('#e-q', root).value.toLowerCase();
+    const list = all.filter((e) => (!c || e.category === c) && (!f || e.expense_date >= f) && (!to || e.expense_date <= to) && (!q || String(e.description || '').toLowerCase().includes(q)));
+    t.setRows(list);
+    const sums = {};
+    list.forEach((e) => { sums[e.category] = (sums[e.category] || 0) + num(e.amount_kes); });
+    $('#e-chart', root).innerHTML = hbars(Object.entries(sums).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label: k, value: v, display: kes(v) })));
+    $('#e-total', root).textContent = kes(list.reduce((s, e) => s + num(e.amount_kes), 0));
+  };
+  ['e-cat', 'e-from', 'e-to'].forEach((id) => { $('#' + id, root).onchange = apply; });
+  $('#e-q', root).oninput = debounce(apply, 150);
+  $('#e-new', root).onclick = openExpenseModal;
+  $('#e-export', root).onclick = () => exportCSV('expenses', cols, t.rows());
+  apply();
+}
+
+/* =====================================================================
+   11. SALES + P&L (with previous-period comparison)
+   ===================================================================== */
+async function renderSales(root) {
+  root.innerHTML = `
+    ${pageHead('Sales report', 'Revenue, profit and best sellers · compared with the previous period', '<button class="btn" id="s-export"><i data-lucide="download"></i> Export CSV</button>')}
+    <div id="s-range"></div><div id="s-body"></div>`;
+  let last = null;
+
+  rangeToolbar($('#s-range', root), (f, t) => guarded(async () => {
+    const [pf, pt] = prevRange(f, t);
+    const [d, prev] = await Promise.all([API.adminSalesReport(f, t), API.adminSalesReport(pf, pt).catch(() => null)]);
+    last = d;
+    const s = d.summary, p = prev?.summary || {};
+    const avg = s.order_count ? num(s.revenue) / s.order_count : 0;
+    const mg = num(s.revenue) ? Math.round(num(s.gross_profit) / num(s.revenue) * 100) : 0;
+    const vs = (cur, old) => (prev ? `${delta(num(cur), num(old))} <span class="hint">vs prev.</span>` : '');
+
+    $('#s-body', root).innerHTML = `
+      <div class="grid-stats">
+        ${statCard({ icon: 'shopping-cart', label: 'Orders', value: num(s.order_count), sub: `avg ${kes(avg)} ${vs(s.order_count, p.order_count)}` })}
+        ${statCard({ icon: 'banknote', label: 'Revenue', value: kes(s.revenue), sub: vs(s.revenue, p.revenue) })}
+        ${statCard({ icon: 'piggy-bank', label: 'Gross profit', value: kes(s.gross_profit), sub: `${mg}% margin ${vs(s.gross_profit, p.gross_profit)}` })}
+        ${statCard({ icon: 'receipt', label: 'Expenses', value: kes(s.total_expenses), sub: vs(s.total_expenses, p.total_expenses) })}
+        ${statCard({ icon: 'scale', label: 'Net profit', value: `<span class="${num(s.net_profit) < 0 ? 'neg' : ''}">${kes(s.net_profit)}</span>`, sub: vs(s.net_profit, p.net_profit) })}
+      </div>
+      <div class="cols">
+        <div class="card"><div class="card-head"><h2>By payment method</h2></div>
+          ${donut((d.by_payment || []).map((r) => ({ label: r.payment_method, value: num(r.total), display: kes(r.total) })))}</div>
+        <div class="card"><div class="card-head"><h2>Top products</h2></div>
+          ${hbars((d.top_products || []).slice(0, 8).map((r) => ({ label: r.product_name, value: num(r.revenue), display: kes(r.revenue), sub: `${r.qty_sold} sold` })))}</div>
+      </div>`;
+    icons($('#s-body', root));
+  }));
+
+  $('#s-export', root).onclick = () => {
+    if (!last) return;
+    exportCSV('top-products', [
+      { key: 'product_name', label: 'Product' }, { key: 'qty_sold', label: 'Qty sold' }, { key: 'revenue', label: 'Revenue' }
+    ], last.top_products || []);
+  };
+}
+
+async function renderPnL(root) {
+  root.innerHTML = `
+    ${pageHead('Profit & loss', 'Net profit = Gross profit − Operating expenses', '<button class="btn" id="pl-print"><i data-lucide="printer"></i> Print</button>')}
+    <div id="pl-range"></div><div id="pl-body"></div>`;
+  const line = (l, v, cls = '') => `<div class="pnl-line ${cls}"><span>${l}</span><b>${v}</b></div>`;
+
+  rangeToolbar($('#pl-range', root), (f, t) => guarded(async () => {
+    const [pf, pt] = prevRange(f, t);
+    const [d, prev] = await Promise.all([API.adminProfitLoss(f, t), API.adminProfitLoss(pf, pt).catch(() => null)]);
+    const net = num(d.net_profit);
+    const gm = num(d.revenue) ? Math.round(num(d.gross_profit) / num(d.revenue) * 100) : 0;
+    const exp = num(d.operating_expenses);
+    const ratio = num(d.revenue) ? Math.round(exp / num(d.revenue) * 100) : 0;
+    const vs = (c, o) => (prev ? ` ${delta(num(c), num(o))}` : '');
+
+    $('#pl-body', root).innerHTML = `
+      <div class="cols">
+        <div class="card">
+          ${line('Revenue (paid orders)', kes(d.revenue) + vs(d.revenue, prev?.revenue))}
+          ${line('Cost of goods sold', '− ' + kes(d.cost_of_goods))}
+          ${line(`Gross profit <span class="hint">${gm}% margin</span>`, kes(d.gross_profit) + vs(d.gross_profit, prev?.gross_profit), 'sub')}
+          ${line(`Operating expenses <span class="hint">${ratio}% of revenue</span>`, '− ' + kes(exp))}
+          ${line('Net profit', `<span class="${net < 0 ? 'neg' : 'pos'}">${kes(net)}</span>${vs(net, prev?.net_profit)}`, 'total')}
+          <p class="hint">${num(d.order_count)} paid orders in period${prev ? ' · % change compares with the previous period of equal length' : ''}</p>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Expenses by category</h2><a class="btn btn-sm" href="${link('expenses')}">Details</a></div>
+          ${hbars(Object.entries(d.expenses_by_category || {}).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ label: k, value: num(v), display: kes(v) })))}
+        </div>
+      </div>`;
+  }));
+  $('#pl-print', root).onclick = () => window.print();
+}
+
+/* =====================================================================
+   12. SUPPLIERS & PURCHASE ORDERS
+   ===================================================================== */
+async function renderSuppliers(root, params) {
+  const [sup, pos] = await Promise.all([API.adminSuppliers(), API.adminPurchaseOrders()]);
+  let tab = params.tab === 'suppliers' ? 'suppliers' : 'pos';
+  let filter = '';
+  const list = pos.purchase_orders || [];
+
+  root.innerHTML = `
+    ${pageHead('Suppliers & purchase orders', '', '<button class="btn" id="add-sup"><i data-lucide="plus"></i> Supplier</button><button class="btn btn-primary" id="add-po"><i data-lucide="plus"></i> Purchase order</button>')}
+    <div class="chips" id="tabs">
+      <button class="chip" data-t="pos">Purchase orders <b>${list.length}</b></button>
+      <button class="chip" data-t="suppliers">Suppliers <b>${(sup.suppliers || []).length}</b></button>
+    </div>
+    <div id="po-filter" class="chips"></div>
+    <div class="table-wrap" id="main-table"></div>`;
+
+  const poCols = [
+    { key: 'po_number', label: 'PO #', render: (p) => `<b>${esc(p.po_number)}</b>` },
+    { key: 'supplier_name', label: 'Supplier' },
+    { key: 'total_kes', label: 'Total', value: (p) => num(p.total_kes), render: (p) => kes(p.total_kes) },
+    { key: 'status', label: 'Status', render: (p) => badge(p.status) },
+    { key: 'a', label: '', sortable: false, csv: false, cls: 'right', render: (p) => (p.status === 'ordered' ? '<button class="btn btn-sm btn-primary" data-act="recv"><i data-lucide="package-check"></i> Receive stock</button>' : '') }
+  ];
+  const supCols = [
+    { key: 'name', label: 'Name', render: (s) => `<b>${esc(s.name)}</b>` },
+    { key: 'contact_person', label: 'Contact' },
+    { key: 'phone', label: 'Phone', render: (s) => (s.phone ? `<a href="tel:${esc(s.phone)}">${esc(s.phone)}</a>` : '') },
+    { key: 'email', label: 'Email', render: (s) => (s.email ? `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>` : '') }
+  ];
+
+  const draw = () => {
+    $$('#tabs .chip', root).forEach((c) => c.classList.toggle('on', c.dataset.t === tab));
+    const f = $('#po-filter', root);
+    if (tab === 'pos') {
+      f.innerHTML = ['', 'ordered', 'received', 'cancelled'].map((s) => `<button class="chip ${s === filter ? 'on' : ''}" data-f="${s}">${s || 'All'}</button>`).join('');
+      $$('[data-f]', f).forEach((b) => { b.onclick = () => { filter = b.dataset.f; draw(); }; });
+      mountTable($('#main-table', root), {
+        columns: poCols, rows: list.filter((p) => !filter || p.status === filter), empty: 'No purchase orders yet', sort: 'po_number', dir: 'desc',
+        onAction: async (a, p) => {
+          if (!(await confirmDialog('Receive stock', `Receive ${p.po_number} and add the stock?`, 'Receive'))) return;
+          guarded(async () => { await API.adminReceivePO(p.id); toast('Stock received'); route(); });
+        }
+      });
+    } else {
+      f.innerHTML = '';
+      mountTable($('#main-table', root), { columns: supCols, rows: sup.suppliers || [], empty: 'No suppliers yet' });
+    }
+  };
+  $$('#tabs .chip', root).forEach((c) => { c.onclick = () => { tab = c.dataset.t; draw(); }; });
+  $('#add-po', root).onclick = () => openPOModal();
+  $('#add-sup', root).onclick = () => {
+    openModal(`
+      <h2>New supplier</h2>
+      <form id="sup-form">
+        <div class="form-group"><label>Name *</label><input name="name" required></div>
+        <div class="form-group"><label>Contact</label><input name="contact_person"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone</label><input name="phone"></div>
+          <div class="form-group"><label>Email</label><input name="email" type="email"></div>
+        </div>
+        <div class="modal-actions"><button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Save</button></div>
+      </form>`);
+    $('#c').onclick = closeModal;
+    $('#sup-form').onsubmit = (e) => {
+      e.preventDefault();
+      guarded(async () => {
+        await API.adminCreateSupplier(Object.fromEntries(new FormData(e.target)));
+        closeModal(); toast('Supplier saved');
+        if (parseHash().params.tab === 'suppliers') route(); else go('suppliers', { tab: 'suppliers' });
+      });
+    };
+  };
+  draw();
+}
+
+/* prefillProductId: single product; prefillIds: many products, or "all low stock" via button */
+async function openPOModal(prefillProductId, prefillIds = []) {
+  await guarded(async () => {
+    const [sup, prods] = await Promise.all([API.adminSuppliers(), API.adminProducts({ limit: 1000 })]);
+    if (!sup.suppliers.length) return toast('Add a supplier first', 'error');
+    const active = prods.products.filter((p) => stateOf(p) !== 'archived');
+    const byId = new Map(active.map((p) => [String(p.id), p]));
+    const lines = [];
+    const suggest = (p) => Math.max(num(p.low_stock_threshold ?? 5) * 2 - num(p.stock_qty), 5);
+
+    openModal(`
+      <h2>New purchase order</h2>
+      <form id="po-form">
+        <div class="form-group"><label>Supplier</label><select name="supplier_id" required>${sup.suppliers.map((s) => `<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Product</label>
+          <select id="po-product">${active.map((p) => `<option value="${p.id}" ${String(p.id) === String(prefillProductId) ? 'selected' : ''}>${esc(p.name)} (${esc(p.sku || 'no SKU')}) · ${esc(p.stock_qty)} in stock</option>`).join('')}</select></div>
+        <div class="form-row">
+          <div class="form-group"><label>Quantity</label><input type="number" id="po-qty" value="10" min="1"></div>
+          <div class="form-group"><label>Unit cost (KES)</label><input type="number" id="po-cost" step="0.01" min="0"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-sm" id="po-add"><i data-lucide="plus"></i> Add line</button>
+          <button type="button" class="btn btn-sm btn-soft" id="po-low"><i data-lucide="wand-sparkles"></i> Add all low / out of stock</button>
+        </div>
+        <div class="table-wrap" style="margin-top:.8rem"><table><tbody id="po-lines"></tbody></table></div>
+        <div class="modal-actions">
+          <span style="margin-right:auto;font-weight:700" id="po-total"></span>
+          <button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Create PO</button>
+        </div>
+      </form>`, 'wide');
+
+    const sel = $('#po-product');
+    const sync = () => { $('#po-cost').value = byId.get(sel.value)?.cost_kes || 0; };
+    sync(); sel.onchange = sync;
+
+    const drawLines = () => {
+      $('#po-lines').innerHTML = lines.length
+        ? lines.map((l, i) => `<tr><td>${esc(l.name)}</td>
+            <td><input type="number" min="1" value="${l.quantity}" data-q="${i}" style="width:80px"></td>
+            <td>× ${kes(l.unit_cost_kes)}</td><td class="right"><b>${kes(l.quantity * l.unit_cost_kes)}</b></td>
+            <td class="right"><button type="button" class="btn btn-sm btn-danger" data-rm="${i}"><i data-lucide="x"></i></button></td></tr>`).join('')
+        : '<tr><td class="empty">No lines yet</td></tr>';
+      $('#po-total').textContent = lines.length ? `Total ${kes(lines.reduce((s, l) => s + l.quantity * l.unit_cost_kes, 0))}` : '';
+      $$('[data-rm]', $('#po-lines')).forEach((b) => { b.onclick = () => { lines.splice(Number(b.dataset.rm), 1); drawLines(); }; });
+      $$('[data-q]', $('#po-lines')).forEach((inp) => {
+        inp.onchange = () => { lines[Number(inp.dataset.q)].quantity = Math.max(1, num(inp.value)); drawLines(); };
+      });
+      icons($('#po-lines'));
+    };
+    const addLine = (p, qty) => {
+      const existing = lines.find((l) => l.product_id === Number(p.id));
+      if (existing) existing.quantity += qty;
+      else lines.push({ product_id: Number(p.id), quantity: qty, unit_cost_kes: num(p.cost_kes), name: p.name });
+    };
+
+    $('#po-add').onclick = () => {
+      const q = num($('#po-qty').value);
+      if (!(q > 0)) return toast('Quantity must be at least 1', 'error');
+      const p = byId.get(sel.value);
+      lines.push({ product_id: Number(sel.value), quantity: q, unit_cost_kes: num($('#po-cost').value), name: p ? p.name : 'Product' });
+      drawLines();
+    };
+    $('#po-low').onclick = () => {
+      const need = active.filter((p) => ['low', 'out'].includes(stateOf(p)));
+      if (!need.length) return toast('Nothing is low on stock');
+      need.forEach((p) => { if (!lines.some((l) => l.product_id === Number(p.id))) addLine(p, suggest(p)); });
+      drawLines();
+    };
+
+    if (prefillProductId && byId.get(String(prefillProductId))) { addLine(byId.get(String(prefillProductId)), suggest(byId.get(String(prefillProductId)))); }
+    prefillIds.forEach((id) => { const p = byId.get(String(id)); if (p) addLine(p, suggest(p)); });
+    drawLines();
+
+    $('#c').onclick = closeModal;
+    $('#po-form').onsubmit = (e) => {
+      e.preventDefault();
+      if (!lines.length) return toast('Add at least one line', 'error');
+      guarded(async () => {
+        await API.adminCreatePO({
+          supplier_id: Number(new FormData(e.target).get('supplier_id')),
+          items: lines.map(({ product_id, quantity, unit_cost_kes }) => ({ product_id, quantity, unit_cost_kes }))
+        });
+        closeModal(); toast('Purchase order created');
+        if (parseHash().view === 'suppliers' && parseHash().params.tab !== 'suppliers') route(); else go('suppliers', { tab: 'pos' });
+      });
+    };
+  });
+}
+
+/* =====================================================================
+   13. STAFF
+   ===================================================================== */
+async function renderStaff(root) {
+  const data = await API.adminStaff();
+  const users = data.users || [];
+  root.innerHTML = `
+    ${pageHead('Staff accounts', 'Roles: owner, manager, inventory, cashier, staff', '<button class="btn btn-primary" id="add-staff"><i data-lucide="user-plus"></i> Staff</button>')}
+    <div class="toolbar"><input id="st-q" type="search" placeholder="Search name or email…"></div>
+    <div class="table-wrap" id="st-table"></div>`;
+
+  const t = mountTable($('#st-table', root), {
+    rows: users, empty: 'No staff',
+    columns: [
+      { key: 'full_name', label: 'Name', render: (u) => `<b>${esc(u.full_name)}</b>` },
+      { key: 'email', label: 'Email' },
+      { key: 'role', label: 'Role', render: (u) => `<span class="pill t-${u.role === 'owner' ? 'ok' : 'confirmed'}">${esc(u.role)}</span>` },
+      { key: 'is_active', label: 'Active', value: (u) => (u.is_active ? 1 : 0), render: (u) => (u.is_active ? badge('ok', 'Active') : badge('archived', 'Disabled')) }
+    ]
+  });
+  $('#st-q', root).oninput = debounce((e) => {
+    const q = e.target.value.toLowerCase();
+    t.setRows(users.filter((u) => `${u.full_name} ${u.email}`.toLowerCase().includes(q)));
+  }, 150);
+
+  $('#add-staff', root).onclick = () => {
+    openModal(`
+      <h2>New staff</h2>
+      <form id="stf">
+        <div class="form-group"><label>Full name</label><input name="full_name" required></div>
+        <div class="form-group"><label>Email</label><input name="email" type="email" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>Password</label><input name="password" type="password" required minlength="6" autocomplete="new-password"></div>
+          <div class="form-group"><label>Phone</label><input name="phone"></div>
+        </div>
+        <div class="form-group"><label>Role</label>
+          <select name="role"><option value="staff">Staff</option><option value="cashier">Cashier</option><option value="inventory">Inventory</option><option value="manager">Manager</option></select></div>
+        <div class="modal-actions"><button type="button" class="btn" id="c">Cancel</button><button class="btn btn-primary">Create</button></div>
+      </form>`);
+    $('#c').onclick = closeModal;
+    $('#stf').onsubmit = (e) => {
+      e.preventDefault();
+      guarded(async () => { await API.adminCreateStaff(Object.fromEntries(new FormData(e.target))); closeModal(); toast('Staff account created'); route(); });
+    };
+  };
+}
+
+/* =====================================================================
+   14. MARKETING CENTRE
+   ===================================================================== */
 const MKT_TABS = ['overview', 'subscribers', 'campaigns', 'promos'];
 let MK = { subs: [], campaigns: [], promos: [], stats: {}, sales: null, pnl: null, failed: [], at: null };
 
-const fdate = (v) => (v ? String(v).slice(0, 10) : '—');
-const arr = (v, k) => (Array.isArray(v) ? v : (v && Array.isArray(v[k]) ? v[k] : []));
-const pct = (v) => (v == null || v === '' ? '—' : `${Math.round((Number(v) <= 1 ? Number(v) * 100 : Number(v)) * 10) / 10}%`);
-const copyText = async (txt, msg = 'Copied') => { try { await navigator.clipboard.writeText(txt); toast(msg); } catch { toast('Copy failed', 'error'); } };
-
-function promoState(p) {
-  if (!p.is_active) return 'inactive';
-  const now = Date.now();
-  if (p.expires_at && new Date(p.expires_at) < now) return 'expired';
-  if (p.starts_at && new Date(p.starts_at) > now) return 'scheduled';
-  const max = num(p.max_uses ?? p.usage_limit ?? p.max_redemptions);
-  const used = num(p.used_count ?? p.times_used ?? p.usage_count ?? p.uses);
-  if (max && used >= max) return 'exhausted';
-  return 'active';
-}
-function promoValue(p) {
-  const t = String(p.discount_type || p.type || '').toLowerCase();
-  const v = num(p.discount_value ?? p.value ?? p.amount);
-  if (t.includes('delivery') || p.free_delivery) return 'Free delivery';
-  if (t.startsWith('percent')) return `${v}% off`;
-  return v ? `${kes(v)} off` : '—';
-}
 const normSub = (s, i) => {
   const email = s.email || s.email_address || '';
   const raw = String(s.status || '').toLowerCase();
@@ -495,22 +1772,13 @@ const normSub = (s, i) => {
     ...s, id: s.id ?? (email || i), email,
     name: [s.first_name || s.firstName, s.last_name || s.lastName].filter(Boolean).join(' ') || s.name || s.full_name || '',
     status: off ? 'unsubscribed' : (raw && raw !== 'subscribed' ? raw : 'active'),
-    date: s.created_at || s.subscribed_at || s.createdAt || s.date || '',
-    source: s.source || ''
+    date: s.created_at || s.subscribed_at || s.createdAt || s.date || '', source: s.source || ''
   };
 };
 const normCamp = (c, i) => ({
-  ...c, id: c.id ?? i, subject: c.subject || c.name || 'Untitled',
-  status: String(c.status || 'draft').toLowerCase(),
-  sent: num(c.sent_count ?? c.recipients ?? c.sent),
-  open: c.open_rate ?? null, click: c.click_rate ?? null,
+  ...c, id: c.id ?? i, subject: c.subject || c.name || 'Untitled', status: String(c.status || 'draft').toLowerCase(),
+  sent: num(c.sent_count ?? c.recipients ?? c.sent), open: c.open_rate ?? null, click: c.click_rate ?? null,
   created: c.created_at || c.createdAt || c.scheduled_at || ''
-});
-const normPromo = (p, i) => ({
-  ...p, id: p.id ?? p.code ?? i, code: p.code || '',
-  used: num(p.used_count ?? p.times_used ?? p.usage_count ?? p.uses),
-  max: num(p.max_uses ?? p.usage_limit ?? p.max_redemptions),
-  state: promoState(p)
 });
 
 async function mktData() {
@@ -587,8 +1855,7 @@ async function renderMarketing(root, params) {
     </div>
     <div id="mkt-body"></div>`;
   $$('#mkt-tabs .mkt-tab', root).forEach((b) => { b.onclick = () => go('marketing', { tab: b.dataset.tab }); });
-  const body = $('#mkt-body', root);
-  ({ overview: mktOverview, subscribers: mktSubscribers, campaigns: mktCampaigns, promos: mktPromos })[tab](body, params);
+  ({ overview: mktOverview, subscribers: mktSubscribers, campaigns: mktCampaigns, promos: mktPromos })[tab]($('#mkt-body', root), params);
 
   $('#mkt-quick', root).onclick = () => {
     openModal(`<h2>Quick create</h2>
@@ -609,14 +1876,9 @@ function mktOverview(body) {
   const draftN = MK.campaigns.filter((c) => c.status === 'draft').length;
   const redemptions = MK.promos.reduce((s, p) => s + p.used, 0);
   const act = activePromos();
-  const soon = act.filter((p) => p.expires_at && new Date(p.expires_at) - Date.now() < 7 * 864e5)
-    .sort((a, b) => new Date(a.expires_at) - new Date(b.expires_at));
+  const soon = act.filter((p) => p.expires_at && new Date(p.expires_at) - Date.now() < 7 * DAY).sort((a, b) => new Date(a.expires_at) - new Date(b.expires_at));
   const watch = soon.length ? soon : act.slice(0, 5);
   const M = (tab, extra = {}) => link('marketing', { tab, ...extra });
-  const tile = (href, ic, lbl, val, sub, cls = '') => `
-    <a class="stat ${cls}" href="${href}"><span class="go"><i data-lucide="arrow-up-right"></i></span>
-      <div class="ico"><i data-lucide="${ic}"></i></div>
-      <div class="label">${lbl}</div><div class="value">${val}</div><div class="sub">${sub}</div></a>`;
   const rev = num(MK.sales?.summary?.revenue);
   const net = num(MK.pnl?.net_profit ?? MK.sales?.summary?.net_profit);
 
@@ -627,18 +1889,19 @@ function mktOverview(body) {
   });
   MK.subs.forEach((s) => { const m = months.find((x) => x.key === String(s.date).slice(0, 7)); if (m) m.n++; });
   const newest = [...MK.subs].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 6);
+  const totalSubs = num(st.active_subscribers ?? st.total_subscribers ?? st.subscribers) || activeSubs().length;
 
   body.innerHTML = `
     <div class="grid-stats">
-      ${tile(M('subscribers'), 'users', 'Newsletter subscribers', (num(st.active_subscribers ?? st.total_subscribers ?? st.subscribers) || activeSubs().length).toLocaleString(), `${MK.subs.filter((s) => s.status === 'unsubscribed').length} unsubscribed`)}
-      ${tile(M('promos', { filter: 'active' }), 'ticket-percent', 'Active promotions', act.length, `${soon.length} expiring within 7 days`, soon.length ? 'warn' : '')}
-      ${tile(M('promos'), 'badge-percent', 'Coupon redemptions', redemptions.toLocaleString(), 'All coupons, all time')}
-      ${tile(M('campaigns', { filter: 'sent' }), 'send', 'Campaigns sent', sentN, 'View sent campaigns', 'info')}
-      ${tile(M('campaigns', { filter: 'draft' }), 'file-text', 'Draft campaigns', draftN, draftN ? 'Ready to review & send' : 'No drafts')}
-      ${tile(M('campaigns'), 'mail-open', 'Open rate', pct(st.open_rate), 'Average across campaigns')}
-      ${tile(M('campaigns'), 'mouse-pointer-click', 'Click rate', pct(st.click_rate), 'Average across campaigns')}
-      ${MK.sales ? tile(link('sales'), 'banknote', 'Revenue (this month)', kes(rev), `${num(MK.sales.summary?.order_count)} orders`, 'info') : ''}
-      ${MK.pnl ? tile(link('pnl'), 'scale', 'Net profit (this month)', `<span class="${net < 0 ? 'neg' : 'pos'}">${kes(net)}</span>`, 'After expenses', net < 0 ? 'bad' : '') : ''}
+      ${statCard({ href: M('subscribers'), icon: 'users', label: 'Newsletter subscribers', value: totalSubs.toLocaleString(), sub: `${MK.subs.filter((s) => s.status === 'unsubscribed').length} unsubscribed` })}
+      ${statCard({ href: M('promos', { filter: 'active' }), icon: 'ticket-percent', label: 'Active promotions', value: act.length, sub: `${soon.length} expiring within 7 days`, tone: soon.length ? 'warn' : '' })}
+      ${statCard({ href: M('promos'), icon: 'badge-percent', label: 'Coupon redemptions', value: redemptions.toLocaleString(), sub: 'All coupons, all time' })}
+      ${statCard({ href: M('campaigns', { filter: 'sent' }), icon: 'send', label: 'Campaigns sent', value: sentN, sub: 'View sent campaigns', tone: 'info' })}
+      ${statCard({ href: M('campaigns', { filter: 'draft' }), icon: 'file-text', label: 'Draft campaigns', value: draftN, sub: draftN ? 'Ready to review & send' : 'No drafts' })}
+      ${statCard({ href: M('campaigns'), icon: 'mail-open', label: 'Open rate', value: pct(st.open_rate), sub: 'Average across campaigns' })}
+      ${statCard({ href: M('campaigns'), icon: 'mouse-pointer-click', label: 'Click rate', value: pct(st.click_rate), sub: 'Average across campaigns' })}
+      ${MK.sales ? statCard({ href: link('sales'), icon: 'banknote', label: 'Revenue (this month)', value: kes(rev), sub: `${num(MK.sales.summary?.order_count)} orders`, tone: 'info' }) : ''}
+      ${MK.pnl ? statCard({ href: link('pnl'), icon: 'scale', label: 'Net profit (this month)', value: `<span class="${net < 0 ? 'neg' : 'pos'}">${kes(net)}</span>`, sub: 'After expenses', tone: net < 0 ? 'bad' : '' }) : ''}
     </div>
     <div class="cols">
       <div class="card">
@@ -685,7 +1948,7 @@ function mktSubscribers(body, params) {
     sort: 'date', dir: 'desc', empty: 'No subscribers found', exportName: 'subscribers',
     toolbar: `<button class="btn btn-sm" id="sb-copy"><i data-lucide="copy"></i> Copy emails</button>
               <button class="btn btn-sm btn-soft" id="sb-mail"><i data-lucide="mail"></i> Compose newsletter</button>`,
-    onRow: (s) => subModal(s)
+    onRow: subModal
   });
   $('#sb-copy', body).onclick = () => {
     const emails = list.visible().map((s) => s.email).filter(Boolean);
@@ -732,7 +1995,7 @@ function mktCampaigns(body, params) {
     placeholder: 'Search campaigns…', filter: params.filter, q: params.q,
     sort: 'created', dir: 'desc', empty: 'No campaigns yet', exportName: 'campaigns',
     toolbar: '<button class="btn btn-primary btn-sm" id="cp-new"><i data-lucide="plus"></i> New campaign</button>',
-    onRow: (c) => previewCampaign(c),
+    onRow: previewCampaign,
     onAction: (act, c) => {
       if (act === 'preview') previewCampaign(c);
       if (act === 'dup') openCampaignForm({ subject: c.subject, preview_text: c.preview_text, html_content: c.html_content || c.body || '' });
@@ -761,35 +2024,31 @@ function previewCampaign(c) {
 function mktPromos(body, params) {
   const cols = [
     { key: 'code', label: 'Code', render: (p) => `<b>${esc(p.code)}</b>${p.description ? `<div class="hint">${esc(p.description)}</div>` : ''}` },
-    { key: 'discount', label: 'Discount', value: (p) => promoValue(p), render: (p) => esc(promoValue(p)) },
-    { key: 'used', label: 'Usage', value: (p) => p.used, render: (p) => p.max
-      ? `<div class="usage"><div class="track"><div class="fill" style="width:${Math.min(100, p.used / p.max * 100)}%"></div></div><span class="hint nowrap">${p.used}/${p.max}</span></div>`
-      : `${p.used} used` },
+    { key: 'discount', label: 'Discount', value: promoValue, render: (p) => esc(promoValue(p)) },
+    { key: 'used', label: 'Usage', value: (p) => p.used, render: (p) => (p.max
+      ? `<div class="usage"><div class="track"><div class="fill" style="width:${Math.min(100, p.used / p.max * 100)}%"></div></div><span class="hint nowrap">${p.used}/${p.max}</span></div>` : `${p.used} used`) },
     { key: 'expires_at', label: 'Expires', cls: 'nowrap', value: (p) => p.expires_at || '9999', render: (p) => esc(p.expires_at ? fdate(p.expires_at) : 'Never') },
-    { key: 'state', label: 'Status', render: (p) => badge(p.state) }
+    { key: 'state', label: 'Status', render: (p) => badge(p.state, label(p.state)) }
   ];
   mktList(body, {
-    rows: MK.promos, columns: cols,
-    statuses: ['active', 'scheduled', 'expired', 'exhausted', 'inactive'].filter((s) => MK.promos.some((p) => p.state === s)),
+    rows: MK.promos, columns: cols, statuses: PROMO_STATES.filter((s) => MK.promos.some((p) => p.state === s)),
     statusOf: (p) => p.state, search: (p) => `${p.code} ${p.description || ''}`,
     placeholder: 'Search coupon code…', filter: params.filter, q: params.q,
     sort: 'used', dir: 'desc', empty: 'No promotions found', exportName: 'promotions',
-    rowClass: (p) => (['expired', 'inactive', 'exhausted'].includes(p.state) ? 'dim' : ''),
+    rowClass: (p) => (['expired', 'inactive', 'used_up'].includes(p.state) ? 'dim' : ''),
     toolbar: `<a class="btn btn-primary btn-sm" href="${link('promotions')}"><i data-lucide="settings-2"></i> Manage promotions</a>`,
-    onRow: (p) => promoModal(p)
+    onRow: promoModal
   });
 }
 
 function promoModal(p) {
   if (!p) return;
-  const yes = (v) => (v ? 'Yes' : 'No');
-  const minOrder = num(p.min_order_total ?? p.min_order ?? p.min_subtotal);
   openModal(`<h2>${esc(p.code)}</h2>
     <dl class="kv">
-      <dt>Status</dt><dd>${badge(p.state)}</dd><dt>Discount</dt><dd>${esc(promoValue(p))}</dd>
+      <dt>Status</dt><dd>${badge(p.state, label(p.state))}</dd><dt>Discount</dt><dd>${esc(promoValue(p))}</dd>
       <dt>Usage</dt><dd>${p.used}${p.max ? ` / ${p.max}` : ' (unlimited)'}</dd>
-      <dt>Min. order</dt><dd>${minOrder ? kes(minOrder) : '—'}</dd>
-      <dt>First order only</dt><dd>${yes(p.first_order_only)}</dd>
+      <dt>Min. order</dt><dd>${num(p.min_order_kes) ? kes(p.min_order_kes) : '—'}</dd>
+      <dt>Per customer</dt><dd>${esc(p.per_user_limit || '—')}</dd>
       <dt>Starts</dt><dd>${esc(fdate(p.starts_at))}</dd>
       <dt>Expires</dt><dd>${p.expires_at ? esc(fdate(p.expires_at)) : 'Never'}</dd>
       ${p.description ? `<dt>Description</dt><dd>${esc(p.description)}</dd>` : ''}
@@ -820,15 +2079,9 @@ ${couponBlock(p)}
 <p>Apply the code at checkout. Happy reading!</p>
 <p>— Mawego Bookshop</p>`;
 const TEMPLATES = {
-  arrivals: `<h2>New arrivals at Mawego Bookshop 📚</h2>
-<p>Hello,</p>
-<p>Fresh titles have just landed on our shelves. Come and see what's new this week.</p>
-<p>— Mawego Bookshop</p>`,
-  event: `<h2>You're invited 🎉</h2>
-<p>Hello,</p>
-<p>Join us for an upcoming event at Mawego Bookshop.</p>
-<p><b>Date:</b> …<br><b>Time:</b> …<br><b>Venue:</b> …</p>
-<p>— Mawego Bookshop</p>`
+  arrivals: `<h2>New arrivals at Mawego Bookshop 📚</h2>\n<p>Hello,</p>\n<p>Fresh titles have just landed on our shelves. Come and see what's new this week.</p>\n<p>— Mawego Bookshop</p>`,
+  event: `<h2>You're invited 🎉</h2>\n<p>Hello,</p>\n<p>Join us for an upcoming event at Mawego Bookshop.</p>\n<p><b>Date:</b> …<br><b>Time:</b> …<br><b>Venue:</b> …</p>\n<p>— Mawego Bookshop</p>`,
+  backtoschool: `<h2>Back to school, sorted 🎒</h2>\n<p>Hello,</p>\n<p>Textbooks, exercise books and stationery — everything for the new term is in stock.</p>\n<p>— Mawego Bookshop</p>`
 };
 
 function openCampaignForm(prefill = {}) {
@@ -844,6 +2097,7 @@ function openCampaignForm(prefill = {}) {
         <span class="hint">Templates:</span>
         <button type="button" class="btn btn-sm" data-tpl="arrivals">New arrivals</button>
         <button type="button" class="btn btn-sm" data-tpl="event">Event invite</button>
+        <button type="button" class="btn btn-sm" data-tpl="backtoschool">Back to school</button>
         ${act.length ? `<select id="nl-coupon"><option value="">Insert coupon…</option>${act.map((p) => `<option value="${esc(p.id)}">${esc(p.code)} — ${esc(promoValue(p))}</option>`).join('')}</select>` : ''}
       </div>
       <div class="form-group"><label>Email body * (HTML allowed)</label>
@@ -869,8 +2123,7 @@ function openCampaignForm(prefill = {}) {
   $('#nl-close').onclick = closeModal;
   f.onsubmit = (e) => {
     e.preventDefault();
-    const btn = $('button[type=submit]', f);
-    btn.disabled = true;
+    const btn = $('button[type=submit]', f); btn.disabled = true;
     guarded(async () => {
       const fd = new FormData(f);
       const created = await API.adminCreateCampaign({
@@ -893,25 +2146,73 @@ async function sendCampaignNow(c) {
   const ok = await confirmDialog('Send campaign now?',
     `“${c.subject}” will be sent to ${subCount().toLocaleString()} active subscribers via Brevo. This cannot be undone.`, 'Send now');
   if (!ok) return;
-  guarded(async () => { await API.adminSendCampaign(c.id); toast('Campaign is being sent'); route(); });
+  guarded(async () => { await API.adminSendCampaign(c.id); closeModal(); toast('Campaign is being sent'); route(); });
 }
 
-/* ============ OTHER VIEWS — PASTE YOUR ORIGINAL FUNCTIONS HERE ============
-   These are placeholders only. Replace each with your real implementation
-   (the ones you already have in your current admin.html).                    */
-async function renderDashboard(root) { root.innerHTML = pageHead('Dashboard', 'Replace with your original renderDashboard'); }
-async function renderOrders(root) { root.innerHTML = pageHead('Orders', 'Replace with your original renderOrders'); }
-async function renderProducts(root) { root.innerHTML = pageHead('Products', 'Replace with your original renderProducts'); }
-async function renderPromotions(root) { root.innerHTML = pageHead('Promotions', 'Replace with your original renderPromotions'); }
-async function renderInventory(root) { root.innerHTML = pageHead('Inventory', 'Replace with your original renderInventory'); }
-async function renderSuppliers(root) { root.innerHTML = pageHead('Suppliers & POs', 'Replace with your original renderSuppliers'); }
-async function renderExpenses(root) { root.innerHTML = pageHead('Expenses', 'Replace with your original renderExpenses'); }
-async function renderSales(root) { root.innerHTML = pageHead('Sales report', 'Replace with your original renderSales'); }
-async function renderPnL(root) { root.innerHTML = pageHead('Profit & loss', 'Replace with your original renderPnL'); }
-async function renderStaff(root) { root.innerHTML = pageHead('Staff', 'Replace with your original renderStaff'); }
-/* ============ END OTHER VIEWS ============ */
+/* =====================================================================
+   15. COMMAND PALETTE, SHORTCUTS, THEME, DENSITY
+   ===================================================================== */
+const VIEWS = {
+  dashboard: renderDashboard, orders: renderOrders, products: renderProducts, customers: renderCustomers,
+  marketing: renderMarketing, promotions: renderPromotions, inventory: renderInventory,
+  suppliers: renderSuppliers, expenses: renderExpenses, sales: renderSales, pnl: renderPnL, staff: renderStaff
+};
 
-/* ============ THEME, PALETTE, SHORTCUTS ============ */
+function openPalette() {
+  const base = [
+    ...NAV.filter((n) => can(n.id)).map((n) => ({ t: `Go to ${n.label}`, icon: n.icon, run: () => go(n.id) })),
+    ...(can('marketing') ? [
+      { t: 'Marketing › Subscribers', icon: 'users', run: () => go('marketing', { tab: 'subscribers' }) },
+      { t: 'Marketing › Campaigns', icon: 'mail', run: () => go('marketing', { tab: 'campaigns' }) },
+      { t: 'Marketing › Active promotions', icon: 'ticket-percent', run: () => go('marketing', { tab: 'promos', filter: 'active' }) },
+      { t: 'New newsletter campaign', icon: 'mail-plus', run: () => guarded(async () => { await mktData(); openCampaignForm(); }) }
+    ] : []),
+    { t: 'Add product', icon: 'plus', run: () => guarded(async () => openProductForm(null, (await API.categories()).categories)) },
+    ...(can('promotions') ? [{ t: 'New coupon', icon: 'ticket-percent', run: () => openCouponForm(null) }] : []),
+    { t: 'Record expense', icon: 'receipt', run: openExpenseModal },
+    { t: 'New purchase order', icon: 'truck', run: () => openPOModal() },
+    ...(can('orders') ? [{ t: 'Pending orders', icon: 'clock', run: () => go('orders', { status: 'pending' }) }] : []),
+    { t: 'Low stock items', icon: 'alert-triangle', run: () => go('inventory', { state: 'alerts' }) },
+    { t: 'Keyboard shortcuts', icon: 'keyboard', run: openHelp },
+    { t: 'Toggle dark mode', icon: 'moon', run: toggleTheme },
+    { t: 'Toggle compact tables', icon: 'rows-3', run: toggleDensity }
+  ];
+  openModal('<input id="pal-q" placeholder="Type a command, or search products and orders…" autocomplete="off"><ul id="pal-list"></ul>', 'palette');
+  let sel = 0, items = base;
+  const draw = () => {
+    $('#pal-list').innerHTML = items.map((i, n) =>
+      `<li class="${n === sel ? 'sel' : ''}" data-n="${n}"><i data-lucide="${i.icon}"></i>${esc(i.t)}${i.hint ? `<span class="hint">${esc(i.hint)}</span>` : ''}</li>`).join('') || '<li class="muted">No matches</li>';
+    icons($('#pal-list'));
+    $('.sel', $('#pal-list'))?.scrollIntoView({ block: 'nearest' });
+  };
+  const run = (i) => { closeModal(); if (i) i.run(); };
+  $('#pal-q').oninput = (e) => {
+    const raw = e.target.value.trim(), q = raw.toLowerCase();
+    items = base.filter((i) => i.t.toLowerCase().includes(q));
+    if (q) {
+      if (can('products')) items.push({ t: `Search products for “${raw}”`, icon: 'book-open', hint: 'Products', run: () => go('products', { q: raw }) });
+      if (can('orders')) items.push({ t: `Search orders for “${raw}”`, icon: 'shopping-cart', hint: 'Orders', run: () => go('orders', { q: raw }) });
+      if (can('customers')) items.push({ t: `Search customers for “${raw}”`, icon: 'contact', hint: 'Customers', run: () => go('customers', { q: raw }) });
+    }
+    sel = 0; draw();
+  };
+  $('#pal-q').onkeydown = (e) => {
+    if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, items.length - 1); draw(); e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); draw(); e.preventDefault(); }
+    else if (e.key === 'Enter') run(items[sel]);
+  };
+  $('#pal-list').onclick = (e) => { const li = e.target.closest('li[data-n]'); if (li) run(items[Number(li.dataset.n)]); };
+  draw();
+}
+
+function openHelp() {
+  const rows = [['Ctrl / ⌘ + K', 'Command palette'], ['/', 'Focus search'], ['R', 'Refresh view'], ['?', 'This help'], ['Esc', 'Close dialog'],
+    ...NAV.filter((n) => can(n.id)).map((n) => [`G then ${n.key.toUpperCase()}`, `Go to ${n.label}`])];
+  openModal(`<h2>Keyboard shortcuts</h2><div class="sc-grid">${rows.map(([k, v]) => `<kbd style="margin:0">${esc(k)}</kbd><span>${esc(v)}</span>`).join('')}</div>
+    <div class="modal-actions"><button class="btn btn-primary" id="hp-close">Close</button></div>`);
+  $('#hp-close').onclick = closeModal;
+}
+
 function applyTheme(t) {
   document.documentElement.dataset.theme = t;
   const b = $('#theme-btn');
@@ -919,47 +2220,59 @@ function applyTheme(t) {
 }
 function toggleTheme() {
   const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  try { localStorage.setItem('admin-theme', t); } catch {}
-  applyTheme(t);
+  store.set('admin-theme', t); applyTheme(t);
 }
-let savedTheme = null;
-try { savedTheme = localStorage.getItem('admin-theme'); } catch {}
-applyTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+function toggleDensity() {
+  const on = document.body.classList.toggle('compact');
+  store.set('admin-density', on ? 'compact' : 'comfortable');
+}
 
-function openPalette() {
-  const items = NAV.filter((n) => can(n.id)).map((n) => ({ ...n, href: link(n.id) }));
-  if (can('marketing')) items.push(
-    { label: 'Marketing › Subscribers', icon: 'users', href: link('marketing', { tab: 'subscribers' }) },
-    { label: 'Marketing › Campaigns', icon: 'mail', href: link('marketing', { tab: 'campaigns' }) },
-    { label: 'Marketing › Active promotions', icon: 'ticket-percent', href: link('marketing', { tab: 'promos', filter: 'active' }) });
-  openModal(`<input id="pal-q" placeholder="Jump to…" autocomplete="off"><ul id="pal-list"></ul>`, 'palette');
-  let sel = 0, shown = items;
-  const draw = () => {
-    $('#pal-list').innerHTML = shown.map((n, i) => `<li data-i="${i}" class="${i === sel ? 'sel' : ''}"><i data-lucide="${n.icon}"></i>${esc(n.label)}</li>`).join('') || '<li class="muted">No matches</li>';
-    icons($('#pal-list'));
-  };
-  const pick = (i) => { if (shown[i]) { closeModal(); location.hash = shown[i].href; } };
-  $('#pal-q').focus();
-  $('#pal-q').oninput = (e) => { const q = e.target.value.toLowerCase(); shown = items.filter((n) => n.label.toLowerCase().includes(q)); sel = 0; draw(); };
-  $('#pal-q').onkeydown = (e) => {
-    if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, shown.length - 1); draw(); e.preventDefault(); }
-    if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); draw(); e.preventDefault(); }
-    if (e.key === 'Enter') pick(sel);
-  };
-  $('#pal-list').onclick = (e) => { const li = e.target.closest('[data-i]'); if (li) pick(Number(li.dataset.i)); };
-  draw();
-}
+applyTheme(store.get('admin-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+if (store.get('admin-density') === 'compact') document.body.classList.add('compact');
 
 $('#theme-btn').onclick = toggleTheme;
+$('#density-btn').onclick = toggleDensity;
+$('#help-btn').onclick = openHelp;
 $('#menu-btn').onclick = () => $('#sidebar').classList.toggle('open');
 $('#palette-btn').onclick = () => { if (isStaffUser(API.getUser())) openPalette(); };
 $('#refresh-btn').onclick = () => { route(); toast('Refreshed'); };
+
+const syncOnline = () => $('#offline-bar').classList.toggle('hidden', navigator.onLine);
+window.addEventListener('online', () => { syncOnline(); toast('Back online'); });
+window.addEventListener('offline', syncOnline);
+syncOnline();
+
 document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if (isStaffUser(API.getUser())) openPalette(); return; }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    if (isStaffUser(API.getUser())) openPalette();
+    return;
+  }
   if (e.key === 'Escape' && modalOpen()) return closeModal();
-  if (e.key.toLowerCase() === 'r' && !modalOpen() && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '') && isStaffUser(API.getUser())) route();
+  if (/input|textarea|select/i.test(e.target.tagName) || modalOpen() || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (!isStaffUser(API.getUser())) return;
+
+  if (e.key === 'r') route();
+  if (e.key === '?') openHelp();
+  if (e.key === '/') {
+    e.preventDefault();
+    const s = $('input[type=search]');
+    if (s) s.focus(); else openPalette();
+  }
+  if (e.key === 'g') {
+    const handler = (ev) => {
+      const n = NAV.find((x) => x.key === ev.key.toLowerCase());
+      if (n && can(n.id)) go(n.id);
+      document.removeEventListener('keydown', handler, true);
+    };
+    document.addEventListener('keydown', handler, true);
+    setTimeout(() => document.removeEventListener('keydown', handler, true), 1500);
+  }
 });
 
+/* =====================================================================
+   16. BOOT
+   ===================================================================== */
 icons();
 if (isStaffUser(API.getUser())) showApp(); else showLogin();
 })();
