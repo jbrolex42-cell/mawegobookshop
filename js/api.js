@@ -1,4 +1,5 @@
-﻿'use strict';
+﻿
+'use strict';
 
 const API = {
 
@@ -33,6 +34,10 @@ const API = {
     }
   },
 
+  // ----------------------------------------------------------
+  // CENTRAL REQUEST HANDLER
+  // ----------------------------------------------------------
+
   async request(path, options = {}) {
     const headers = { ...(options.headers || {}) };
 
@@ -57,6 +62,7 @@ const API = {
       response = await fetch(this.base + path, {
         ...options,
         headers,
+
         body: isFormData
           ? options.body
           : options.body !== undefined
@@ -67,6 +73,7 @@ const API = {
               )
             : undefined
       });
+
     } catch (networkError) {
       const error = new Error(
         'Unable to connect to Mawego Bookshop server. Check that the backend is running.'
@@ -93,6 +100,10 @@ const API = {
 
     return data;
   },
+
+  // ----------------------------------------------------------
+  // HTTP METHODS
+  // ----------------------------------------------------------
 
   get(path) {
     return this.request(path);
@@ -147,6 +158,10 @@ const API = {
     return this.get('/settings');
   },
 
+  // ----------------------------------------------------------
+  // AUTHENTICATION
+  // ----------------------------------------------------------
+
   login(email, password) {
     return this.post('/auth/login', {
       email,
@@ -179,6 +194,10 @@ const API = {
     });
   },
 
+  // ----------------------------------------------------------
+  // ADMIN STAFF
+  // ----------------------------------------------------------
+
   adminStaff() {
     return this.get('/auth/staff');
   },
@@ -193,6 +212,10 @@ const API = {
       body
     );
   },
+
+  // ----------------------------------------------------------
+  // ORDERS
+  // ----------------------------------------------------------
 
   createOrder(payload) {
     return this.post('/orders', payload);
@@ -226,6 +249,10 @@ const API = {
     );
   },
 
+  // ----------------------------------------------------------
+  // PAYMENTS
+  // ----------------------------------------------------------
+
   mpesaStk(orderId, phone) {
     return this.post('/payments/mpesa/stk', {
       order_id: orderId,
@@ -238,6 +265,10 @@ const API = {
       order_id: orderId
     });
   },
+
+  // ----------------------------------------------------------
+  // RECEIPTS
+  // ----------------------------------------------------------
 
   receiptByOrderId(orderId) {
     return this.get(
@@ -257,6 +288,10 @@ const API = {
     );
   },
 
+  // ----------------------------------------------------------
+  // PROMOTIONS AND DISCOUNT CODES
+  // ----------------------------------------------------------
+
   validatePromo(code, subtotal) {
     return this.post('/promos/validate', {
       code,
@@ -271,6 +306,10 @@ const API = {
   adminCreatePromo(body) {
     return this.post('/admin/promos', body);
   },
+
+  // ----------------------------------------------------------
+  // CUSTOMER NOTIFICATIONS
+  // ----------------------------------------------------------
 
   notifications(params = {}) {
     const q = new URLSearchParams(params).toString();
@@ -305,9 +344,17 @@ const API = {
     return this.del('/notifications/clear-all');
   },
 
+  // ----------------------------------------------------------
+  // ADMIN DASHBOARD
+  // ----------------------------------------------------------
+
   adminDashboard() {
     return this.get('/admin/dashboard');
   },
+
+  // ----------------------------------------------------------
+  // ADMIN PRODUCTS
+  // ----------------------------------------------------------
 
   adminProducts(params = {}) {
     const q = new URLSearchParams(params).toString();
@@ -355,6 +402,10 @@ const API = {
     });
   },
 
+  // ----------------------------------------------------------
+  // ADMIN ORDERS
+  // ----------------------------------------------------------
+
   adminOrders(params = {}) {
     const q = new URLSearchParams(params).toString();
 
@@ -385,6 +436,10 @@ const API = {
     );
   },
 
+  // ----------------------------------------------------------
+  // ADMIN REPORTS
+  // ----------------------------------------------------------
+
   adminSalesReport(from, to) {
     return this.get(
       `/admin/reports/sales?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`
@@ -401,6 +456,10 @@ const API = {
     );
   },
 
+  // ----------------------------------------------------------
+  // ADMIN SUPPLIERS
+  // ----------------------------------------------------------
+
   adminSuppliers() {
     return this.get('/admin/suppliers');
   },
@@ -415,6 +474,10 @@ const API = {
       body
     );
   },
+
+  // ----------------------------------------------------------
+  // ADMIN PURCHASE ORDERS
+  // ----------------------------------------------------------
 
   adminPurchaseOrders() {
     return this.get('/admin/purchase-orders');
@@ -432,6 +495,10 @@ const API = {
       {}
     );
   },
+
+  // ----------------------------------------------------------
+  // ADMIN EXPENSES
+  // ----------------------------------------------------------
 
   adminExpenses(params = {}) {
     const q = new URLSearchParams(params).toString();
@@ -462,6 +529,63 @@ const API = {
     );
   },
 
+  // ----------------------------------------------------------
+  // NEWSLETTER / BREVO
+  // ----------------------------------------------------------
+
+  // Legacy newsletter endpoints
+
+  adminSendCampaign(body) {
+    return this.post('/admin/newsletter/send', body);
+  },
+
+  adminGetSubscribers() {
+    return this.get('/admin/newsletter/subscribers');
+  },
+
+  // Newsletter statistics
+
+  adminNewsletterStats() {
+    return this.get('/newsletter/admin/stats');
+  },
+
+  // Subscriber management
+
+  adminNewsletterSubscribers(params = {}) {
+    const q = new URLSearchParams(params).toString();
+
+    return this.get(
+      '/newsletter/admin/subscribers' +
+      (q ? '?' + q : '')
+    );
+  },
+
+  // Campaign management
+
+  adminNewsletterCampaigns() {
+    return this.get('/newsletter/admin/campaigns');
+  },
+
+  adminCreateCampaign(body) {
+    return this.post(
+      '/newsletter/admin/campaigns',
+      body
+    );
+  },
+
+  // Send a saved newsletter campaign by ID
+
+  adminSendNewsletterCampaign(id) {
+    return this.post(
+      `/newsletter/admin/campaigns/${encodeURIComponent(id)}/send`,
+      {}
+    );
+  },
+
+  // ----------------------------------------------------------
+  // LOYALTY POINTS
+  // ----------------------------------------------------------
+
   pointsBalance() {
     return this.get('/points/balance');
   },
@@ -469,13 +593,25 @@ const API = {
   pointsHistory() {
     return this.get('/points/history');
   }
+
 };
 
+// Make API globally accessible
+
 window.API = API;
+
+
+/* ============================================================
+   MAWEGO BOOKSHOP - SHOPPING CART
+   ============================================================ */
 
 const Cart = {
 
   key: 'mb_cart',
+
+  // ----------------------------------------------------------
+  // PRODUCT ID
+  // ----------------------------------------------------------
 
   getProductId(product) {
     if (!product) return '';
@@ -491,6 +627,10 @@ const Cart = {
 
     return id == null ? '' : String(id);
   },
+
+  // ----------------------------------------------------------
+  // GET CART
+  // ----------------------------------------------------------
 
   get() {
     try {
@@ -537,6 +677,10 @@ const Cart = {
     }
   },
 
+  // ----------------------------------------------------------
+  // SAVE CART
+  // ----------------------------------------------------------
+
   save(items) {
     try {
       localStorage.setItem(
@@ -559,6 +703,10 @@ const Cart = {
       return false;
     }
   },
+
+  // ----------------------------------------------------------
+  // ADD PRODUCT
+  // ----------------------------------------------------------
 
   add(product, qty = 1) {
     if (!product || typeof product !== 'object') {
@@ -607,6 +755,7 @@ const Cart = {
     );
 
     if (existing) {
+
       existing.quantity = Math.min(
         existing.quantity + quantity,
         stock
@@ -614,7 +763,18 @@ const Cart = {
 
       existing.stock_qty = stock;
 
+      // Refresh product details
+
+      existing.price_kes = price;
+
+      existing.name =
+        product.name ||
+        product.product_name ||
+        product.title ||
+        existing.name;
+
     } else {
+
       items.push({
         product_id: productId,
 
@@ -639,11 +799,14 @@ const Cart = {
         ),
 
         image_url: product.image_url || '',
+
         slug: product.slug || '',
+
         stock_qty: stock,
 
         quantity: Math.min(quantity, stock)
       });
+
     }
 
     if (!this.save(items)) {
@@ -655,10 +818,15 @@ const Cart = {
     return items;
   },
 
+  // ----------------------------------------------------------
+  // UPDATE QUANTITY
+  // ----------------------------------------------------------
+
   updateQty(productId, quantity) {
     const id = String(productId);
 
     const items = this.get().map(item => {
+
       if (String(item.product_id) !== id) {
         return item;
       }
@@ -684,6 +852,10 @@ const Cart = {
     return this.save(items);
   },
 
+  // ----------------------------------------------------------
+  // REMOVE PRODUCT
+  // ----------------------------------------------------------
+
   remove(productId) {
     const id = String(productId);
 
@@ -694,9 +866,17 @@ const Cart = {
     );
   },
 
+  // ----------------------------------------------------------
+  // CLEAR CART
+  // ----------------------------------------------------------
+
   clear() {
     return this.save([]);
   },
+
+  // ----------------------------------------------------------
+  // CART ITEM COUNT
+  // ----------------------------------------------------------
 
   count() {
     return this.get().reduce(
@@ -705,6 +885,10 @@ const Cart = {
       0
     );
   },
+
+  // ----------------------------------------------------------
+  // CART SUBTOTAL
+  // ----------------------------------------------------------
 
   subtotal() {
     return this.get().reduce(
@@ -716,18 +900,27 @@ const Cart = {
     );
   },
 
+  // ----------------------------------------------------------
+  // UPDATE CART BADGE
+  // ----------------------------------------------------------
+
   updateBadge() {
     const count = this.count();
 
     document.querySelectorAll('.cart-count').forEach(el => {
+
       el.textContent = count;
 
       el.style.display = count
         ? 'inline-flex'
         : 'none';
+
     });
   }
+
 };
+
+// Make Cart globally accessible
 
 window.Cart = Cart;
 
@@ -739,6 +932,10 @@ function formatKes(amount) {
     }
   );
 }
+
+// ------------------------------------------------------------
+// ESCAPE HTML
+// ------------------------------------------------------------
 
 function escapeHtml(value) {
   if (value == null) return '';
@@ -755,14 +952,20 @@ window.formatKes = formatKes;
 window.escapeHtml = escapeHtml;
 
 function initializeMawegoCart() {
+
   Cart.updateBadge();
+
 }
 
 if (document.readyState === 'loading') {
+
   document.addEventListener(
     'DOMContentLoaded',
     initializeMawegoCart
   );
+
 } else {
+
   initializeMawegoCart();
+
 }
