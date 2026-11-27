@@ -17,9 +17,6 @@
   <script src="https://unpkg.com/lucide@0.469.0"></script>
 
   <style>
-    /* =====================================================
-       ORDER TRACKING PAGE
-    ===================================================== */
 
     .tracking-page {
       max-width: 850px;
@@ -136,10 +133,6 @@
       margin-top: 2px;
     }
 
-    /* =====================================================
-       LOADING
-    ===================================================== */
-
     .tracking-loading {
       background: var(--card, #fff);
       border: 1px solid var(--border, #e5e7eb);
@@ -164,10 +157,6 @@
         transform: rotate(360deg);
       }
     }
-
-    /* =====================================================
-       ERROR
-    ===================================================== */
 
     .tracking-error {
       background: #fff5f5;
@@ -204,10 +193,6 @@
     .tracking-retry {
       margin-top: 14px;
     }
-
-    /* =====================================================
-       RESULT CARD
-    ===================================================== */
 
     .tracking-result {
       margin-top: 26px;
@@ -274,10 +259,6 @@
       color: #126b45;
     }
 
-    /* =====================================================
-       STATUS BADGES
-    ===================================================== */
-
     .tracking-badges {
       display: flex;
       flex-wrap: wrap;
@@ -322,10 +303,6 @@
       background: #dbeafe;
       color: #1e40af;
     }
-
-    /* =====================================================
-       ORDER PROGRESS
-    ===================================================== */
 
     .tracking-progress {
       display: grid;
@@ -391,10 +368,6 @@
       line-height: 1.6;
     }
 
-    /* =====================================================
-       INFORMATION GRID
-    ===================================================== */
-
     .tracking-info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -415,10 +388,6 @@
       overflow-wrap: anywhere;
       line-height: 1.5;
     }
-
-    /* =====================================================
-       ORDER ITEMS
-    ===================================================== */
 
     .tracking-item {
       display: flex;
@@ -457,10 +426,6 @@
       white-space: nowrap;
     }
 
-    /* =====================================================
-       TOTALS
-    ===================================================== */
-
     .tracking-total-row {
       display: flex;
       justify-content: space-between;
@@ -476,10 +441,6 @@
       font-size: 1.12rem;
       font-weight: 800;
     }
-
-    /* =====================================================
-       FOOTER ACTIONS
-    ===================================================== */
 
     .tracking-actions {
       display: flex;
@@ -711,18 +672,10 @@
 
   </main>
 
-  <!-- ===================================================
-       SCRIPTS
-  ==================================================== -->
-
   <script src="/js/api.js"></script>
 
   <script>
     'use strict';
-
-    // ==================================================
-    // ELEMENTS
-    // ==================================================
 
     const trackForm = document.getElementById('track-form');
     const orderNumberInput = document.getElementById('order_number');
@@ -731,10 +684,6 @@
     const resultContainer = document.getElementById('result');
 
     let lastSearch = null;
-
-    // ==================================================
-    // SAFE HTML
-    // ==================================================
 
     function safe(value) {
       return typeof window.escapeHtml === 'function'
@@ -747,10 +696,6 @@
             "'": '&#39;'
           })[char]);
     }
-
-    // ==================================================
-    // CURRENCY FORMAT
-    // ==================================================
 
     function money(value) {
       const amount = Number(value);
@@ -766,10 +711,6 @@
             maximumFractionDigits: 2
           });
     }
-
-    // ==================================================
-    // DATE FORMAT
-    // ==================================================
 
     function formatDate(value) {
       if (!value) return 'Not available';
@@ -789,19 +730,11 @@
       });
     }
 
-    // ==================================================
-    // ICON INITIALIZATION
-    // ==================================================
-
     function refreshIcons() {
       if (window.lucide) {
         window.lucide.createIcons();
       }
     }
-
-    // ==================================================
-    // BUTTON LOADING STATE
-    // ==================================================
 
     function setLoading(loading) {
       trackButton.disabled = loading;
@@ -826,10 +759,6 @@
       refreshIcons();
     }
 
-    // ==================================================
-    // LOADING MESSAGE
-    // ==================================================
-
     function showLoading() {
       resultContainer.innerHTML = `
         <div class="tracking-loading">
@@ -843,10 +772,6 @@
         </div>
       `;
     }
-
-    // ==================================================
-    // ERROR MESSAGE
-    // ==================================================
 
     function showError(message) {
       resultContainer.innerHTML = `
@@ -885,10 +810,6 @@
 
       refreshIcons();
     }
-
-    // ==================================================
-    // ORDER STATUS
-    // ==================================================
 
     const statusLabels = {
       pending: 'Order received',
@@ -931,10 +852,6 @@
       return 'status-info';
     }
 
-    // ==================================================
-    // STATUS ICON
-    // ==================================================
-
     function orderStatusIcon(status) {
       const icons = {
         pending: 'clock',
@@ -948,10 +865,6 @@
 
       return icons[status] || 'package';
     }
-
-    // ==================================================
-    // ORDER PROGRESS
-    // ==================================================
 
     function renderProgress(status) {
       if (status === 'cancelled') {
@@ -1040,10 +953,6 @@
       `;
     }
 
-    // ==================================================
-    // CUSTOMER DETAILS
-    // ==================================================
-
     function renderCustomer(order) {
       const fulfilment = order.fulfilment_type === 'delivery'
         ? 'Home delivery'
@@ -1110,10 +1019,6 @@
       `;
     }
 
-    // ==================================================
-    // ORDER ITEMS
-    // ==================================================
-
     function renderItems(items) {
       if (!Array.isArray(items) || items.length === 0) {
         return `
@@ -1154,10 +1059,6 @@
       }).join('');
     }
 
-    // ==================================================
-    // ORDER TOTALS
-    // ==================================================
-
     function renderTotals(order) {
       const subtotal = Number(order.subtotal_kes) || 0;
       const delivery = Number(order.delivery_fee_kes) || 0;
@@ -1192,10 +1093,6 @@
         </div>
       `;
     }
-
-    // ==================================================
-    // COMPLETE ORDER DISPLAY
-    // ==================================================
 
     function renderOrder(order) {
       if (!order || typeof order !== 'object') {
@@ -1354,10 +1251,6 @@
       refreshIcons();
     }
 
-    // ==================================================
-    // SEARCH ORDER
-    // ==================================================
-
     async function searchOrder(orderNumber, phone) {
       lastSearch = {
         orderNumber,
@@ -1415,10 +1308,6 @@
       }
     }
 
-    // ==================================================
-    // FORM SUBMISSION
-    // ==================================================
-
     trackForm.addEventListener('submit', async event => {
       event.preventDefault();
 
@@ -1446,10 +1335,6 @@
 
       await searchOrder(orderNumber, phone);
     });
-
-    // ==================================================
-    // INITIALIZE
-    // ==================================================
 
     document.addEventListener('DOMContentLoaded', () => {
       refreshIcons();

@@ -7,7 +7,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <script src="https://unpkg.com/lucide@0.469.0"></script>
   <style>
-    /* ---------- Theme tokens ---------- */
+
     :root {
       --bg: #f5f6f8; --surface: #fff; --surface-2: #f0f2f5;
       --text: #1b1f27; --muted: #6b7280; --border: #e3e6eb;
@@ -30,7 +30,6 @@
       --shadow: 0 1px 2px rgba(0,0,0,.4); --shadow-lg: 0 12px 32px rgba(0,0,0,.6);
     }
 
-    /* ---------- Base ---------- */
     * { box-sizing: border-box; }
     html, body { margin: 0; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.45; }
@@ -45,7 +44,6 @@
     .nowrap { white-space: nowrap; }
     i[data-lucide], svg.lucide { width: 16px; height: 16px; vertical-align: -3px; flex: none; }
 
-    /* ---------- Buttons & forms ---------- */
     .btn { display: inline-flex; align-items: center; gap: .4rem; padding: .5rem .85rem; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; transition: .15s; }
     .btn:hover { background: var(--surface-2); }
     .btn:disabled { opacity: .5; cursor: not-allowed; }
@@ -65,14 +63,12 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
     .check { display: flex; align-items: center; gap: .5rem; color: var(--text); font-size: .9rem; }
 
-    /* ---------- Login ---------- */
     #login-view { min-height: 100vh; display: grid; place-items: center; padding: 1rem; background: linear-gradient(135deg, var(--brand-soft), var(--bg)); }
     .login-card { width: 100%; max-width: 400px; background: var(--surface); border-radius: 16px; padding: 2rem; box-shadow: var(--shadow-lg); }
     .login-card .mark { width: 48px; height: 48px; border-radius: 12px; background: var(--brand); color: #fff; display: grid; place-items: center; margin-bottom: 1rem; }
     .alert { padding: .65rem .85rem; border-radius: 9px; margin-bottom: .85rem; font-size: .88rem; }
     .alert-error { background: var(--danger-soft); color: var(--danger); }
 
-    /* ---------- Shell ---------- */
     .shell { display: grid; grid-template-columns: var(--sidebar) 1fr; min-height: 100vh; }
     .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 1rem .75rem; position: sticky; top: 0; height: 100vh; overflow: auto; display: flex; flex-direction: column; gap: .15rem; }
     .brand { display: flex; align-items: center; gap: .6rem; font-weight: 800; font-size: 1.05rem; padding: .4rem .6rem 1rem; }
@@ -93,7 +89,6 @@
     .page-head p { margin: .2rem 0 0; color: var(--muted); }
     .actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
 
-    /* ---------- Cards & stats ---------- */
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; box-shadow: var(--shadow); }
     .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .8rem; gap: .5rem; }
     .grid-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .9rem; margin-bottom: 1.25rem; }
@@ -112,7 +107,6 @@
     .cols-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.1rem; margin-bottom: 1.1rem; }
     .quick { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
 
-    /* ---------- Tables ---------- */
     .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: auto; box-shadow: var(--shadow); }
     table { width: 100%; border-collapse: collapse; }
     th { text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: .65rem .85rem; background: var(--surface-2); border-bottom: 1px solid var(--border); white-space: nowrap; user-select: none; }
@@ -135,7 +129,6 @@
     .chip.on { background: var(--brand); border-color: var(--brand); color: #fff; }
     .chip b { opacity: .8; margin-left: .25rem; }
 
-    /* ---------- Badges ---------- */
     .pill, .badge { display: inline-block; padding: .12rem .6rem; border-radius: 99px; font-size: .74rem; font-weight: 700; text-transform: capitalize; white-space: nowrap; }
     .t-ok, .t-paid, .t-completed, .t-received { background: var(--brand-soft); color: var(--brand); }
     .t-low, .t-pending, .t-ordered, .t-unpaid { background: var(--warn-soft); color: var(--warn); }
@@ -143,7 +136,6 @@
     .t-confirmed, .t-processing, .t-ready, .t-out_for_delivery { background: var(--info-soft); color: var(--info); }
     .t-archived, .t-default { background: var(--surface-2); color: var(--muted); }
 
-    /* ---------- Charts ---------- */
     .bars .bar { margin: .55rem 0; }
     .bar .top { display: flex; justify-content: space-between; font-size: .85rem; gap: .5rem; }
     .bar .track { height: 8px; background: var(--surface-2); border-radius: 99px; margin-top: .25rem; overflow: hidden; }
@@ -157,7 +149,6 @@
     .neg { color: var(--danger); }
     .pos { color: var(--brand); }
 
-    /* ---------- Modal, toast, palette ---------- */
     .overlay { position: fixed; inset: 0; background: rgba(10,14,20,.55); display: grid; place-items: start center; padding: 6vh 1rem; z-index: 100; overflow: auto; animation: fade .15s; }
     .modal { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-lg); width: 100%; max-width: 600px; padding: 1.4rem; animation: pop .18s; }
     .modal h2 { margin-bottom: .9rem; font-size: 1.2rem; }
@@ -189,7 +180,6 @@
     @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ---------- Responsive & print ---------- */
     @media (max-width: 900px) {
       .shell { grid-template-columns: 1fr; }
       .sidebar { position: fixed; left: 0; top: 0; z-index: 60; width: 250px; transform: translateX(-100%); transition: .2s; box-shadow: var(--shadow-lg); }
@@ -260,9 +250,6 @@
 (() => {
   'use strict';
 
-  /* =====================================================================
-     Utilities
-     ===================================================================== */
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
   const esc = (v) => escapeHtml(String(v ?? ''));
@@ -294,7 +281,6 @@
     { id: 'staff',      label: 'Staff',           icon: 'users' }
   ];
 
-  // null = full access (owner / manager, which includes promotions)
   const ACCESS = {
     owner: null,
     manager: null,
@@ -308,7 +294,6 @@
     return a === null || (a || []).includes(view);
   };
 
-  /* ---------- Toasts & error guard ---------- */
   function toast(message, type = 'success') {
     const el = document.createElement('div');
     el.className = `toast ${type === 'error' ? 'error' : ''}`;
@@ -327,7 +312,6 @@
     }
   }
 
-  /* ---------- Modals ---------- */
   function openModal(html, cls = '') {
     const root = $('#modal-root');
     root.innerHTML = `<div class="overlay"><div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div></div>`;
@@ -354,7 +338,6 @@
     });
   }
 
-  /* ---------- CSV export ---------- */
   function exportCSV(name, columns, rows) {
     const cols = columns.filter((c) => c.csv !== false && c.label);
     const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
@@ -369,7 +352,6 @@
     toast(`Exported ${rows.length} rows`);
   }
 
-  /* ---------- Sortable, paginated table (event-delegated) ---------- */
   function mountTable(el, o) {
     let rows = o.rows || [], sort = o.sort || null, dir = o.dir || 'asc', page = 1;
     const size = o.pageSize || 15;
@@ -442,7 +424,6 @@
     return { setRows(r) { rows = r; page = 1; draw(); }, rows: sorted };
   }
 
-  /* ---------- Charts ---------- */
   const COLORS = ['#1f7a4d', '#2b6cb0', '#b7791f', '#8e44ad', '#c0392b', '#16a085', '#7f8c8d'];
 
   function donut(items) {
@@ -476,7 +457,6 @@
       </div>`).join('')}</div>`;
   }
 
-  /* ---------- Date range toolbar with presets ---------- */
   function rangeToolbar(root, run, pre = 'month') {
     const now = new Date();
     const presets = {
@@ -513,7 +493,6 @@
     runNow();
   }
 
-  /* ---------- Shared view helpers ---------- */
   const pageHead = (title, sub, actions = '') =>
     `<div class="page-head"><div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div class="actions">${actions}</div></div>`;
 
@@ -528,9 +507,6 @@
   const matches = (p, q) => !q || [p.name, p.sku, p.barcode, p.category_name]
     .some((v) => String(v || '').toLowerCase().includes(q.trim().toLowerCase()));
 
-  /* =====================================================================
-     Router
-     ===================================================================== */
   function parseHash() {
     const raw = location.hash.replace(/^#\/?/, '') || 'dashboard';
     const [view, qs] = raw.split('?');
@@ -586,9 +562,6 @@
   }
   window.addEventListener('hashchange', route);
 
-  /* =====================================================================
-     Auth
-     ===================================================================== */
   function showLogin() {
     $('#login-view').classList.remove('hidden');
     $('#admin-app').classList.add('hidden');
@@ -620,9 +593,6 @@
     }
   };
 
-  /* =====================================================================
-     Dashboard
-     ===================================================================== */
   async function renderDashboard(root) {
     const d = await API.adminDashboard();
     const now = new Date();
@@ -745,9 +715,6 @@
   }
   setAuto();
 
-  /* =====================================================================
-     Orders
-     ===================================================================== */
   const FLOW = ['pending', 'confirmed', 'processing', 'ready', 'completed'];
   const nextStatus = (o) => {
     if (o.order_status === 'ready' && o.fulfilment_type === 'delivery') return 'out_for_delivery';
@@ -882,9 +849,6 @@
     });
   }
 
-  /* =====================================================================
-     Products
-     ===================================================================== */
   async function renderProducts(root, params) {
     const [{ categories }, data] = await Promise.all([API.categories(), API.adminProducts({ limit: 1000 })]);
     const products = data.products.map((p) => ({
@@ -1132,9 +1096,6 @@
     });
   }
 
-  /* =====================================================================
-     Promotions & Coupons  (fields match promoController)
-     ===================================================================== */
   async function renderPromotions(root) {
     const data = await API.adminPromos();
     const coupons = data.promos || [];
@@ -1341,9 +1302,6 @@
     });
   }
 
-  /* =====================================================================
-     Inventory
-     ===================================================================== */
   async function renderInventory(root, params) {
     const { products, totals } = await API.adminInventory();
     const out = products.filter((p) => stateOf(p) === 'out').length;
@@ -1423,9 +1381,6 @@
     apply();
   }
 
-  /* =====================================================================
-     Expenses
-     ===================================================================== */
   let expenseCats = null;
 
   async function openExpenseModal() {
@@ -1531,9 +1486,6 @@
     apply();
   }
 
-  /* =====================================================================
-     Sales report
-     ===================================================================== */
   async function renderSales(root) {
     root.innerHTML = `
       ${pageHead('Sales report', 'Revenue, profit and best sellers', '<button class="btn" id="s-export"><i data-lucide="download"></i> Export CSV</button>')}
@@ -1576,9 +1528,6 @@
     };
   }
 
-  /* =====================================================================
-     Profit & loss
-     ===================================================================== */
   async function renderPnL(root) {
     root.innerHTML = `
       ${pageHead('Profit & loss', 'Net profit = Gross profit − Operating expenses', '<button class="btn" id="pl-print"><i data-lucide="printer"></i> Print</button>')}
@@ -1610,9 +1559,6 @@
     $('#pl-print', root).onclick = () => window.print();
   }
 
-  /* =====================================================================
-     Suppliers & purchase orders
-     ===================================================================== */
   async function renderSuppliers(root, params) {
     const [sup, pos] = await Promise.all([API.adminSuppliers(), API.adminPurchaseOrders()]);
     let tab = params.tab === 'suppliers' ? 'suppliers' : 'pos';
@@ -1782,9 +1728,6 @@
     });
   }
 
-  /* =====================================================================
-     Staff
-     ===================================================================== */
   async function renderStaff(root) {
     const data = await API.adminStaff();
     const users = data.users || [];
@@ -1843,9 +1786,6 @@
     };
   }
 
-  /* =====================================================================
-     Command palette
-     ===================================================================== */
   function openPalette() {
     const base = [
       ...NAV.filter((n) => can(n.id)).map((n) => ({ t: `Go to ${n.label}`, icon: n.icon, run: () => go(n.id) })),
@@ -1892,9 +1832,6 @@
     draw();
   }
 
-  /* =====================================================================
-     Chrome: theme, menu, shortcuts
-     ===================================================================== */
   function applyTheme(t) {
     document.documentElement.dataset.theme = t;
     const b = $('#theme-btn');
@@ -1942,9 +1879,6 @@
     }
   });
 
-  /* =====================================================================
-     Start
-     ===================================================================== */
   icons();
   if (isStaffUser(API.getUser())) showApp(); else showLogin();
 })();

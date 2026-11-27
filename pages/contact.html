@@ -678,10 +678,6 @@
   <script>
     "use strict";
 
-    // ------------------------------------------
-    // ICON INITIALIZATION
-    // ------------------------------------------
-
     function refreshIcons() {
       if (
         window.lucide &&
@@ -693,16 +689,8 @@
 
     refreshIcons();
 
-    // ------------------------------------------
-    // FOOTER YEAR
-    // ------------------------------------------
-
     document.getElementById("current-year").textContent =
       new Date().getFullYear();
-
-    // ------------------------------------------
-    // SAFE TEXT HELPERS
-    // ------------------------------------------
 
     function setText(element, value, fallback) {
       if (!element) return;
@@ -711,10 +699,6 @@
 
       element.textContent = text || fallback;
     }
-
-    // ------------------------------------------
-    // PHONE NUMBER DISPLAY
-    // ------------------------------------------
 
     function normalizePhone(value) {
       return String(value || "").trim();
@@ -750,10 +734,6 @@
       element.appendChild(display);
     }
 
-    // ------------------------------------------
-    // LOAD SHOP SETTINGS
-    // ------------------------------------------
-
     async function loadShopInformation() {
       const addressElement = document.getElementById("shop-address");
 
@@ -788,11 +768,7 @@
         renderShopPhone("");
       }
     }
-
-    // ------------------------------------------
-    // START PAGE
-    // ------------------------------------------
-
+    
     loadShopInformation();
   </script>
 

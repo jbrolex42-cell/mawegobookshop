@@ -1,17 +1,6 @@
-﻿
-/* =========================================================
-   MAWEGO BOOKSHOP — MAIN FRONTEND API
-   Local development: http://localhost:3000/api
-   Production: Render backend
-========================================================= */
-
-'use strict';
+﻿'use strict';
 
 const API = {
-
-  // =======================================================
-  // API CONFIGURATION
-  // =======================================================
 
   base: (
     window.location.hostname === 'localhost' ||
@@ -19,10 +8,6 @@ const API = {
   )
     ? 'http://localhost:3000/api'
     : 'https://mawegobookbackend.onrender.com/api',
-
-  // =======================================================
-  // AUTHENTICATION
-  // =======================================================
 
   getToken() {
     return localStorage.getItem('mb_token');
@@ -47,10 +32,6 @@ const API = {
       return null;
     }
   },
-
-  // =======================================================
-  // CORE HTTP REQUEST
-  // =======================================================
 
   async request(path, options = {}) {
     const headers = { ...(options.headers || {}) };
@@ -113,10 +94,6 @@ const API = {
     return data;
   },
 
-  // =======================================================
-  // HTTP METHODS
-  // =======================================================
-
   get(path) {
     return this.request(path);
   },
@@ -148,10 +125,6 @@ const API = {
     });
   },
 
-  // =======================================================
-  // CATEGORIES AND PRODUCTS
-  // =======================================================
-
   categories() {
     return this.get('/categories');
   },
@@ -173,10 +146,6 @@ const API = {
   settings() {
     return this.get('/settings');
   },
-
-  // =======================================================
-  // CUSTOMER AUTHENTICATION
-  // =======================================================
 
   login(email, password) {
     return this.post('/auth/login', {
@@ -210,10 +179,6 @@ const API = {
     });
   },
 
-  // =======================================================
-  // STAFF MANAGEMENT
-  // =======================================================
-
   adminStaff() {
     return this.get('/auth/staff');
   },
@@ -228,10 +193,6 @@ const API = {
       body
     );
   },
-
-  // =======================================================
-  // ORDERS AND CHECKOUT
-  // =======================================================
 
   createOrder(payload) {
     return this.post('/orders', payload);
@@ -265,10 +226,6 @@ const API = {
     );
   },
 
-  // =======================================================
-  // PAYMENTS
-  // =======================================================
-
   mpesaStk(orderId, phone) {
     return this.post('/payments/mpesa/stk', {
       order_id: orderId,
@@ -281,10 +238,6 @@ const API = {
       order_id: orderId
     });
   },
-
-  // =======================================================
-  // RECEIPTS
-  // =======================================================
 
   receiptByOrderId(orderId) {
     return this.get(
@@ -304,10 +257,6 @@ const API = {
     );
   },
 
-  // =======================================================
-  // PROMOTIONAL COUPONS
-  // =======================================================
-
   validatePromo(code, subtotal) {
     return this.post('/promos/validate', {
       code,
@@ -322,10 +271,6 @@ const API = {
   adminCreatePromo(body) {
     return this.post('/admin/promos', body);
   },
-
-  // =======================================================
-  // CUSTOMER NOTIFICATIONS
-  // =======================================================
 
   notifications(params = {}) {
     const q = new URLSearchParams(params).toString();
@@ -360,17 +305,9 @@ const API = {
     return this.del('/notifications/clear-all');
   },
 
-  // =======================================================
-  // ADMIN DASHBOARD
-  // =======================================================
-
   adminDashboard() {
     return this.get('/admin/dashboard');
   },
-
-  // =======================================================
-  // ADMIN PRODUCT MANAGEMENT
-  // =======================================================
 
   adminProducts(params = {}) {
     const q = new URLSearchParams(params).toString();
@@ -418,10 +355,6 @@ const API = {
     });
   },
 
-  // =======================================================
-  // ADMIN ORDER MANAGEMENT
-  // =======================================================
-
   adminOrders(params = {}) {
     const q = new URLSearchParams(params).toString();
 
@@ -452,10 +385,6 @@ const API = {
     );
   },
 
-  // =======================================================
-  // ADMIN REPORTS
-  // =======================================================
-
   adminSalesReport(from, to) {
     return this.get(
       `/admin/reports/sales?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`
@@ -471,10 +400,6 @@ const API = {
       `/admin/reports/profit-loss?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`
     );
   },
-
-  // =======================================================
-  // SUPPLIERS AND PURCHASE ORDERS
-  // =======================================================
 
   adminSuppliers() {
     return this.get('/admin/suppliers');
@@ -508,10 +433,6 @@ const API = {
     );
   },
 
-  // =======================================================
-  // EXPENSE MANAGEMENT
-  // =======================================================
-
   adminExpenses(params = {}) {
     const q = new URLSearchParams(params).toString();
 
@@ -541,10 +462,6 @@ const API = {
     );
   },
 
-  // =======================================================
-  // CUSTOMER LOYALTY POINTS
-  // =======================================================
-
   pointsBalance() {
     return this.get('/points/balance');
   },
@@ -554,25 +471,11 @@ const API = {
   }
 };
 
-
-// =========================================================
-// EXPOSE API GLOBALLY
-// =========================================================
-
 window.API = API;
-
-
-// =========================================================
-// MAWEGO BOOKSHOP — SHOPPING CART
-// =========================================================
 
 const Cart = {
 
   key: 'mb_cart',
-
-  // -------------------------------------------------------
-  // GET PRODUCT ID
-  // -------------------------------------------------------
 
   getProductId(product) {
     if (!product) return '';
@@ -588,10 +491,6 @@ const Cart = {
 
     return id == null ? '' : String(id);
   },
-
-  // -------------------------------------------------------
-  // GET CART
-  // -------------------------------------------------------
 
   get() {
     try {
@@ -638,10 +537,6 @@ const Cart = {
     }
   },
 
-  // -------------------------------------------------------
-  // SAVE CART
-  // -------------------------------------------------------
-
   save(items) {
     try {
       localStorage.setItem(
@@ -664,10 +559,6 @@ const Cart = {
       return false;
     }
   },
-
-  // -------------------------------------------------------
-  // ADD PRODUCT
-  // -------------------------------------------------------
 
   add(product, qty = 1) {
     if (!product || typeof product !== 'object') {
@@ -764,10 +655,6 @@ const Cart = {
     return items;
   },
 
-  // -------------------------------------------------------
-  // UPDATE QUANTITY
-  // -------------------------------------------------------
-
   updateQty(productId, quantity) {
     const id = String(productId);
 
@@ -797,10 +684,6 @@ const Cart = {
     return this.save(items);
   },
 
-  // -------------------------------------------------------
-  // REMOVE PRODUCT
-  // -------------------------------------------------------
-
   remove(productId) {
     const id = String(productId);
 
@@ -811,17 +694,9 @@ const Cart = {
     );
   },
 
-  // -------------------------------------------------------
-  // CLEAR CART
-  // -------------------------------------------------------
-
   clear() {
     return this.save([]);
   },
-
-  // -------------------------------------------------------
-  // CART COUNT
-  // -------------------------------------------------------
 
   count() {
     return this.get().reduce(
@@ -830,10 +705,6 @@ const Cart = {
       0
     );
   },
-
-  // -------------------------------------------------------
-  // CART SUBTOTAL
-  // -------------------------------------------------------
 
   subtotal() {
     return this.get().reduce(
@@ -844,10 +715,6 @@ const Cart = {
       0
     );
   },
-
-  // -------------------------------------------------------
-  // UPDATE CART BADGE
-  // -------------------------------------------------------
 
   updateBadge() {
     const count = this.count();
@@ -862,17 +729,7 @@ const Cart = {
   }
 };
 
-
-// =========================================================
-// EXPOSE CART GLOBALLY
-// =========================================================
-
 window.Cart = Cart;
-
-
-// =========================================================
-// GLOBAL FORMATTING HELPERS
-// =========================================================
 
 function formatKes(amount) {
   return 'KES ' + Number(amount).toLocaleString(
@@ -896,11 +753,6 @@ function escapeHtml(value) {
 
 window.formatKes = formatKes;
 window.escapeHtml = escapeHtml;
-
-
-// =========================================================
-// INITIALIZE CART
-// =========================================================
 
 function initializeMawegoCart() {
   Cart.updateBadge();

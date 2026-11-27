@@ -75,8 +75,6 @@
       outline-offset: 3px;
     }
 
-    /* HEADER */
-
     .product-header {
       position: sticky;
       top: 0;
@@ -183,8 +181,6 @@
       font-weight: 850;
     }
 
-    /* PAGE */
-
     .product-page {
       width: min(1120px, calc(100% - 36px));
       margin: 0 auto;
@@ -224,16 +220,12 @@
       overflow-wrap: anywhere;
     }
 
-    /* PRODUCT LAYOUT */
-
     .product-layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 48px;
       align-items: start;
     }
-
-    /* GALLERY */
 
     .product-gallery {
       position: sticky;
@@ -311,8 +303,6 @@
       text-align: center;
     }
 
-    /* PRODUCT DETAILS */
-
     .product-info {
       min-width: 0;
       padding: 5px 0;
@@ -351,8 +341,6 @@
       font-size: 13px;
       line-height: 1.8;
     }
-
-    /* PRICE */
 
     .product-price-card {
       margin-top: 24px;
@@ -408,8 +396,6 @@
       color: var(--product-muted);
       font-size: 10px;
     }
-
-    /* STOCK */
 
     .stock-card {
       display: flex;
@@ -478,8 +464,6 @@
       color: var(--product-danger);
     }
 
-    /* PRODUCT META */
-
     .product-meta {
       display: flex;
       flex-wrap: wrap;
@@ -508,8 +492,6 @@
       font-weight: 800;
     }
 
-    /* DESCRIPTION */
-
     .description-section {
       margin-top: 25px;
       padding-top: 21px;
@@ -531,8 +513,6 @@
       overflow-wrap: anywhere;
       white-space: pre-line;
     }
-
-    /* BUY CONTROLS */
 
     .buy-section {
       margin-top: 27px;
@@ -676,8 +656,6 @@
       font-size: 10px;
     }
 
-    /* BENEFITS */
-
     .fulfilment-card {
       margin-top: 23px;
       padding: 17px;
@@ -721,8 +699,6 @@
       flex: 0 0 15px;
       color: var(--product-green);
     }
-
-    /* STATES */
 
     .page-state {
       min-height: 310px;
@@ -781,8 +757,6 @@
       background: var(--product-green-dark);
     }
 
-    /* TOAST */
-
     .product-toast {
       position: fixed;
       right: 22px;
@@ -830,8 +804,6 @@
       }
     }
 
-    /* FOOTER */
-
     .product-footer {
       background: white;
       border-top: 1px solid var(--product-border);
@@ -862,8 +834,6 @@
       width: 15px;
       height: 15px;
     }
-
-    /* RESPONSIVE */
 
     @media (max-width: 850px) {
       .product-layout {
@@ -1108,10 +1078,6 @@
       const $ = (selector, root = document) =>
         root.querySelector(selector);
 
-      /* -----------------------------------------
-         UTILITIES
-      ----------------------------------------- */
-
       function escapeHtml(value) {
         return String(value ?? "").replace(/[&<>"']/g, char => ({
           "&": "&amp;",
@@ -1197,10 +1163,7 @@
       }
 
       function updateCartCount() {
-        /*
-          The existing cart implementation may update this count
-          automatically. This is only a safe display fallback.
-        */
+
         const count = document.querySelector(".cart-count");
 
         if (!count) return;
@@ -1225,10 +1188,6 @@
         }
       }
 
-      /* -----------------------------------------
-         STOCK PRESENTATION
-      ----------------------------------------- */
-
       function stockDetails(stock) {
         if (stock <= 0) {
           return {
@@ -1252,10 +1211,6 @@
           className: ""
         };
       }
-
-      /* -----------------------------------------
-         PRODUCT RENDERING
-      ----------------------------------------- */
 
       function renderProduct(product) {
         if (!product || !product.name) {
@@ -1584,10 +1539,6 @@
         bindPurchaseControls(product);
       }
 
-      /* -----------------------------------------
-         QUANTITY CONTROLS
-      ----------------------------------------- */
-
       function bindPurchaseControls(product) {
         const input = $("#quantityInput");
         const decrease = $("#quantityDecrease");
@@ -1646,10 +1597,6 @@
           addToBasket(product, selectedQuantity, addButton);
         });
       }
-
-      /* -----------------------------------------
-         ADD TO BASKET
-      ----------------------------------------- */
 
       function addToBasket(product, quantity, button) {
         if (addingToCart) return;
@@ -1742,10 +1689,6 @@
         }
       }
 
-      /* -----------------------------------------
-         ERROR DISPLAY
-      ----------------------------------------- */
-
       function showError(title, message) {
         content.innerHTML = `
           <div class="page-state">
@@ -1771,10 +1714,6 @@
 
         refreshIcons(content);
       }
-
-      /* -----------------------------------------
-         LOAD PRODUCT
-      ----------------------------------------- */
 
       async function loadProduct() {
         if (!slug || !slug.trim()) {
@@ -1815,10 +1754,6 @@
           );
         }
       }
-
-      /* -----------------------------------------
-         INITIALISE
-      ----------------------------------------- */
 
       refreshIcons();
       updateCartCount();

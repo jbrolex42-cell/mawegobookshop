@@ -1091,19 +1091,11 @@
   <script>
     "use strict";
 
-    // =====================================================
-    // CONFIGURATION
-    // =====================================================
-
     const FREE_THRESHOLD = 2000;
     const DELIVERY_FEE = 200;
 
     const PAYMENT_POLL_INTERVAL = 5000;
     const MAX_PAYMENT_ATTEMPTS = 60;
-
-    // =====================================================
-    // HELPERS
-    // =====================================================
 
     const $ = id => document.getElementById(id);
 
@@ -1148,20 +1140,16 @@
     function normalizeKenyanPhone(phone) {
       let value = String(phone || "").trim();
 
-      // Remove spaces, hyphens and brackets.
       value = value.replace(/[\s()-]/g, "");
 
-      // Convert international prefix to standard format.
       if (value.startsWith("+")) {
         value = value.slice(1);
       }
 
-      // Local Kenyan format.
       if (/^0[17]\d{8}$/.test(value)) {
         return "254" + value.slice(1);
       }
 
-      // International Kenyan format.
       if (/^254[17]\d{8}$/.test(value)) {
         return value;
       }
@@ -1181,10 +1169,6 @@
       $("msg").innerHTML = "";
     }
 
-    // =====================================================
-    // BASKET
-    // =====================================================
-
     function getCartItems() {
       return Cart.get() || [];
     }
@@ -1200,10 +1184,6 @@
 
       return subtotal >= FREE_THRESHOLD ? 0 : DELIVERY_FEE;
     }
-
-    // =====================================================
-    // REWARD POINTS
-    // =====================================================
 
     function getRequestedPoints() {
       const input = $("points_redeemed");
@@ -1282,10 +1262,6 @@
 
       return true;
     }
-
-    // =====================================================
-    // COUPONS
-    // =====================================================
 
     async function applyCoupon() {
       const input = $("coupon-code");
@@ -1378,10 +1354,6 @@
       renderSummary();
     }
 
-    // =====================================================
-    // ORDER SUMMARY
-    // =====================================================
-
     function calculateTotals() {
       const subtotal = getSubtotal();
 
@@ -1473,10 +1445,6 @@
       }
     }
 
-    // =====================================================
-    // FULFILMENT
-    // =====================================================
-
     function toggleAddress() {
       const fulfilment = selectedValue(
         "fulfilment_type",
@@ -1492,10 +1460,6 @@
 
       renderSummary();
     }
-
-    // =====================================================
-    // FORM VALIDATION
-    // =====================================================
 
     function validateCheckout() {
       const name = $("customer_name").value.trim();
@@ -1545,10 +1509,6 @@
 
       return true;
     }
-
-    // =====================================================
-    // PAYMENT STATUS
-    // =====================================================
 
     function stopPaymentPolling() {
       if (paymentPollTimer) {
@@ -1666,10 +1626,6 @@
       }, PAYMENT_POLL_INTERVAL);
     }
 
-    // =====================================================
-    // M-PESA STK PUSH
-    // =====================================================
-
     async function sendMpesaPrompt() {
       const button = $("stk-btn");
       const phoneInput = $("stk-phone");
@@ -1701,13 +1657,12 @@
       button.textContent = "Sending prompt...";
 
       try {
-        // Always send the normalized international format.
+
         const response = await API.mpesaStk(
           activeOrder.id,
           phone
         );
 
-        // Keep the normalized phone for payment tracking.
         activeOrder.customer_phone = phone;
 
         showPaymentStatus(
@@ -1729,10 +1684,6 @@
         button.textContent = "Send M-Pesa prompt";
       }
     }
-
-    // =====================================================
-    // CARD PAYMENT
-    // =====================================================
 
     async function initiateCardPayment() {
       const button = $("card-btn");
@@ -1767,10 +1718,6 @@
         button.textContent = "Pay with card";
       }
     }
-
-    // =====================================================
-    // ORDER SUCCESS
-    // =====================================================
 
     function renderOrderSuccess(order, response) {
       const originalPhone = normalizeKenyanPhone(
@@ -1893,10 +1840,6 @@
       });
     }
 
-    // =====================================================
-    // PLACE ORDER
-    // =====================================================
-
     async function placeOrder(event) {
       event.preventDefault();
 
@@ -1917,8 +1860,6 @@
 
         const formData = new FormData(event.currentTarget);
 
-        // Normalize the customer's phone number before
-        // sending the order to the backend.
         const normalizedPhone = normalizeKenyanPhone(
           formData.get("customer_phone")
         );
@@ -1974,9 +1915,6 @@
 
         renderOrderSuccess(response.order, response);
 
-        // Cash-on-delivery orders are accepted immediately.
-        // Electronic payment baskets are retained until payment
-        // confirmation is received.
         if (
           response.order.payment_method === "cash_on_delivery"
         ) {
@@ -2000,10 +1938,6 @@
         }
       }
     }
-
-    // =====================================================
-    // EVENT LISTENERS
-    // =====================================================
 
     $("apply-coupon").addEventListener("click", () => {
       if (appliedCoupon) {
@@ -2037,10 +1971,6 @@
       "submit",
       placeOrder
     );
-
-    // =====================================================
-    // INITIALIZE CHECKOUT
-    // =====================================================
 
     async function initializeCheckout() {
       refreshIcons();

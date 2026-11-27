@@ -1,13 +1,3 @@
-/**
- * Mawego Bookshop — Notifications (drop-in)
- *
- * Usage: add after api.js on any page (especially admin + account + header):
- *   <script src="/js/api.js"></script>
- *   <script src="/js/notifications.js"></script>
- *
- * Creates a bell icon in the header nav and a dropdown panel.
- * Requires logged-in user (customer or staff).
- */
 (function () {
   const POLL_MS = 45000;
   let panelOpen = false;
@@ -76,7 +66,7 @@
 
   async function api(path, options = {}) {
     if (window.API && typeof API.request === 'function') {
-      // Prefer project API if it exposes request
+    
     }
     const token = localStorage.getItem('mb_token');
     if (!token) return null;
@@ -142,7 +132,6 @@
         </div>
       </div>`;
 
-    // Insert before cart button if present
     const cart = nav.querySelector('.cart-btn');
     if (cart) nav.insertBefore(wrap, cart);
     else nav.appendChild(wrap);
@@ -266,6 +255,5 @@
     start();
   }
 
-  // Re-run after login on same page
   window.MawegoNotifications = { refresh, start };
 })();

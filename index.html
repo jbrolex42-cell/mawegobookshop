@@ -26,10 +26,6 @@
   <script defer src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 
   <style>
-    /* =====================================================
-       MAWEGO BOOKSHOP — PREMIUM PAGE LOADER
-    ===================================================== */
-
     #mawego-page-loader {
       position: fixed;
       inset: 0;
@@ -167,10 +163,6 @@
       .mawego-loader-progress { width: 100%; }
     }
 
-    /* =====================================================
-       MAWEGO BOOKSHOP - DESIGN SYSTEM
-    ===================================================== */
-
     :root {
       color-scheme: light;
       --brand: #087653;
@@ -303,7 +295,6 @@
       color: var(--muted);
     }
 
-    /* Buttons */
     .btn {
       min-height: 43px;
       display: inline-flex;
@@ -355,7 +346,6 @@
       padding: 13px 21px;
     }
 
-    /* Header */
     .site-header {
       position: sticky;
       top: 0;
@@ -457,7 +447,6 @@
 
     .mobile-toggle { display: none; }
 
-    /* Hero */
     .hero {
       position: relative;
       overflow: hidden;
@@ -612,7 +601,6 @@
     .floating-top { top: 5px; right: -15px; }
     .floating-bottom { bottom: 5px; left: -20px; }
 
-    /* Trust strip */
     .trust-strip {
       padding: 26px 0;
       background: var(--surface);
@@ -654,7 +642,6 @@
       font-size: .75rem;
     }
 
-    /* Catalogue */
     .catalogue { padding-top: 82px; }
 
     .catalogue-tools {
@@ -871,7 +858,6 @@
       cursor: pointer;
     }
 
-    /* Loading / Empty */
     .loading-grid {
       display: grid;
       grid-template-columns: repeat(4,1fr);
@@ -915,7 +901,6 @@
       margin-top: 35px;
     }
 
-    /* Benefits */
     .benefits { background: var(--soft); }
 
     .benefits-grid {
@@ -953,7 +938,6 @@
       line-height: 1.8;
     }
 
-    /* Newsletter */
     .newsletter { padding: 50px 0; }
 
     .newsletter-inner {
@@ -1002,7 +986,6 @@
       cursor: pointer;
     }
 
-    /* Footer */
     .footer {
       padding: 60px 0 22px;
       color: #eaf4ed;
@@ -1074,7 +1057,6 @@
       font-size: .8rem;
     }
 
-    /* Toasts */
     .toast-region {
       position: fixed;
       right: 20px;
@@ -1104,7 +1086,6 @@
       from { opacity: 0; transform: translateY(10px); }
     }
 
-    /* Quick View Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -1174,7 +1155,6 @@
       line-height: 1.8;
     }
 
-    /* Back to top */
     .back-top {
       position: fixed;
       right: 22px;
@@ -1193,7 +1173,6 @@
     }
     .back-top.visible { display: grid; }
 
-    /* Responsive */
     @media (max-width: 1050px) {
       .main-nav a {
         padding: 9px;
@@ -1752,7 +1731,6 @@
   (() => {
     'use strict';
 
-    // DOM Helpers
     const $ = (selector, root = document) => root.querySelector(selector);
     const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -1770,7 +1748,6 @@
       toast: $('#toast-region')
     };
 
-    // Application State
     const state = {
       products: [],
       category: '',
@@ -1782,7 +1759,6 @@
       wishlist: readStorage('mawego:wishlist', [])
     };
 
-    // Storage
     function readStorage(key, fallback) {
       try {
         const value = JSON.parse(localStorage.getItem(key));
@@ -1800,7 +1776,6 @@
       }
     }
 
-    // Security & Formatting
     function escapeHtml(value) {
       return String(value ?? '').replace(/[&<>"']/g, char => ({
         '&': '&amp;',
@@ -1869,7 +1844,6 @@
       return state.wishlist.includes(String(id));
     }
 
-    // Notifications
     function notify(message, type = 'success') {
       const toast = document.createElement('div');
       toast.className = `toast ${type === 'error' ? 'error' : ''}`;
@@ -1891,7 +1865,6 @@
       dom.status.textContent = message;
     }
 
-    // Wishlist
     function updateWishlist() {
       $('#wishlist-count').textContent = state.wishlist.length;
       $('#wishlist-filter').setAttribute('aria-pressed', String(state.wishlistOnly));
@@ -1923,7 +1896,6 @@
       }
     }
 
-    // Product Card
     function productCard(product) {
       const id = productId(product);
       const name = product.name || 'Unnamed product';
@@ -2006,7 +1978,6 @@
       `;
     }
 
-    // Render Products
     function renderProducts(products) {
       const visible = state.wishlistOnly
         ? products.filter(product => isSaved(productId(product)))
@@ -2040,7 +2011,6 @@
       updateWishlist();
     }
 
-    // Categories
     async function loadCategories() {
       const response = await API.categories();
       const categories = Array.isArray(response) ? response : response?.categories || [];
@@ -2067,7 +2037,6 @@
       });
     }
 
-    // Pagination
     function renderPagination() {
       if (state.pages <= 1) {
         dom.pagination.innerHTML = '';
@@ -2088,7 +2057,6 @@
       refreshIcons(dom.pagination);
     }
 
-    // Product Loading
     function showLoading() {
       dom.grid.innerHTML = `
         <div class="loading-grid">
@@ -2168,7 +2136,6 @@
       }
     }
 
-    // Filter Reset
     function resetFilters() {
       state.category = '';
       state.query = '';
@@ -2180,7 +2147,6 @@
       loadProducts();
     }
 
-    // Shopping Cart
     function createCartProduct(product) {
       return {
         id: productId(product),
@@ -2224,7 +2190,6 @@
       }
     }
 
-    // Quick View
     let previousFocus = null;
 
     function openQuickView(id) {
@@ -2288,7 +2253,6 @@
       previousFocus?.focus();
     }
 
-    // Dark Mode
     function updateTheme() {
       const dark = document.body.classList.contains('theme-dark');
       $('#theme-toggle').innerHTML = `<i data-lucide="${dark ? 'sun' : 'moon'}"></i>`;
@@ -2308,7 +2272,6 @@
       });
     }
 
-    // Mobile Navigation
     function initializeNavigation() {
       const button = $('#mobile-toggle');
       const nav = $('#main-nav');
@@ -2331,9 +2294,8 @@
       });
     }
 
-    // Event Handlers
     function initializeEvents() {
-      // Search
+
       $('#search-form').addEventListener('submit', event => {
         event.preventDefault();
         state.query = dom.search.value.trim();
@@ -2344,7 +2306,6 @@
         $('#catalogue').scrollIntoView({ behavior: 'smooth' });
       });
 
-      // Categories
       dom.categories.addEventListener('click', event => {
         const button = event.target.closest('[data-slug]');
         if (!button) return;
@@ -2356,20 +2317,17 @@
         loadProducts();
       });
 
-      // Sorting
       dom.sort.addEventListener('change', () => {
         state.page = 1;
         loadProducts();
       });
 
-      // Wishlist filter
       $('#wishlist-filter').addEventListener('click', () => {
         state.wishlistOnly = !state.wishlistOnly;
         updateWishlist();
         renderProducts(state.products);
       });
 
-      // Product interactions
       dom.grid.addEventListener('click', event => {
         const addButton = event.target.closest('[data-add]');
         const wishlistButton = event.target.closest('[data-wishlist]');
@@ -2389,7 +2347,6 @@
         }
       });
 
-      // Pagination
       dom.pagination.addEventListener('click', event => {
         if (event.target.closest('#previous-page') && state.page > 1) {
           state.page--;
@@ -2401,7 +2358,6 @@
         }
       });
 
-      // Modal
       $('#close-modal').addEventListener('click', closeModal);
       dom.modal.addEventListener('click', event => {
         if (event.target === dom.modal) closeModal();
@@ -2417,7 +2373,6 @@
         }
       });
 
-      // Back to top
       const backTop = $('#back-top');
       window.addEventListener('scroll', () => {
         backTop.classList.toggle('visible', window.scrollY > 500);
@@ -2427,20 +2382,17 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      // Newsletter
       $('#newsletter-form').addEventListener('submit', event => {
         event.preventDefault();
         notify('Newsletter registration is not connected yet.', 'error');
       });
 
-      // Cart badge
       if (typeof Cart !== 'undefined' && typeof Cart.updateBadge === 'function') {
         Cart.updateBadge();
         window.addEventListener('cart:updated', () => Cart.updateBadge());
       }
     }
 
-    // Application Initialization
     async function initialize() {
       $('#year').textContent = new Date().getFullYear();
       initializeTheme();
@@ -2487,12 +2439,10 @@
       loader.classList.remove('active');
     }
 
-    // Show loader on internal link clicks
     document.addEventListener('click', (event) => {
       const link = event.target.closest('a[href]');
       if (!link) return;
 
-      // Ignore modified / non-primary clicks
       if (
         event.defaultPrevented ||
         event.button !== 0 ||
@@ -2502,7 +2452,6 @@
         event.altKey
       ) return;
 
-      // Ignore external / special links
       if (
         link.target === '_blank' ||
         link.hasAttribute('download') ||
@@ -2516,30 +2465,25 @@
         return;
       }
 
-      // Only animate same-origin navigation
       if (destination.origin !== window.location.origin) return;
 
-      // Ignore same-page anchors
       if (
         destination.pathname === window.location.pathname &&
         destination.search === window.location.search &&
         destination.hash
       ) return;
 
-      // Ignore exact current page
       if (destination.href === window.location.href) return;
 
       showLoader();
     });
 
-    // Show loader on form submissions
     document.addEventListener('submit', (event) => {
       const form = event.target;
       if (form.dataset.noLoader !== undefined || form.target === '_blank') return;
       showLoader();
     });
 
-    // Restore correctly on back/forward
     window.addEventListener('pageshow', hideLoader);
     window.addEventListener('pagehide', () => { navigating = false; });
   })();
