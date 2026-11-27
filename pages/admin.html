@@ -411,15 +411,15 @@ function rangeToolbar(root, run, pre = 'month') {
       <button class="btn btn-primary btn-sm" id="r-run"><i data-lucide="play"></i> Run</button>
     </div>`;
   icons(root);
-  const runNow = () => run($('#r-from').value, $('#r-to').value);
+  const runNow = () => run($('#r-from', root).value, $('#r-to', root).value);
   $$('[data-preset]', root).forEach((b) => {
     b.onclick = () => {
       $$('[data-preset]', root).forEach((x) => x.classList.toggle('on', x === b));
       const [a, z] = presets[b.dataset.preset]();
-      $('#r-from').value = ymd(a); $('#r-to').value = ymd(z); runNow();
+      $('#r-from', root).value = ymd(a); $('#r-to', root).value = ymd(z); runNow();
     };
   });
-  $('#r-run').onclick = runNow;
+  $('#r-run', root).onclick = runNow;
   runNow();
 }
 /* Previous period of equal length, immediately before [from, to] */
@@ -520,7 +520,7 @@ async function route() {
     const html = document.createElement('div');
     await VIEWS[view](html, params);
     if (token !== navToken) return;
-    root.replaceChildren(...html.childNodes);
+    root.replaceChildren(html);
     icons(root);
     document.title = `${NAV.find((n) => n.id === view)?.label || 'Admin'} — Mawego Admin`;
     window.scrollTo(0, 0);
