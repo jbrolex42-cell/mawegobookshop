@@ -1776,7 +1776,9 @@ const normSub = (s, i) => {
   };
 };
 const normCamp = (c, i) => ({
-  ...c, id: c.id ?? i, subject: c.subject || c.name || 'Untitled', status: String(c.status || 'draft').toLowerCase(),
+  ...c, id: c.id ?? i, subject: c.subject || c.name || 'Untitled',
+  html_content: c.html_content || c.content || c.body || c.html || '',
+  status: String(c.status || 'draft').toLowerCase(),
   sent: num(c.sent_count ?? c.recipients ?? c.sent), open: c.open_rate ?? null, click: c.click_rate ?? null,
   created: c.created_at || c.createdAt || c.scheduled_at || ''
 });
@@ -2006,7 +2008,7 @@ function mktCampaigns(body, params) {
 }
 
 function previewCampaign(c) {
-  const html = c.html_content || c.body || c.html || '';
+  const html = c.html_content || c.content || c.body || c.html || '';
   openModal(`<h2>${esc(c.subject)}</h2>
     <p class="muted" style="margin:0 0 .75rem">${badge(c.status)} ${c.sent ? `· sent to ${c.sent.toLocaleString()}` : ''} ${c.created ? `· created ${esc(fdate(c.created))}` : ''}</p>
     ${html ? '<iframe class="preview-frame" id="pv-frame" sandbox></iframe>' : '<p class="muted">No content available for preview.</p>'}
@@ -2111,7 +2113,11 @@ function openCampaignForm(prefill = {}) {
     </form>`, 'wide');
 
   const f = $('#nl-form'), ta = f.elements.html_content, sub = f.elements.subject;
-  const refresh = () => { $('#nl-frame').srcdoc = ta.value; $('#nl-count').textContent = `${sub.value.length}/60 chars`; };
+  const refresh = () => {
+    $('#nl-frame').srcdoc = ta.value;
+    $('#nl-count').textContent = `${ta.value.length.toLocaleString()}/50,000 content chars · ${sub.value.length}/60 subject chars`;
+    $('#nl-count').style.color = ta.value.length > 50000 ? 'var(--danger)' : 'var(--muted)';
+  };
   ta.oninput = refresh; sub.oninput = refresh; refresh();
   $$('[data-tpl]', f).forEach((b) => { b.onclick = () => { ta.value = TEMPLATES[b.dataset.tpl]; refresh(); }; });
   const cp = $('#nl-coupon', f);
@@ -2126,10 +2132,28 @@ function openCampaignForm(prefill = {}) {
     const btn = $('button[type=submit]', f); btn.disabled = true;
     guarded(async () => {
       const fd = new FormData(f);
+      const subject = String(fd.get('subject') || '').trim();
+      const previewText = String(fd.get('preview_text') || '').trim();
+      const content = String(fd.get('html_content') || '').trim();
+
+      // The backend validates the field named `content` (not only `html_content`).
+      if (!content) {
+        btn.disabled = false;
+        ta.focus();
+        return toast('Campaign content is required. Choose a template or write the email body.', 'error');
+      }
+      if (content.length > 50000) {
+        btn.disabled = false;
+        ta.focus();
+        return toast(`Campaign content is ${content.length.toLocaleString()} characters. Maximum is 50,000.`, 'error');
+      }
+
       const created = await API.adminCreateCampaign({
-        subject: String(fd.get('subject')).trim(),
-        preview_text: String(fd.get('preview_text') || '').trim(),
-        html_content: String(fd.get('html_content')).trim()
+        subject,
+        preview_text: previewText,
+        content,
+        // Keep the alias for compatibility with existing email-sending code.
+        html_content: content
       });
       if (fd.get('send_now')) {
         const id = created?.id ?? created?.campaign?.id ?? created?.campaign_id;
